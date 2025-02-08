@@ -15,7 +15,7 @@ export default async function NavBar() {
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex h-14 items-center px-4">
         <div className="mr-4 flex items-center">
-          <Link href="/" className="flex items-center gap-2">
+          <Link href="https://discord.gg/amongusindians" className="flex items-center gap-2" target="_blank">
             <ServerLogo></ServerLogo>
             <span className="font-bold inline-block ">AUI</span>
           </Link>
