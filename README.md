@@ -1,36 +1,85 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AUI Website
+
+Welcome to the **AUI Website**! This is an open-source project built with [Next.js](https://nextjs.org/) and [Prisma](https://www.prisma.io/) for database management. AUI is a community Discord server for hangouts.
+
+## Features
+
+- **Next.js 20+** for a modern full-stack experience
+- **Prisma ORM** for seamless database management
+- **PostgreSQL** as the database
+- **Authentication via Discord** using NextAuth.js
+- **Environment variables for configuration**
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+Ensure you have the following installed:
+- [Node.js](https://nodejs.org/) (v19+ recommended)
+- [PostgreSQL](https://www.postgresql.org/)
+- [npm](https://www.npmjs.com/)
+
+### Installation
+
+Clone the repository:
+
+```bash
+git clone https://github.com/kishore341507/aui.git
+cd aui
+```
+
+Install dependencies:
+
+```bash
+npm install
+```
+
+### Environment Variables
+
+Create a `.env` file in the root directory and configure the required variables:
+
+```env
+AUTH_SECRET="your_auth_secret"
+DATABASE_URL="postgres://username:password@host:port/database?sslmode=require"
+AUTH_DISCORD_ID="your_discord_client_id"
+AUTH_DISCORD_SECRET="your_discord_client_secret"
+```
+
+> **Warning**: Do not share your `.env` file in public repositories. Use a `.gitignore` file to exclude it.
+
+### Database Setup
+
+Run Prisma migrations to set up the database:
+
+```bash
+npx prisma migrate dev --name init
+```
+
+### Running the Development Server
+
+Start the Next.js development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The application should now be running at `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Deployment
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+To deploy the application, ensure the required environment variables are set in your hosting provider. 
 
-## Learn More
+Platforms like **Vercel** and **Railway** support Prisma with PostgreSQL natively.
 
-To learn more about Next.js, take a look at the following resources:
+## Contributing
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Contributions are welcome! Feel free to open issues or submit pull requests.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## License
 
-## Deploy on Vercel
+This project is licensed under the **MIT License**. See the [LICENSE](LICENSE) file for details.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**Happy coding! 🚀**
+
