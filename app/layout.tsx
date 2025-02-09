@@ -10,10 +10,10 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "AUI",
-  description: "About AUI" ,
+  description: "AUI (Among Us India) is India's most active Discord server, bringing together a vibrant and engaging gaming community. We host regular events, tournaments, and game nights, fostering a fun and competitive environment. Whether you're looking for casual or competitive gameplay, AUI is the perfect place to connect with fellow gamers and be part of an ever-growing community." ,
   authors : [ {name : "Team AUI" , url : "https://amongusindia.com/aboutus"} ],
-  keywords: ["amongusindia"],
-  creator : "Kamal Kisore",
+  keywords: ["amongusindia" , 'AUI' , 'AUI discord' , 'among us india' , 'among us indians' , 'among us india discord' , 'among us india server' , 'among us india discord server' , 'among us india discord community' , 'among us india discord community server' , 'among us india discord community server invite' , 'among us india discord community server link' , 'among us india discord community server link invite' , 'among us india discord community server invite link'],
+  creator : "Kishore",
 };
 
 export default function RootLayout({
