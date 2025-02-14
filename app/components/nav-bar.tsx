@@ -24,7 +24,7 @@ export default async function NavBar() {
             {[
               { href: "/", label: "Home" },
               { href: "/donate", label: "Donate" },
-              { href: "/", label: "Forms" },
+              { href: "/forms", label: "Forms" },
             ].map(({ href, label }) => (
               <Link key={href} href={href} className="transition-colors hover:text-foreground/80">
                 {label}

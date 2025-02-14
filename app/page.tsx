@@ -72,9 +72,11 @@ export default async function Home() {
 
         <section className="text-center">
           {/* <h3 className="text-2xl font-bold mb-4">Ready to join the fun?</h3> */}
-          <Button variant="destructive" size="lg" >
-            <Heart className="mr-2 h-5 w-5" />
-            Donate Us
+          <Button variant="destructive" size="lg" asChild>
+            <Link href="/donate">
+              <Heart className="mr-2 h-5 w-5" />
+              Donate Us
+            </Link>
           </Button>
         </section>
       </main>
