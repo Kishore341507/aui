@@ -5,6 +5,12 @@ import Link from "next/link";
 
 export default async function Home() {
 
+  const videos = [
+    "https://www.youtube.com/embed/73dLcr-Y5xA?si=n42oHES9myFta5LB",
+    "https://www.youtube.com/embed/OYpIWKf5yxg?si=3UnEjNd8v0Ph5Qy3",
+    "https://www.youtube.com/embed/s2td8G2E9IQ?si=D-mmlRjOJ-lap3Cf",
+  ];
+
   return (
     <div >
       <main className="container mx-auto px-4 py-8">
@@ -79,8 +85,22 @@ export default async function Home() {
             </Link>
           </Button>
         </section>
-      </main>
 
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 mt-8">
+          {videos.map((url, index) => (
+            <div key={index} className="w-full aspect-video">
+              <iframe
+                className="w-full h-full rounded-lg shadow-lg"
+                src={url}
+                title={`YouTube video ${index + 1}`}
+                allowFullScreen
+              />
+            </div>
+          ))}
+        </div>
+
+      </main>
       <footer className="container mx-auto p-4 text-center text-muted-foreground">
         <p>&copy; 2025 AUI Discord. All rights reserved.</p>
       </footer>

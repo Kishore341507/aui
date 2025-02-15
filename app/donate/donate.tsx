@@ -80,7 +80,6 @@ export default function Donate() {
                 <Checkbox id="ann" checked={anonymous}
                     onClick={() => {
                         if (!text) {
-                            console.log("Please login to use this feature");
                             toast({
                                 title: "Opps!",
                                 description: "Login will help us to know your name",
