@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
+import { FormItem, FormLabel, FormControl, FormMessage, FormDescription } from "@/components/ui/form";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 type Option = {
@@ -9,6 +9,7 @@ type Option = {
 
 type CustomRadioGroupProps = {
   label: string;
+  description?: string;
   name: string;
   options: Option[];
   defaultValue?: string;
@@ -17,6 +18,7 @@ type CustomRadioGroupProps = {
 
 const CustomRadioGroup: React.FC<CustomRadioGroupProps> = ({
   label,
+  description,
   name,
   options,
   defaultValue,
@@ -32,6 +34,8 @@ const CustomRadioGroup: React.FC<CustomRadioGroupProps> = ({
   return (
     <FormItem>
       <FormLabel>{label}</FormLabel>
+      {description && <FormDescription>{description}</FormDescription>}
+      {/* Add a description if needed */}
       <FormControl>
         <div className="flex flex-col items-center w-full space-y-4">
           <RadioGroup
