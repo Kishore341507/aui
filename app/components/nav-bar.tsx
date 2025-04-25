@@ -63,7 +63,7 @@ export default async function NavBar() {
               <DropdownMenuSub>
                 <DropdownMenuSubTrigger>
                   <SunMoon className="mr-2 h-4 w-4" />
-                  <span>appearance</span>
+                  <span>Appearance</span>
                 </DropdownMenuSubTrigger>
                 <ModeToggleSub />
               </DropdownMenuSub>
