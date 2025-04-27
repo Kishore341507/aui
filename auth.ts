@@ -6,4 +6,5 @@ import prisma from "./prisma/db"
 export const { handlers, signIn, signOut, auth } = NextAuth({
     adapter: PrismaAdapter(prisma),
     providers: [Discord],
+    
 })
