@@ -11,5 +11,5 @@ export default auth((req) => {
 })
  
 export const config = {
-  matcher: ["/forms/unban"],
+  matcher: ["/forms/unban", "/forms/modApp"],
 }
