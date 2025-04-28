@@ -5,6 +5,8 @@ import Link from "next/link";
 
 export default async function Home() {
 
+  // fetch current server time of nextjs server
+  const currentYear = new Date().getFullYear();
   const videos = [
     "https://www.youtube.com/embed/73dLcr-Y5xA?si=n42oHES9myFta5LB",
     "https://www.youtube.com/embed/OYpIWKf5yxg?si=3UnEjNd8v0Ph5Qy3",
@@ -102,7 +104,7 @@ export default async function Home() {
 
       </main>
       <footer className="container mx-auto p-4 text-center text-muted-foreground">
-        <p>&copy; 2025 AUI Discord. All rights reserved.</p>
+        <p>&copy; {currentYear} <Link href="https://discord.gg/amongusindia" className="text-blue-500" target="_blank">Among Us India Discord</Link>. All rights reserved.</p>
       </footer>
     </div>
   );
