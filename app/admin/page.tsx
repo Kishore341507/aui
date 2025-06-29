@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
-import { Clock, ExternalLink, Users, FileText, Shield, Settings } from "lucide-react";
+import {  ExternalLink, FileText, Shield } from "lucide-react";
 
 export default function AdminDashboard() {
     return (

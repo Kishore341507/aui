@@ -34,13 +34,13 @@ export async function GET(request: Request) {
         // Build where clause
         const whereClause: {
             form: string;
-            status?: string;
+            status?: 'PENDING' | 'ACCEPTED' | 'UNDER_REVIEW' | 'REJECTED';
         } = {
             form: "moderation"
         };
 
         if (status && status !== 'ALL') {
-            whereClause.status = status;
+            whereClause.status = status as 'PENDING' | 'ACCEPTED' | 'UNDER_REVIEW' | 'REJECTED';
         }
 
         // Fetch moderation responses with pagination
