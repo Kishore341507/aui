@@ -19,6 +19,7 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
 
 const formSchema = z.object({
@@ -33,7 +34,8 @@ const formSchema = z.object({
 
 export default function UnbanForm() {
   const router = useRouter();
-  const { data } = useSession()
+  const { data } = useSession();
+  const { toast } = useToast();
 
   const [loading, setLoading] = useState(false)
 
@@ -46,14 +48,42 @@ export default function UnbanForm() {
     },
   })
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    setLoading(true)
-    console.log(values)
-    
-    setTimeout(() => {
-      router.push('https://discord.gg/XHQhJ99fnm')
-    }, 2000)
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setLoading(true);
+    try {
+      const response = await fetch('/api/forms/unban', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(values),
+      });
 
+      const result = await response.json();
+
+      if (response.ok) {
+        toast({
+          title: "Success!",
+          description: "Your unban request has been submitted successfully.",
+        });
+        
+        // Redirect to Discord server after a delay
+        setTimeout(() => {
+          router.push('https://discord.gg/XHQhJ99fnm');
+        }, 2000);
+      } else {
+        throw new Error(result.message || 'Failed to submit request');
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      toast({
+        title: "Error",
+        description: "Failed to submit your request. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   }
 
   if (!data) return (
@@ -125,7 +155,7 @@ export default function UnbanForm() {
                 {loading ? (
                   <Loader2 className="w-5 h-5 animate-spin" />
                 ) : (
-                  "Join Unban Server"
+                  "Submit Unban Request"
                 )}
               </Button>
             </form>
