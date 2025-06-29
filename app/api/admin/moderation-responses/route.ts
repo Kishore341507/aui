@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import prisma from "@/prisma/db";
-import { console } from "inspector";
-
 export async function GET(request: Request) {
     try {
         const session = await auth();
