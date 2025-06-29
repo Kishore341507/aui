@@ -19,6 +19,8 @@ model User {
   sessions      Session[]
   // Optional for WebAuthn support
   Authenticator Authenticator[]
+
+  role          String?
  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -84,4 +86,21 @@ model Discordauth {
   ip        String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+enum FormStatus {
+  PENDING
+  ACCEPTED
+  UNDER_REVIEW
+  REJECTED
+}
+
+model FormResponse {
+  id        String     @id @default(cuid())
+  userId    String
+  form      String
+  data      Json
+  status    FormStatus @default(PENDING)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
 }
