@@ -82,7 +82,13 @@ export async function GET(request: Request) {
                         id: true,
                         name: true,
                         email: true,
-                        image: true
+                        image: true,
+                        accounts: {
+                            select: {
+                                provider: true,
+                                providerAccountId: true
+                            }
+                        }
                     }
                 });
                 return { ...response, user };
@@ -175,7 +181,13 @@ export async function PATCH(request: Request) {
                 id: true,
                 name: true,
                 email: true,
-                image: true
+                image: true,
+                accounts: {
+                    select: {
+                        provider: true,
+                        providerAccountId: true
+                    }
+                }
             }
         });
 

@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { ChevronLeft, ChevronRight, Eye, Users, Clock, CheckCircle, XCircle, AlertCircle } from "lucide-react";
@@ -14,6 +15,10 @@ interface User {
     name: string | null;
     email: string;
     image: string | null;
+    accounts?: {
+        provider: string;
+        providerAccountId: string;
+    }[];
 }
 
 interface ModerationResponse {
@@ -63,7 +68,7 @@ export default function AdminModerationResponses() {
     const [selectedResponse, setSelectedResponse] = useState<ModerationResponse | null>(null);
     const [updatingStatus, setUpdatingStatus] = useState(false);
 
-    const fetchResponses = async (page = 1, status = statusFilter) => {
+    const fetchResponses = useCallback(async (page = 1, status = statusFilter) => {
         setLoading(true);
         try {
             const params = new URLSearchParams({
@@ -91,7 +96,7 @@ export default function AdminModerationResponses() {
         } finally {
             setLoading(false);
         }
-    };
+    }, [statusFilter]);
 
     const updateStatus = async (responseId: string, newStatus: string) => {
         setUpdatingStatus(true);
@@ -141,7 +146,7 @@ export default function AdminModerationResponses() {
 
     useEffect(() => {
         fetchResponses(1, statusFilter);
-    }, [statusFilter]);
+    }, [statusFilter, fetchResponses]);
 
     const handlePageChange = (newPage: number) => {
         fetchResponses(newPage, statusFilter);
@@ -225,42 +230,49 @@ export default function AdminModerationResponses() {
                     responses.map((response, index) => (
                         <Card key={response.id} className="bg-gray-950/40 border-gray-700/30">
                             <CardHeader>
-                                <div className="flex justify-between items-start">
-                                    <div className="space-y-2">
-                                        <CardTitle className="text-lg text-white">
-                                            Application #{index + 1}
-                                        </CardTitle>
-                                        <CardDescription className="text-gray-300">
-                                            Submitted by {response.user?.name || response.user?.email || 'Unknown User'}
-                                        </CardDescription>
-                                        <div className="text-sm text-gray-400">
-                                            {formatDate(response.createdAt)}
-                                        </div>
+                                {/* User Profile Section at Top */}
+                                <div className="flex items-center space-x-3 mb-4">
+                                    <Avatar className="h-12 w-12">
+                                        <AvatarImage 
+                                            src={response.user?.image || undefined} 
+                                            alt={response.user?.name || 'User'} 
+                                        />
+                                        <AvatarFallback className="bg-gray-700 text-gray-200">
+                                            {response.user?.name 
+                                                ? response.user.name.charAt(0).toUpperCase()
+                                                : response.user?.email?.charAt(0).toUpperCase() || 'U'
+                                            }
+                                        </AvatarFallback>
+                                    </Avatar>
+                                    <div className="flex flex-col flex-1">
+                                        <span className="text-lg font-semibold text-white">
+                                            {response.user?.name || response.user?.email || 'Unknown User'}
+                                        </span>
+                                        {response.user?.accounts && response.user.accounts.length > 0 && (
+                                            <span className="text-sm text-gray-400">
+                                                {response.user.accounts[0].providerAccountId}
+                                            </span>
+                                        )}
                                     </div>
+                                    {/* Status Badge */}
                                     <div className="flex items-center gap-2">
                                         {getStatusBadge(response.status)}
                                     </div>
                                 </div>
+                                
+                                {/* Application Info */}
+                                <div className="space-y-2">
+                                    {/* <CardTitle className="text-sm text-gray-300">
+                                    </CardTitle> */}
+                                    <CardDescription className="text-gray-400">
+                                        Application #{index + ((pagination.currentPage - 1) * 10) + 1}<br></br>
+                                        Submitted: {formatDate(response.createdAt)}
+                                    </CardDescription>
+                                </div>
                             </CardHeader>
                             <CardContent>
                                 <div className="flex flex-col sm:flex-row gap-4 justify-between items-start">
-                                    <div className="space-y-2 flex-1">
-                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
-                                            <div>
-                                                <span className="font-medium text-gray-200">Age:</span>
-                                                <p className="text-gray-400">
-                                                    {String(response.data?.age) || 'Not provided'}
-                                                </p>
-                                            </div>
-                                            <div>
-                                                <span className="font-medium text-gray-200">Experience:</span>
-                                                <p className="text-gray-400">
-                                                    {String(response.data?.experience) || 'Not provided'}
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="flex flex-col sm:flex-row gap-2">
+                                    <div className="flex flex-col sm:flex-row gap-2 w-full">
                                         <Dialog>
                                             <DialogTrigger asChild>
                                                 <Button 
@@ -288,7 +300,11 @@ export default function AdminModerationResponses() {
                                                                 <div className="space-y-1 text-sm">
                                                                     <p className="text-gray-300"><span className="font-medium text-gray-200">Name:</span> {selectedResponse.user?.name || 'Not provided'}</p>
                                                                     <p className="text-gray-300"><span className="font-medium text-gray-200">Email:</span> {selectedResponse.user?.email}</p>
-                                                                    <p className="text-gray-300"><span className="font-medium text-gray-200">Age:</span> {String(selectedResponse.data?.age) || 'Not provided'}</p>
+                                                                    {selectedResponse.user?.accounts && selectedResponse.user.accounts.length > 0 && (
+                                                                        <p className="text-gray-300">
+                                                                            <span className="font-medium text-gray-200">Id:</span> {selectedResponse.user.accounts[0].providerAccountId}
+                                                                        </p>
+                                                                    )}
                                                                 </div>
                                                             </div>
                                                             <div>
@@ -308,16 +324,27 @@ export default function AdminModerationResponses() {
                                                         <div>
                                                             <h4 className="font-medium mb-2 text-white">Application Data</h4>
                                                             <div className="space-y-3">
-                                                                {Object.entries(selectedResponse.data || {}).map(([key, value]) => (
-                                                                    <div key={key} className="border-b border-gray-700 pb-2">
-                                                                        <span className="font-medium capitalize text-gray-200">
-                                                                            {key.replace(/([A-Z])/g, ' $1').trim()}:
-                                                                        </span>
-                                                                        <p className="text-sm text-gray-400 mt-1">
-                                                                            {typeof value === 'string' ? value : JSON.stringify(value)}
-                                                                        </p>
-                                                                    </div>
-                                                                ))}
+                                                                {Object.entries(selectedResponse.data || {})
+                                                                    .filter(([key]) => key !== 'age') // Filter out age field
+                                                                    .map(([key, value]) => {
+                                                                        // Format discord field to show only the ID
+                                                                        let displayValue = value;
+                                                                        if (key.toLowerCase().includes('discord') && typeof value === 'string') {
+                                                                            // Extract just the Discord ID if it contains "discord:" prefix
+                                                                            displayValue = value.replace(/^discord:\s*/, '');
+                                                                        }
+                                                                        
+                                                                        return (
+                                                                            <div key={key} className="border-b border-gray-700 pb-2">
+                                                                                <span className="font-medium capitalize text-gray-200">
+                                                                                    {key.replace(/([A-Z])/g, ' $1').trim()}:
+                                                                                </span>
+                                                                                <p className="text-sm text-gray-400 mt-1">
+                                                                                    {typeof displayValue === 'string' ? displayValue : JSON.stringify(displayValue)}
+                                                                                </p>
+                                                                            </div>
+                                                                        );
+                                                                    })}
                                                             </div>
                                                         </div>
 
