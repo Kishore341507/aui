@@ -8,9 +8,9 @@ import React, { useState } from "react"
 import { cn } from "@/lib/utils"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 
-type PricingSwitchProps = {
-  onSwitch: (value: string) => void
-}
+// type PricingSwitchProps = {
+//   onSwitch: (value: string) => void
+// }
 
 type PricingCardProps = {
   isYearly?: boolean
@@ -33,18 +33,18 @@ const PricingHeader = ({ title, subtitle }: { title: string; subtitle: string })
   </section>
 )
 
-const PricingSwitch = ({ onSwitch }: PricingSwitchProps) => (
-  <Tabs defaultValue="0" className="w-40 mx-auto" onValueChange={onSwitch}>
-    <TabsList className="py-6 px-2">
-      <TabsTrigger value="0" className="text-base">
-        Monthly
-      </TabsTrigger>
-      <TabsTrigger value="1" className="text-base">
-        Yearly
-      </TabsTrigger>
-    </TabsList>
-  </Tabs>
-)
+// const PricingSwitch = ({ onSwitch }: PricingSwitchProps) => (
+//   <Tabs defaultValue="0" className="w-40 mx-auto" onValueChange={onSwitch}>
+//     <TabsList className="py-6 px-2">
+//       <TabsTrigger value="0" className="text-base">
+//         Monthly
+//       </TabsTrigger>
+//       <TabsTrigger value="1" className="text-base">
+//         Yearly
+//       </TabsTrigger>
+//     </TabsList>
+//   </Tabs>
+// )
 
 const PricingCard = ({ isYearly, title, monthlyPrice, yearlyPrice, description, features, allFeatures, actionLabel, popular, exclusive }: PricingCardProps) => (
   <Card
