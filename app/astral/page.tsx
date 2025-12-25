@@ -2,7 +2,7 @@
 
 // import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { CheckCircle2, Eye, Palette, Mic, MessageSquare, Wrench, Brain, Lock, Crown, Sliders, Coins, Gift, TrendingUp } from "lucide-react"
+import { CheckCircle2, Eye, Palette, Mic, MessageSquare, Wrench, Brain, Lock, Crown, Sliders, Coins, Gift, TrendingUp, LucideIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import React from "react"
 import { cn } from "@/lib/utils"
@@ -120,7 +120,7 @@ const CheckItem = ({ text }: { text: string }) => (
 
 const CheckItemWithCategory = ({ text }: { text: string }) => {
   const getCategoryIcon = (category: string) => {
-    const iconMap: Record<string, { Icon: any; color: string }> = {
+    const iconMap: Record<string, { Icon: LucideIcon; color: string }> = {
       "Visual": { Icon: Eye, color: "text-blue-400" },
       "Visual Flex": { Icon: Palette, color: "text-purple-400" },
       "Voice Power": { Icon: Mic, color: "text-pink-400" },
