@@ -1,10 +1,10 @@
 "use client"
 
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+// import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { CheckCircle2, Eye, Palette, Mic, MessageSquare, Wrench, Brain, Lock, Crown, Sliders, Coins, Gift, TrendingUp } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import React, { useState } from "react"
+import React from "react"
 import { cn } from "@/lib/utils"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 
@@ -160,8 +160,9 @@ const CheckItemWithCategory = ({ text }: { text: string }) => {
 }
 
 export default function page() {
-  const [isYearly, setIsYearly] = useState(false)
-  const togglePricingPeriod = (value: string) => setIsYearly(parseInt(value) === 1)
+//   const [isYearly, setIsYearly] = useState(false)
+    const isYearly = false
+//   const togglePricingPeriod = (value: string) => setIsYearly(parseInt(value) === 1)
 
   const plans = [
     {
