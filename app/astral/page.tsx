@@ -166,8 +166,8 @@ export default function page() {
 
   const plans = [
     {
-      title: "The Supporter",
-      monthlyPrice: 199,
+      title: "The ***",
+      monthlyPrice: 149,
       yearlyPrice: 1999,
       description: "I am not a freeloader; I have a badge.",
       features: [
@@ -177,7 +177,7 @@ export default function page() {
         "Hoisted Role"
       ],
       allFeatures: [
-        'Visual: Custom "Supporter" Icon/Badge next to name',
+        'Visual: Custom "***" Icon/Badge next to name',
         "Voice Power: Permission to use Voice Notes (High engagement feature)",
         "Utility: Access to .afk (Set AFK status)",
         "Hierarchy: Role hoisted above standard members"
@@ -185,7 +185,7 @@ export default function page() {
       actionLabel: "Get Started with Supporter",
     },
     {
-      title: "The Insider",
+      title: "The ****",
       monthlyPrice: 249,
       yearlyPrice: 2499,
       description: "I look cool, and I have power.",
@@ -213,17 +213,24 @@ export default function page() {
       popular: true,
     },
     {
-      title: "The Elite",
-      monthlyPrice: 399,
+      title: "The *****",
+      monthlyPrice: 499,
       yearlyPrice: 3999,
       description: "I have access to the Staff and influence.",
       features: [
         "All Tier 1 & 2 perks included",
-        "Private VCs with Staff",
-        "Priority Private Music Bot support",
-        "Monthly Nitro Giveaway entry",
+        " 🎁",
+        " 🎁",
+        " 🎁",
         "And more..."
       ],
+    //   features: [
+    //     "All Tier 1 & 2 perks included",
+    //     "Private VCs with Staff",
+    //     "Priority Private Music Bot support",
+    //     "Monthly Nitro Giveaway entry",
+    //     "And more..."
+    //   ],
       allFeatures: [
         'Visual: Custom "Elite" Icon/Badge next to name',
         "Visual Flex: Gradient Role Colours (User selects from exclusive presets)",
