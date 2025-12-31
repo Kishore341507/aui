@@ -201,7 +201,8 @@ export default function page() {
         "All in Gold",
         "Gradient Role Colors",
         "Slowmode Bypass",
-        "Stream Perms (Source)"
+        "Stream Perms (Source)",
+        "Many More..."
       ],
       allFeatures: [
         "Visual: Visual Flex: Premium identity signal (Gradient Role Colors)",
@@ -236,7 +237,8 @@ export default function page() {
         "All in Gold and Platinum",
         "GIFs on General Chat",
         "Custom Role Colors",
-        "Returning Gifts (Nitro/Decor)"
+        "Returning Gifts (Nitro/Decor)",
+        "Many More..."
       ],
       allFeatures: [
         "Chat: Self-Expression: Standing out in the fastest-moving chat (GIFs on General Chat)",
