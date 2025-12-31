@@ -23,7 +23,7 @@ export default async function NavBar() {
           <nav className="ml-6 flex items-center gap-3 text-sm">
             {[
               { href: "/", label: "Home" },
-              { href: "/astral", label: "Astral" },
+              { href: "/membership", label: "Membership" },
               { href: "/forms", label: "Forms" },
             ].map(({ href, label }) => (
               <Link key={href} href={href} className="transition-colors hover:text-foreground/80">

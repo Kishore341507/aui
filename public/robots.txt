@@ -1,0 +1,21 @@
+# robots.txt for Among Us Indians (AUI)
+# India's Most Active Discord Server
+# https://discord.gg/amongusindians
+# Website: https://amongusindia.com
+
+# Allow all bots to crawl the site
+User-agent: *
+Allow: /
+
+# Disallow admin and API routes
+Disallow: /admin/
+Disallow: /api/
+
+# Sitemap location (if you create one in the future)
+Sitemap: https://amongusindia.com/sitemap.xml
+
+# Social Media & Community Links
+# YouTube: https://www.youtube.com/@among_us_indians
+# Instagram: https://www.instagram.com/amongusindians/
+# Twitter: https://x.com/amongusindians
+# Discord: https://discord.gg/amongusindians
