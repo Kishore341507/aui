@@ -16,16 +16,15 @@ export default async function NavBar() {
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex h-14 items-center px-4">
         <div className="mr-4 flex items-center">
-          <Link href="https://discord.gg/amongusindians" className="flex items-center gap-2" target="_blank">
+          <Link href="/" className="flex items-center gap-2">
             <ServerLogo></ServerLogo>
             <span className="font-bold inline-block ">AUI</span>
           </Link>
           <nav className="ml-6 flex items-center gap-3 text-sm">
             {[
               { href: "/", label: "Home" },
-              { href: "/donate", label: "Donate" },
-              { href: "/forms", label: "Forms" },
               { href: "/astral", label: "Astral" },
+              { href: "/forms", label: "Forms" },
             ].map(({ href, label }) => (
               <Link key={href} href={href} className="transition-colors hover:text-foreground/80">
                 {label}

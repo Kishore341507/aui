@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Instagram, Youtube, Twitter, Heart } from "lucide-react"
+import { Instagram, Youtube, Twitter, Heart, Sparkles } from "lucide-react"
 import Link from "next/link";
 
 export default async function Home() {
@@ -23,6 +23,23 @@ export default async function Home() {
             </Link>
           </Button>
 
+        </section>
+
+        <section className="mb-12">
+          <Link href="/astral">
+            <Card className="w-full animate-background-shine bg-white dark:bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] transition-colors hover:shadow-lg">
+              <CardHeader>
+                <CardTitle className="flex items-center justify-center text-2xl">
+                  <Sparkles className="mr-2 h-6 w-6" /> Membership Tiers
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription className="text-center text-base">
+                  Choose the tier that&apos;s right for you - Gold, Platinum, or Diamond. Unlock exclusive perks, custom roles, and special access.
+                </CardDescription>
+              </CardContent>
+            </Card>
+          </Link>
         </section>
 
         <section className="grid md:grid-cols-3 gap-6 mb-12">
@@ -75,17 +92,6 @@ export default async function Home() {
             </Card>
           </Link>
         </section>
-
-        <section className="text-center">
-          {/* <h3 className="text-2xl font-bold mb-4">Ready to join the fun?</h3> */}
-          <Button variant="destructive" size="lg" asChild>
-            <Link href="/donate">
-              <Heart className="mr-2 h-5 w-5" />
-              Donate Us
-            </Link>
-          </Button>
-        </section>
-
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 p-4 mt-8">
           {videos.map((url, index) => (
