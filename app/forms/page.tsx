@@ -1,5 +1,4 @@
-"use client";
-
+import type { Metadata } from "next";
 import {
     Card,
     CardDescription,
@@ -10,6 +9,19 @@ import {
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import { Clock, ExternalLink } from "lucide-react";
+
+export const metadata: Metadata = {
+  title: "Forms & Applications - AUI Discord | India's Most Active Discord Server",
+  description: "Apply for moderator position or submit unban request for AUI Discord - India's most active Discord server. Join the Among US India Discord moderation team.",
+  keywords: [
+    "AUI discord applications",
+    "AUI discord moderator",
+    "Among US India Discord moderator",
+    "India's most active Discord server moderator",
+    "AUI unban request",
+    "AUI discord forms"
+  ],
+};
 
 export default function Forms() {
 

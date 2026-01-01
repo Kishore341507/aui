@@ -12,23 +12,60 @@ import AuthProvider from "./auth/Provider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "AUI",
-  description: "AUI (Among Us India) is India's most active Discord server, bringing together a vibrant and engaging gaming community. We host regular events, tournaments, and game nights, fostering a fun and competitive environment. Whether you're looking for casual or competitive gameplay, AUI is the perfect place to connect with fellow gamers and be part of an ever-growing community.",
+  title: "AUI - India's Most Active Discord Server | Among Us India Discord Community",
+  description: "Join AUI Discord - India's most active Discord server with 50,000+ members! Among US India Discord community for gaming, tournaments, events, and fun. Best Indian gaming Discord server with 24/7 music, Valorant, Minecraft, BGMI & more.",
   authors: [{ name: "Team AUI", url: "https://amongusindia.com/aboutus" }],
-  keywords: ["amongusindia", 'AUI', 'AUI discord', 'among us india', 'among us indians', 'among us india discord', 'among us india server', 'among us india discord server', 'among us india discord community', 'among us india discord community server', 'among us india discord community server invite', 'among us india discord community server link', 'among us india discord community server link invite', 'among us india discord community server invite link'],
+  keywords: [
+    "India's most active Discord server",
+    "AUI discord",
+    "Among US India Discord",
+    "AUI discord server",
+    "amongusindia",
+    "AUI",
+    "among us india",
+    "among us indians",
+    "Indian Discord server",
+    "India gaming Discord",
+    "most active Indian Discord",
+    "biggest Indian Discord server",
+    "among us india discord server",
+    "among us india community",
+    "Indian gaming community Discord",
+    "India Discord community",
+    "Valorant India Discord",
+    "BGMI India Discord",
+    "Minecraft India Discord",
+    "Indian Discord community server"
+  ],
   creator: "Kishore",
   openGraph: {
-    title: "AUI",
-    description: "AUI (Among Us India) is India's most active Discord server, bringing together a vibrant and engaging gaming community. We host regular events, tournaments, and game nights, fostering a fun and competitive environment. Whether you're looking for casual or competitive gameplay, AUI is the perfect place to connect with fellow gamers and be part of an ever-growing community.",
+    title: "AUI - India's Most Active Discord Server | All AUI Discord",
+    description: "Join All AUI Discord - India's most active Discord server with 50,000+ members! Among US India Discord community for gaming, tournaments, events, and fun. Best Indian gaming Discord server with 24/7 music, Valorant, Minecraft, BGMI & more.",
     url: "https://amongusindia.com",
+    siteName: "Among Us India - AUI Discord",
+    type: "website",
     images: [
       {
         url: "/aui.jpg",
         width: 256,
         height: 256,
-        alt: "AUI Logo",
+        alt: "AUI Logo - India's Most Active Discord Server",
       },
     ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "AUI - India's Most Active Discord Server",
+    description: "Join All AUI Discord - India's most active Discord server! Among US India Discord community.",
+    images: ["/aui.jpg"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+    },
   },
 };
 
