@@ -107,7 +107,7 @@ export default function ShippingPage() {
             <li><strong>Be a member of AUI Discord server</strong> - Join before or immediately after purchase</li>
             <li><strong>Have Discord notifications enabled</strong> - To receive confirmation messages</li>
             <li><strong>Not be banned/blocked</strong> - From the AUI Discord server</li>
-            <li><strong>Meet Discord's age requirements</strong> - As per Discord Terms of Service</li>
+            <li><strong>Meet Discord&apos;s age requirements</strong> - As per Discord Terms of Service</li>
           </ul>
           <p className="mt-4 font-semibold text-foreground">
             Failure to meet these requirements may delay or prevent delivery of services. No refunds will be 
@@ -151,7 +151,7 @@ export default function ShippingPage() {
             <div className="border border-zinc-700 rounded-lg p-4">
               <p className="font-semibold text-foreground mb-2">Issue: Role not assigned after payment</p>
               <p className="text-sm">
-                <strong>Solution:</strong> Ensure you're in the AUI Discord server, verify payment was successful, 
+                <strong>Solution:</strong> Ensure you&apos;re in the AUI Discord server, verify payment was successful, 
                 wait up to 15 minutes, or contact support with transaction proof.
               </p>
             </div>
@@ -160,7 +160,7 @@ export default function ShippingPage() {
               <p className="font-semibold text-foreground mb-2">Issue: Cannot access exclusive channels</p>
               <p className="text-sm">
                 <strong>Solution:</strong> Refresh Discord (Ctrl+R or close and reopen), check your role assignment, 
-                ensure you're looking at the correct server.
+                ensure you&apos;re looking at the correct server.
               </p>
             </div>
 
@@ -183,7 +183,7 @@ export default function ShippingPage() {
             <li>Contact us within 24 hours of payment</li>
             <li>Provide transaction ID and payment proof</li>
             <li>Include your Discord username and ID</li>
-            <li>Describe the issue you're experiencing</li>
+            <li>Describe the issue you&apos;re experiencing</li>
             <li>We will resolve delivery issues within 24-48 hours</li>
           </ul>
         </section>

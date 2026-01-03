@@ -40,7 +40,7 @@ export default function RefundPage() {
           <ul className="list-disc pl-6 space-y-2">
             <li>Membership benefits are delivered instantly upon successful payment</li>
             <li>Access to exclusive features begins immediately</li>
-            <li>Digital services cannot be "returned" once accessed</li>
+            <li>Digital services cannot be &quot;returned&quot; once accessed</li>
             <li>All subscriptions are non-refundable and non-transferable</li>
           </ul>
         </section>
@@ -85,14 +85,14 @@ export default function RefundPage() {
 
           <h3 className="text-xl font-semibold text-foreground mb-3">Fraudulent Transactions</h3>
           <ul className="list-disc pl-6 space-y-2">
-            <li>Unauthorized transactions made without the account holder's knowledge</li>
+            <li>Unauthorized transactions made without the account holder&apos;s knowledge</li>
             <li>Must be reported within 48 hours of the transaction with supporting evidence</li>
           </ul>
 
           <p className="mt-4 font-semibold">
             Exception requests must be submitted to info@amongusindia.com or chiragsm258@gmail.com within 
             48 hours of the transaction with complete documentation. Each case will be reviewed individually, 
-            and AUI's decision will be final.
+            and AUI&apos;s decision will be final.
           </p>
         </section>
 
@@ -105,7 +105,7 @@ export default function RefundPage() {
             <li>Violation of terms leading to membership suspension or termination</li>
             <li>Bans or kicks from the Discord server due to rule violations</li>
             <li>Discord account suspension or deletion</li>
-            <li>Technical issues on Discord's end (not AUI's responsibility)</li>
+            <li>Technical issues on Discord&apos;s end (not AUI&apos;s responsibility)</li>
             <li>Lack of understanding of membership features before purchase</li>
             <li>Personal circumstances preventing use of the membership</li>
             <li>Partial months when cancelling subscription</li>

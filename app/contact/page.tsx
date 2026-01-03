@@ -14,7 +14,7 @@ export default function ContactPage() {
       <div className="space-y-8">
         <section>
           <p className="text-lg text-muted-foreground mb-6">
-            Have questions about our membership subscriptions or need support? We're here to help!
+            Have questions about our membership subscriptions or need support? We&apos;re here to help!
           </p>
         </section>
 

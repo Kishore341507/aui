@@ -15,12 +15,12 @@ export default function AboutPage() {
         {/* Introduction */}
         <section className="space-y-4">
           <p className="text-lg text-muted-foreground leading-relaxed">
-            Welcome to <strong className="text-foreground">AUI (Among Us India)</strong> - India's most active 
+            Welcome to <strong className="text-foreground">AUI (Among Us India)</strong> - India&apos;s most active 
             and vibrant Discord community! Founded and operated by <strong className="text-foreground">Chirag Solanki</strong>, 
             AUI has grown from a simple gaming server to become one of the largest and most engaged Discord communities in India.
           </p>
           <p className="text-muted-foreground leading-relaxed">
-            With over 50,000+ members and counting, we've created a space where gamers, content creators, and 
+            With over 50,000+ members and counting, we&apos;ve created a space where gamers, content creators, and 
             friends come together to connect, play, and build lasting relationships. Our community thrives on 
             inclusivity, entertainment, and the shared passion for gaming and social interaction.
           </p>
@@ -148,7 +148,7 @@ export default function AboutPage() {
           <h2 className="text-2xl font-semibold mb-4">Our Journey</h2>
           <div className="space-y-3 text-muted-foreground">
             <p>
-              What started as a small Discord server for Among Us players has evolved into one of India's 
+              What started as a small Discord server for Among Us players has evolved into one of India&apos;s 
               premier gaming and social communities. Through dedication, innovation, and an unwavering commitment 
               to our members, AUI has achieved remarkable milestones:
             </p>
@@ -161,7 +161,7 @@ export default function AboutPage() {
               <li>Fostered countless friendships, gaming squads, and memorable experiences</li>
             </ul>
             <p>
-              And we're just getting started! We continue to evolve, innovate, and expand to provide even better 
+              And we&apos;re just getting started! We continue to evolve, innovate, and expand to provide even better 
               experiences for our community.
             </p>
           </div>
@@ -192,7 +192,7 @@ export default function AboutPage() {
               <p className="text-muted-foreground">
                 <strong className="text-foreground">Chirag Solanki</strong> - The visionary behind AUI, responsible 
                 for establishing and operating this incredible community. With a passion for gaming and community building, 
-                Chirag has transformed AUI into India's most active Discord server.
+                Chirag has transformed AUI into India&apos;s most active Discord server.
               </p>
             </div>
             <div>
@@ -235,8 +235,8 @@ export default function AboutPage() {
         <section className="text-center border border-zinc-700 rounded-lg p-8 space-y-4">
           <h2 className="text-3xl font-bold">Join the AUI Family Today!</h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
-            Whether you're looking for gaming partners, want to make new friends, or simply want to be part of 
-            India's most vibrant Discord community - AUI welcomes you with open arms!
+            Whether you&apos;re looking for gaming partners, want to make new friends, or simply want to be part of 
+            India&apos;s most vibrant Discord community - AUI welcomes you with open arms!
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center mt-6">
             <a 

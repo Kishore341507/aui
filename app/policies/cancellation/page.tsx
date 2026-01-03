@@ -34,7 +34,7 @@ export default function CancellationPage() {
           <p className="mb-2">To cancel your subscription, follow these steps:</p>
           <ol className="list-decimal pl-6 space-y-2">
             <li>Send an email to <strong>info@amongusindia.com</strong> or <strong>chiragsm258@gmail.com</strong></li>
-            <li>Subject line: "Membership Cancellation Request"</li>
+            <li>Subject line: &quot;Membership Cancellation Request&quot;</li>
             <li>Include the following information:
               <ul className="list-disc pl-6 mt-2 space-y-1">
                 <li>Your Discord username and ID</li>
@@ -81,7 +81,7 @@ export default function CancellationPage() {
           
           <h3 className="text-xl font-semibold text-foreground mb-3 mt-4">Immediate Effects</h3>
           <ul className="list-disc pl-6 space-y-2">
-            <li>Your subscription will be marked as "cancelled"</li>
+            <li>Your subscription will be marked as &quot;cancelled&quot;</li>
             <li>No further charges will be made to your payment method</li>
             <li>You will receive a cancellation confirmation email</li>
             <li>You can still access all membership benefits until the period ends</li>
@@ -195,7 +195,7 @@ export default function CancellationPage() {
           <p>
             In the unlikely event that AUI discontinues the membership service entirely, we will provide 
             at least 30 days notice. Active subscriptions will be honored until their expiration date, 
-            or pro-rated refunds may be offered at AUI's discretion.
+            or pro-rated refunds may be offered at AUI&apos;s discretion.
           </p>
         </section>
 

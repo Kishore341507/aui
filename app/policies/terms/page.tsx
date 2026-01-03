@@ -52,7 +52,7 @@ export default function TermsPage() {
           <p className="mb-2">As a member, you agree to:</p>
           <ul className="list-disc pl-6 space-y-2">
             <li>Provide accurate and complete information during registration</li>
-            <li>Follow Discord's Terms of Service and Community Guidelines</li>
+            <li>Follow Discord&apos;s Terms of Service and Community Guidelines</li>
             <li>Follow AUI server rules and regulations</li>
             <li>Not share your membership benefits with non-members</li>
             <li>Not engage in any abusive, harassing, or inappropriate behavior</li>
@@ -83,7 +83,7 @@ export default function TermsPage() {
           <p className="mb-2">AUI reserves the right to terminate or suspend your membership if:</p>
           <ul className="list-disc pl-6 space-y-2">
             <li>You violate these terms and conditions</li>
-            <li>You violate Discord's Terms of Service or Community Guidelines</li>
+            <li>You violate Discord&apos;s Terms of Service or Community Guidelines</li>
             <li>You violate AUI server rules</li>
             <li>You engage in fraudulent or abusive behavior</li>
             <li>Payment issues arise</li>
