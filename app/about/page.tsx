@@ -55,13 +55,13 @@ export default function AboutPage() {
                 talk, and hang out at any time of the day.
               </p>
             </div>
-            <div className="border border-zinc-700 rounded-lg p-5">
+            {/* <div className="border border-zinc-700 rounded-lg p-5">
               <h3 className="font-semibold text-lg text-foreground mb-2">Gaming Together</h3>
               <p className="text-muted-foreground text-sm">
                 Find teammates for your favorite games, participate in tournaments, and join gaming sessions 
                 across multiple titles including Among Us, Valorant, Minecraft, and more.
               </p>
-            </div>
+            </div> */}
             <div className="border border-zinc-700 rounded-lg p-5">
               <h3 className="font-semibold text-lg text-foreground mb-2">Premium Features</h3>
               <p className="text-muted-foreground text-sm">
@@ -79,7 +79,7 @@ export default function AboutPage() {
             <div className="border border-zinc-700 rounded-lg p-5">
               <h3 className="font-semibold text-lg text-foreground mb-2">Economy System</h3>
               <p className="text-muted-foreground text-sm">
-                Engage with our in-server economy featuring PVC Coins, casino games, trading, and rewards that 
+                Engage with our in-server economy featuring PVC Coins, and rewards that 
                 make your server activity even more exciting and rewarding.
               </p>
             </div>
