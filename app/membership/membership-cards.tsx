@@ -1,9 +1,10 @@
 "use client"
 
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { CheckCircle2, Eye, Palette, Mic, MessageSquare, Wrench, Brain, Lock, Crown, Sliders, Coins, Gift, TrendingUp, LucideIcon } from "lucide-react"
+import { CheckCircle2, Eye, Palette, Mic, MessageSquare, Wrench, Brain, Lock, Crown, Sliders, Coins, Gift, TrendingUp, LucideIcon, Mail } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import React from "react"
+import Link from "next/link"
 import { cn } from "@/lib/utils"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 
@@ -256,6 +257,17 @@ export default function MembershipCards() {
           return <PricingCard key={plan.title} {...plan} isYearly={isYearly} />
         })}
       </section>
+      
+      {/* Contact Link */}
+      <div className="text-center mt-8">
+        <Link 
+          href="/about" 
+          className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+        >
+          <Mail size={16} />
+          <span>Have questions?</span>
+        </Link>
+      </div>
     </div>
   )
 }
