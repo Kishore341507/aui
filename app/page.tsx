@@ -1,5 +1,5 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Instagram, Youtube, Twitter, Sparkles } from "lucide-react"
+import { Instagram, Youtube, Twitter } from "lucide-react"
 import Link from "next/link";
 import type { Metadata } from "next";
 import HeroComponent from "./components/hero-component";
