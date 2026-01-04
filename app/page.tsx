@@ -37,7 +37,7 @@ export default async function Home() {
       <main className="container mx-auto px-12 lg:px-24 py-8">
         <HeroComponent />
 
-        <section className="mb-12">
+        {/* <section className="mb-12">
           <Link href="/membership">
             <Card className="w-full bg-white dark:bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] transition-colors hover:shadow-lg">
               <CardHeader>
@@ -52,7 +52,7 @@ export default async function Home() {
               </CardContent>
             </Card>
           </Link>
-        </section>
+        </section> */}
 
         <section className="grid md:grid-cols-3 gap-6 mb-12">
 

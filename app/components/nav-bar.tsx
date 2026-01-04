@@ -35,9 +35,9 @@ export default async function NavBar() {
           <nav className="ml-6 hidden lg:flex items-center gap-3 text-sm">
             {[
               { href: "/", label: "Home" },
-              { href: "/membership", label: "Membership" },
+              // { href: "/membership", label: "Membership" },
               { href: "/forms", label: "Forms" },
-              { href: "/about", label: "About-us" },
+              // { href: "/about", label: "About-us" },
             ].map(({ href, label }) => (
               <Link key={href} href={href} className="transition-colors hover:text-foreground/80">
                 {label}
