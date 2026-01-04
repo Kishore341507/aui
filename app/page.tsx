@@ -1,11 +1,11 @@
-import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Instagram, Youtube, Twitter, Sparkles } from "lucide-react"
 import Link from "next/link";
 import type { Metadata } from "next";
+import HeroComponent from "./components/hero-component";
 
 export const metadata: Metadata = {
-  title: "AUI - India's Most Active Discord Server | Join AUI Discord Community",
+  title: "AUI - India's Most Active Discord Server",
   description: "Join AUI Discord - India's most active Discord server with 50,000+ members! Among US India Discord community offering gaming, tournaments, 24/7 music, Valorant, Minecraft, BGMI tournaments. Best Indian gaming Discord server. Join now!",
   keywords: [
     "India's most active Discord server",
@@ -33,33 +33,13 @@ export default async function Home() {
   ];
 
   return (
-    <div >
-      <main className="container mx-auto px-4 py-8">
-        <section className="text-center mb-12">
-          <h2 className="text-4xl font-extrabold mb-4">Welcome to AUI</h2>
-            <p className="text-xl mb-6">Join thousands in India&apos;s most active and welcoming Discord community!</p>
-
-          <div className="max-w-7xl mx-auto mb-8 text-left space-y-3">
-            <p className="text-base leading-relaxed text-muted-foreground">
-              AUI Discord is <span className="font-semibold text-primary">India&apos;s most active server</span>, where thousands of users come together to game, chat, and have fun. We maintain a <span className="font-semibold text-primary">healthy and welcoming environment</span> with dedicated moderation to ensure everyone feels safe and respected.
-            </p>
-            
-            <p className="text-base leading-relaxed text-muted-foreground">
-              Enjoy 24/7 music channels, participate in gaming tournaments across titles like Among Us, Valorant, Minecraft, and BGMI, and join exciting community events including movie nights, art contests, and seasonal celebrations. Whether you&apos;re here to find teammates, make friends, or just relax, AUI is your online home!
-            </p>
-          </div>
-          
-          <Button size="lg" asChild>
-            <Link href="https://discord.gg/amongusindians" target="_blank">
-              Join the Server
-            </Link>
-          </Button>
-
-        </section>
+    <div>
+      <main className="container mx-auto px-12 lg:px-24 py-8">
+        <HeroComponent />
 
         <section className="mb-12">
           <Link href="/membership">
-            <Card className="w-full animate-background-shine bg-white dark:bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] transition-colors hover:shadow-lg">
+            <Card className="w-full bg-white dark:bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] transition-colors hover:shadow-lg">
               <CardHeader>
                 <CardTitle className="flex items-center justify-center text-2xl">
                   <Sparkles className="mr-2 h-6 w-6" /> Membership Tiers

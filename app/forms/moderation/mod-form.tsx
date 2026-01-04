@@ -3,7 +3,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useSession, signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import { useToast } from "@/hooks/use-toast";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -37,13 +36,15 @@ import { CheckCircle2, Loader2, Info, AlertTriangle, Shield } from "lucide-react
 
 // Banner component
 const Banner = () => (
-  <Image
-    src="/mod-form-banner.png"
-    alt="Staff Application Banner"
-    width={800}
-    height={200}
-    className="rounded-t-xl w-full object-cover"
-  />
+  // <Image
+  //   src="/mod-form-banner.png"
+  //   alt="Staff Application Banner"
+  //   width={800}
+  //   height={200}
+  //   className="rounded-t-xl w-full object-cover"
+  // />
+  <>
+  </>
 );
 
 // Form validation schema
@@ -55,19 +56,14 @@ const formSchema = z.object({
   contributionTime: z.string().min(1, "Contribution time is required"),
   age: z.string().min(1, "Age is required"),
   moderationDefinition: z.string().min(10, "Please provide a detailed answer (minimum 10 characters)"),
-  pastExperience: z.string().min(10, "Please provide a detailed answer (minimum 10 characters)"),
+  pastExperience: z.string().min(4, "Please provide a detailed answer (minimum 4 characters)"),
   voiceChat: z.string().min(1, "Please select an option"),
   aboutYourself: z.string().optional(),
-  serverImprovement: z.string().min(10, "Please provide a detailed answer (minimum 10 characters)"),
-  serviceDuration: z.string().min(10, "Please provide a detailed answer (minimum 10 characters)"),
-  staffViolation: z.string().min(10, "Please provide a detailed answer (minimum 10 characters)"),
+  serviceDuration: z.string().min(4, "Please provide a detailed answer (minimum 4 characters)"),
   botExperience: z.string().min(1, "Please select an option"),
-  argumentScenario: z.string().min(10, "Please provide a detailed answer (minimum 10 characters)"),
-  otherServerExperience: z.string().min(10, "Please provide a detailed answer (minimum 10 characters)"),
-  whyQualified: z.string().min(10, "Please provide a detailed answer (minimum 10 characters)"),
 });
 
-export default function Page() {
+export default function ModerationForm() {
   const { status: sessionStatus } = useSession();
   const { toast } = useToast();
   const router = useRouter();
@@ -89,13 +85,8 @@ export default function Page() {
       pastExperience: "",
       voiceChat: "",
       aboutYourself: "",
-      serverImprovement: "",
       serviceDuration: "",
-      staffViolation: "",
       botExperience: "",
-      argumentScenario: "",
-      otherServerExperience: "",
-      whyQualified: "",
     },
   });
 
@@ -154,7 +145,7 @@ export default function Page() {
             <Banner />
             <div className="p-6 pt-0">
               <CardHeader>
-                <CardTitle className="text-3xl font-bold text-center">Among Us India Staff Applications</CardTitle>
+                <CardTitle className="text-3xl font-bold text-center">AUI Staff Applications</CardTitle>
                 <CardDescription className="text-center text-gray-400">
                   Welcome! We appreciate your interest in joining our moderation team.
                 </CardDescription>
@@ -244,7 +235,7 @@ export default function Page() {
             <Banner />
             <div className="p-6 pt-0">
               <CardHeader>
-                <CardTitle className="text-2xl font-bold text-center">Staff Applications</CardTitle>
+                <CardTitle className="text-2xl font-bold text-center">AUI Staff Applications</CardTitle>
               </CardHeader>
               <div className="space-y-6">
                 <FormField
@@ -288,6 +279,19 @@ export default function Page() {
                 />
                 <FormField
                   control={form.control}
+                  name="aboutYourself"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Tell us about yourself, if you&apos;d like!</FormLabel>
+                      <FormControl>
+                        <Textarea placeholder="Your answer (optional, but helps us know you better!)" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
                   name="moderationDefinition"
                   render={({ field }) => (
                     <FormItem>
@@ -306,7 +310,7 @@ export default function Page() {
                     <FormItem>
                       <FormLabel>Please describe any past moderation or leadership experience you feel is relevant?</FormLabel>
                       <FormControl>
-                        <Textarea placeholder="Your detailed answer" {...field} />
+                        <Textarea placeholder="Enter your past experience if you have any, otherwise enter 'None'" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -347,71 +351,12 @@ export default function Page() {
                 />
                 <FormField
                   control={form.control}
-                  name="aboutYourself"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Tell us about yourself, if you&apos;d like!</FormLabel>
-                      <FormControl>
-                        <Textarea placeholder="Your answer (optional, but helps us know you better!)" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="serverImprovement"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>What is something you would like to see improved within the server?</FormLabel>
-                      <FormDescription>
-                        This could be something in our rules, the channels, roles, bots etc.
-                      </FormDescription>
-                      <FormControl>
-                        <Textarea placeholder="Your detailed answer" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
                   name="serviceDuration"
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>For how long will you be able to provide service in moderation before taking any sort of major break or completely step down?</FormLabel>
                       <FormControl>
                         <Textarea placeholder="e.g., 6 months, 1 year, indefinitely" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </div>
-          </CardContent>
-        );
-
-      case 2:
-        return (
-          <CardContent key="step3" className="p-0">
-            <Banner />
-            <div className="p-6 pt-0">
-              <CardHeader>
-                <CardTitle className="text-2xl font-bold text-center">Moderation Scenarios</CardTitle>
-                <CardDescription className="text-center">
-                  For the following scenarios, describe what action you would take. You can decide that no action should be taken or decide that a user should be warned, temporarily muted, temporarily banned, or permanently banned. Don&apos;t overthink these. The goal is to see your thought process more than which you choose.
-                </CardDescription>
-              </CardHeader>
-              <div className="space-y-6">
-                <FormField
-                  control={form.control}
-                  name="staffViolation"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>If a staff member above you or alongside you, is violating the rules what do you do in that situation?</FormLabel>
-                      <FormControl>
-                        <Textarea placeholder="Your detailed answer" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -447,51 +392,6 @@ export default function Page() {
                     </FormItem>
                   )}
                 />
-                <FormField
-                  control={form.control}
-                  name="argumentScenario"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Two members are arguing in a public chatroom. What do you do? Please list all steps.</FormLabel>
-                      <FormControl>
-                        <Textarea placeholder="Your detailed answer" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="otherServerExperience"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>What is your experience moderating other Discord servers?</FormLabel>
-                      <FormDescription>
-                        Include your level of authority (e.g. helper/mod/admin) and an approximate number of people on the server(s). Be sure to describe your activities as a moderator in detail. Please leave an invite to the server(s) in question if you can. Type &quot;none&quot; if you have no moderation experience on other discord servers
-                      </FormDescription>
-                      <FormControl>
-                        <Textarea placeholder="Your detailed answer" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <FormField
-                  control={form.control}
-                  name="whyQualified"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Why do you feel qualified for/want to be on the server moderation team?</FormLabel>
-                      <FormDescription>
-                        What makes you a good candidate for moderator overall? How much experience do you have with the game? What is motivating you to fill out this form right now?
-                      </FormDescription>
-                      <FormControl>
-                        <Textarea placeholder="Your detailed answer" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
               </div>
             </div>
           </CardContent>
@@ -506,8 +406,7 @@ export default function Page() {
   const validateStep = async (step: number) => {
     const fieldsForStep: { [key: number]: (keyof z.infer<typeof formSchema>)[] } = {
       0: ["understand"],
-      1: ["country", "contributionTime", "age", "moderationDefinition", "pastExperience", "voiceChat", "serverImprovement", "serviceDuration"],
-      2: ["staffViolation", "botExperience", "argumentScenario", "otherServerExperience", "whyQualified"],
+      1: ["country", "contributionTime", "age", "moderationDefinition", "pastExperience", "voiceChat", "serviceDuration", "botExperience"],
     };
 
     const fieldsToValidate = fieldsForStep[step];
@@ -520,7 +419,7 @@ export default function Page() {
   // Multi-step navigation functions
   const nextStep = async () => {
     const isValid = await validateStep(currentStep);
-    if (isValid && currentStep < 2) {
+    if (isValid && currentStep < 1) {
       setCurrentStep(step => step + 1);
     }
   };
@@ -534,7 +433,8 @@ export default function Page() {
   // Render loading state
   if (sessionStatus === "loading") {
     return (
-      <div className="min-h-screen bg-black bg-gradient-to-br from-gray-900 via-black to-gray-900 flex items-center justify-center text-white text-xl">
+      // <div className="min-h-screen bg-black bg-gradient-to-br from-gray-900 via-black to-gray-900 flex items-center justify-center text-white text-xl">
+      <div className="min-h-screen flex items-center justify-center text-white text-xl">
         Loading...
       </div>
     );
@@ -543,7 +443,8 @@ export default function Page() {
   // Render unauthenticated state
   if (sessionStatus === "unauthenticated") {
     return (
-      <div className="min-h-screen bg-black bg-gradient-to-br from-gray-900 via-black to-gray-900">
+      <div className="min-h-screen">
+      {/* <div className="min-h-screen bg-black bg-gradient-to-br from-gray-900 via-black to-gray-900"> */}
         <div className="container mx-auto py-12 flex flex-col items-center justify-center h-screen">
           <Card className="w-full max-w-md bg-white/10 backdrop-blur-sm border-gray-200/20 shadow-lg p-8">
             <CardHeader>
@@ -579,12 +480,12 @@ export default function Page() {
                   )}
                 </div>
                 <div>
-                  {currentStep < 2 && (
+                  {currentStep < 1 && (
                     <Button onClick={nextStep} type="button">
                       Next
                     </Button>
                   )}
-                  {currentStep === 2 && (
+                  {currentStep === 1 && (
                     <Button type="submit" disabled={isSubmitting}>
                       {isSubmitting ? (
                         <>

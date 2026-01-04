@@ -259,7 +259,7 @@ export default function MembershipCards() {
       </section>
       
       {/* Contact Link */}
-      <div className="text-center mt-8">
+      <div className="text-center mt-2">
         <Link 
           href="/about" 
           className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"

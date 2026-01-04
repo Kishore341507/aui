@@ -22,6 +22,93 @@ export async function POST(request: Request) {
       },
     });
 
+    // Send Discord webhook if MOD_FORM_WEBHOOK_URL exists
+    if (process.env.MOD_FORM_WEBHOOK_URL) {
+      try {
+        const embed = {
+          embeds: [
+            {
+              title: "🛡️ New Moderator Application",
+              color: 0x5865f2,
+              fields: [
+                {
+                  name: "👤 Applicant",
+                  value: `**${session.user.name || "Unknown"}**\nUser ID: \`${session.user.userId}\`\nEmail: ${session.user.email || "No email"}`,
+                  inline: false,
+                },
+                {
+                  name: "🌍 Country",
+                  value: formData.country || "Not provided",
+                  inline: true,
+                },
+                {
+                  name: "🎂 Age",
+                  value: formData.age || "Not provided",
+                  inline: true,
+                },
+                {
+                  name: "⏰ Available Time",
+                  value: formData.contributionTime || "Not provided",
+                  inline: false,
+                },
+                {
+                  name: "🎤 Voice Chat",
+                  value: formData.voiceChat || "Not provided",
+                  inline: true,
+                },
+                {
+                  name: "🤖 Bot Experience",
+                  value: `${formData.botExperience || "N/A"}/5`,
+                  inline: true,
+                },
+                {
+                  name: "📝 Moderation Definition",
+                  value: formData.moderationDefinition
+                    ? formData.moderationDefinition.substring(0, 1024)
+                    : "Not provided",
+                  inline: false,
+                },
+                {
+                  name: "📚 Past Experience",
+                  value: formData.pastExperience
+                    ? formData.pastExperience.substring(0, 1024)
+                    : "Not provided",
+                  inline: false,
+                },
+                {
+                  name: "⏳ Service Duration",
+                  value: formData.serviceDuration || "Not provided",
+                  inline: false,
+                },
+                {
+                  name: "ℹ️ About",
+                  value: formData.aboutYourself
+                    ? formData.aboutYourself.substring(0, 1024)
+                    : "Not provided",
+                  inline: false,
+                },
+              ],
+              timestamp: new Date().toISOString(),
+              footer: {
+                text: "AUI Moderation Application",
+              },
+            },
+          ],
+        };
+
+        await fetch(process.env.MOD_FORM_WEBHOOK_URL, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(embed),
+        });
+      } catch (webhookError) {
+        console.error("Discord webhook error:", webhookError);
+        // Continue even if webhook fails
+      }
+    }
+
     return NextResponse.json(
       { message: "Application submitted successfully!" },
       { status: 200 }

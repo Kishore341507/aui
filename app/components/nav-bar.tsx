@@ -20,7 +20,19 @@ export default async function NavBar() {
             <ServerLogo></ServerLogo>
             <span className="font-bold inline-block ">AUI</span>
           </Link>
-          <nav className="ml-6 flex items-center gap-3 text-sm">
+          {/* Mobile/Tablet Navigation - Only Home and Forms */}
+          <nav className="ml-6 flex items-center gap-3 text-sm lg:hidden">
+            {[
+              { href: "/", label: "Home" },
+              { href: "/forms", label: "Forms" },
+            ].map(({ href, label }) => (
+              <Link key={href} href={href} className="transition-colors hover:text-foreground/80">
+                {label}
+              </Link>
+            ))}
+          </nav>
+          {/* Desktop Navigation - All Items */}
+          <nav className="ml-6 hidden lg:flex items-center gap-3 text-sm">
             {[
               { href: "/", label: "Home" },
               { href: "/membership", label: "Membership" },
