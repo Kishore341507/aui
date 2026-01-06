@@ -12,6 +12,7 @@ import AuthProvider from "./auth/Provider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://amongusindia.com'),
   title: "AUI - India's Most Active Discord Server | Among Us India Discord Community",
   description: "Join AUI Discord - India's most active Discord server with 50,000+ members! Among US India Discord community for gaming, tournaments, events, and fun. Best Indian gaming Discord server with 24/7 music, Valorant, Minecraft, BGMI & more.",
   authors: [{ name: "Team AUI", url: "https://amongusindia.com/aboutus" }],
