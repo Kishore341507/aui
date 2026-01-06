@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 
 export const metadata: Metadata = {
-  title: "About Us - AUI | Among Us India",
+  title: "About Us - Among Us India",
   description: "Learn about AUI - India's most active Discord community",
 }
 
