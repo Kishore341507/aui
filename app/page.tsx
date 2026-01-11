@@ -120,7 +120,8 @@ export default async function Home() {
 
       </main>
       <footer className="container mx-auto p-4 text-center text-muted-foreground">
-        <p>&copy; 2025 AUI Discord. All rights reserved.</p>
+        <p>&copy; 2026 AUI Discord. All rights reserved.</p>
+        <Link href="/active-servers" className="hidden">Active Servers</Link>
       </footer>
     </div>
   );
