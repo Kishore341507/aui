@@ -1,5 +1,7 @@
 import type { Metadata } from "next"
 import MembershipCards from "./membership-cards"
+import { auth } from "@/auth"
+import { TawkChat } from "@/components/tawk-chat"
 
 export const metadata: Metadata = {
   title: "Membership Tiers - All AUI Discord | India's Most Active Discord Server",
@@ -14,6 +16,13 @@ export const metadata: Metadata = {
   ],
 }
 
-export default function Page() {
-  return <MembershipCards />
+export default async function Page() {
+  const session = await auth()
+
+  return (
+    <>
+      <MembershipCards />
+      {session?.user && <TawkChat user={session.user} />}
+    </>
+  )
 }
