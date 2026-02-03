@@ -69,8 +69,8 @@ export default function ContactPage() {
             <div>
               <h2 className="text-2xl font-semibold mb-3">Registered Address</h2>
               <p className="text-muted-foreground leading-relaxed">
-                D/505, Shyam Satva, Nava naroda, naroda<br />
-                Ahmedabad, Gujarat - 382330<br />
+                xx<br />
+                xx<br />
                 India
               </p>
             </div>
