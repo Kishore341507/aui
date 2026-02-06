@@ -1,11 +1,10 @@
 import { Button } from "@/components/ui/button";
-import { CircleUser, Settings, SunMoon, LifeBuoy, LogOut, KeyRound } from "lucide-react";
+import { CircleUser, Settings, LifeBuoy, LogOut, KeyRound } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import ServerLogo from "./server-log";
 import { auth } from "@/auth";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuSub, DropdownMenuSubTrigger, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { ModeToggleSub } from "./mode-toggle-sub";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { signIn, signOut } from "@/auth";
 
 export default async function NavBar() {
@@ -24,6 +23,7 @@ export default async function NavBar() {
           <nav className="ml-6 flex items-center gap-3 text-sm lg:hidden">
             {[
               { href: "/", label: "Home" },
+              { href: "/membership", label: "Membership" },
               { href: "/forms", label: "Forms" },
             ].map(({ href, label }) => (
               <Link key={href} href={href} className="transition-colors hover:text-foreground/80">
@@ -73,13 +73,13 @@ export default async function NavBar() {
                 Settings
               </DropdownMenuItem>
 
-              <DropdownMenuSub>
+              {/* <DropdownMenuSub>
                 <DropdownMenuSubTrigger>
                   <SunMoon className="mr-2 h-4 w-4" />
                   <span>appearance</span>
                 </DropdownMenuSubTrigger>
                 <ModeToggleSub />
-              </DropdownMenuSub>
+              </DropdownMenuSub> */}
 
               <DropdownMenuItem>
                 <LifeBuoy className="mr-2 h-4 w-4" />
