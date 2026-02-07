@@ -115,6 +115,7 @@ model Plan {
   interval    PlanInterval
   features    String[]
   isActive    Boolean  @default(true)
+  roles       BigInt[]
 
   memberships Membership[]
 
