@@ -345,7 +345,7 @@ export default function MembershipCards() {
       title: "Diamond",
       monthlyPrice: 1999,
       yearlyPrice: 19999,
-      description: "Stand out with your first premium badge.",
+      description: "The ultimate tier for power users.",
       features: [
         "All in Gold and Platinum",
         "Custom Role Colors",
