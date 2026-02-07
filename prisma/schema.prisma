@@ -21,6 +21,7 @@ model User {
   Authenticator Authenticator[]
 
   role          String?
+  memberships   Membership[]
  
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -103,4 +104,53 @@ model FormResponse {
   status    FormStatus @default(PENDING)
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
+}
+
+model Plan {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  name        String
+  description String?
+  price       Decimal  @db.Decimal(10, 2)
+  interval    PlanInterval
+  features    String[]
+  isActive    Boolean  @default(true)
+
+  memberships Membership[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Membership {
+  id        String           @id @default(cuid())
+  userId    String
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  planId    String
+  plan      Plan             @relation(fields: [planId], references: [id])
+
+  status    MembershipStatus @default(PENDING)
+
+  startDate DateTime         @default(now())
+  endDate   DateTime?
+
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  @@index([userId])
+}
+
+enum MembershipStatus {
+  ACTIVE
+  EXPIRED
+  PENDING
+  CANCELLED
+}
+
+enum PlanInterval {
+  MONTHLY
+  QUARTERLY
+  YEARLY
+  LIFETIME
 }
