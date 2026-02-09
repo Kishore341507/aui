@@ -79,19 +79,19 @@ const PricingCard = ({ isYearly, title, monthlyPrice, yearlyPrice, description, 
         ) : (
           <CardTitle className="text-zinc-700 dark:text-zinc-300 text-lg">{title}</CardTitle>
         )}
-        <div className="flex gap-0.5">
-          <h3 className="text-3xl font-bold">{yearlyPrice && isYearly ? "₹" + yearlyPrice : monthlyPrice ? "₹" + monthlyPrice : "Custom"}</h3>
-          <span className="flex flex-col justify-end text-sm mb-1">{yearlyPrice && isYearly ? "/year" : monthlyPrice ? "/month" : null}</span>
+        <div className="flex gap-0.5 justify-between items-end">
+          <div className="flex gap-0.5">
+            <h3 className="text-3xl font-bold">{yearlyPrice && isYearly ? "₹" + yearlyPrice : monthlyPrice ? "₹" + monthlyPrice : "Custom"}</h3>
+            <span className="flex flex-col justify-end text-sm mb-1">{yearlyPrice && isYearly ? "/year" : monthlyPrice ? "/month" : null}</span>
+          </div>
+          {soldCount !== undefined && maxCount !== undefined && (
+            <span className="text-3xl font-bold text-white mb-1">
+              {soldCount}/{maxCount}
+            </span>
+          )}
         </div>
         <CardDescription className="pt-1.5 h-12">
           {description}
-          {soldCount !== undefined && maxCount !== undefined && (
-            <div className="mt-1 text-xs font-semibold">
-              <span className={isSoldOut ? "text-red-500" : "text-amber-500"}>
-                {soldCount}/{maxCount} Sold
-              </span>
-            </div>
-          )}
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-2">
