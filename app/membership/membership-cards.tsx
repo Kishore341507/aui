@@ -26,6 +26,9 @@ type PricingCardProps = {
   popular?: boolean
   exclusive?: boolean
   expandableFeatures?: Record<string, string[]>
+  soldCount?: number
+  maxCount?: number
+  isDisabled?: boolean
 }
 
 const PricingHeader = ({ title, subtitle }: { title: string; subtitle: string }) => (
@@ -36,13 +39,14 @@ const PricingHeader = ({ title, subtitle }: { title: string; subtitle: string })
   </section>
 )
 
-const PricingCard = ({ isYearly, title, monthlyPrice, yearlyPrice, description, features, allFeatures, actionLabel, popular, exclusive, expandableFeatures }: PricingCardProps) => {
+const PricingCard = ({ isYearly, title, monthlyPrice, yearlyPrice, description, features, allFeatures, actionLabel, popular, exclusive, expandableFeatures, soldCount, maxCount, isDisabled }: PricingCardProps) => {
   const { data: session } = useSession()
   const isMobile = useIsMobile()
   const [view, setView] = useState<'features' | 'terms' | 'qr'>('features')
   const amount = yearlyPrice && isYearly ? yearlyPrice : monthlyPrice ? monthlyPrice : "custom"
   const url = "upi://pay?pa=amongusindians@axl&pn=AmongUsIndians"
-  const paymentUrl = url + ((session?.user?.userId) ? "&tn=" + session.user.userId : "") + ((amount && amount !== "custom") ? "&am=" + amount : "")
+  const paymentUrl = url + ((session?.user?.userId) ? "&tn=" + session.user.userId + "|" + (session.user.name || "") : "") + ((amount && amount !== "custom") ? "&am=" + amount : "")
+  const isSoldOut = soldCount !== undefined && maxCount !== undefined && soldCount >= maxCount
 
   const handleGetClick = () => {
     if (view === 'features') {
@@ -75,11 +79,20 @@ const PricingCard = ({ isYearly, title, monthlyPrice, yearlyPrice, description, 
         ) : (
           <CardTitle className="text-zinc-700 dark:text-zinc-300 text-lg">{title}</CardTitle>
         )}
-        <div className="flex gap-0.5">
-          <h3 className="text-3xl font-bold">{yearlyPrice && isYearly ? "₹" + yearlyPrice : monthlyPrice ? "₹" + monthlyPrice : "Custom"}</h3>
-          <span className="flex flex-col justify-end text-sm mb-1">{yearlyPrice && isYearly ? "/year" : monthlyPrice ? "/month" : null}</span>
+        <div className="flex gap-0.5 justify-between items-end">
+          <div className="flex gap-0.5">
+            <h3 className="text-3xl font-bold">{yearlyPrice && isYearly ? "₹" + yearlyPrice : monthlyPrice ? "₹" + monthlyPrice : "Custom"}</h3>
+            <span className="flex flex-col justify-end text-sm mb-1">{yearlyPrice && isYearly ? "/year" : monthlyPrice ? "/month" : null}</span>
+          </div>
+          {soldCount !== undefined && maxCount !== undefined && (
+            <span className="font-bold text-red-500 mb-1 animate-pulse">
+              {maxCount - soldCount} Left
+            </span>
+          )}
         </div>
-        <CardDescription className="pt-1.5 h-12">{description}</CardDescription>
+        <CardDescription className="pt-1.5 h-12">
+          {description}
+        </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-2">
         {features.map((feature: string) => (
@@ -90,9 +103,11 @@ const PricingCard = ({ isYearly, title, monthlyPrice, yearlyPrice, description, 
     <CardFooter className="mt-2">
       <Dialog onOpenChange={(open) => !open && setView('features')}>
         <DialogTrigger asChild>
-          <Button className="relative inline-flex w-full items-center justify-center rounded-md bg-black text-white dark:bg-white px-6 font-medium  dark:text-black transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
+          <Button 
+            disabled={isDisabled || isSoldOut}
+            className="relative inline-flex w-full items-center justify-center rounded-md bg-black text-white dark:bg-white px-6 font-medium  dark:text-black transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50 disabled:opacity-50 disabled:cursor-not-allowed">
             <div className="absolute -inset-0.5 -z-10 rounded-lg bg-gradient-to-b from-[#c7d2fe] to-[#8678f9] opacity-75 blur" />
-            {actionLabel}
+            {isSoldOut ? "Sold Out" : actionLabel}
           </Button>
         </DialogTrigger>
         <DialogContent className="max-w-2xl min-h-[500px]">
@@ -268,7 +283,7 @@ const CheckItemWithCategory = ({ text }: { text: string }) => {
   )
 }
 
-export default function MembershipCards() {
+export default function MembershipCards({ diamondSoldCount = 0 }: { diamondSoldCount?: number }) {
   const isYearly = false
 
   const goldFeaturesList = [
@@ -306,7 +321,7 @@ export default function MembershipCards() {
 
   const plans: Omit<PricingCardProps, "isYearly">[] = [
     {
-      title: " Gold",
+      title: "Gold",
       monthlyPrice: 149,
       yearlyPrice: 1999,
       description: "Stand out with your first premium badge.",
@@ -362,6 +377,8 @@ export default function MembershipCards() {
       },
       actionLabel: "Get Started with Diamond",
       exclusive: true,
+      soldCount: diamondSoldCount,
+      maxCount: 5,
     },
   ]
   return (
