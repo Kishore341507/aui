@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 export default async function Page() {
   // Get Diamond plan and count active memberships
   const diamondPlan = await prisma.plan.findFirst({
-    where: { slug: "AUI Diamond" }
+    where: { slug: "Diamond" }
   })
 
   const diamondSoldCount = diamondPlan ? await prisma.membership.count({

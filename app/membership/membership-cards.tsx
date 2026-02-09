@@ -321,7 +321,7 @@ export default function MembershipCards({ diamondSoldCount = 0 }: { diamondSoldC
 
   const plans: Omit<PricingCardProps, "isYearly">[] = [
     {
-      title: "AUI Gold",
+      title: "Gold",
       monthlyPrice: 149,
       yearlyPrice: 1999,
       description: "Stand out with your first premium badge.",
@@ -335,7 +335,7 @@ export default function MembershipCards({ diamondSoldCount = 0 }: { diamondSoldC
       actionLabel: "Get Started with Gold",
     },
     {
-      title: "AUI Platinum",
+      title: "Platinum",
       monthlyPrice: 299,
       yearlyPrice: 2999,
       description: "Direct access, priority support, and elite status.",
@@ -357,7 +357,7 @@ export default function MembershipCards({ diamondSoldCount = 0 }: { diamondSoldC
       popular: true,
     },
     {
-      title: "AUI Diamond",
+      title: "Diamond",
       monthlyPrice: 1999,
       yearlyPrice: 19999,
       description: "The ultimate tier for power users.",
