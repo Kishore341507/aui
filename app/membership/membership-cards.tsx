@@ -85,7 +85,7 @@ const PricingCard = ({ isYearly, title, monthlyPrice, yearlyPrice, description, 
             <span className="flex flex-col justify-end text-sm mb-1">{yearlyPrice && isYearly ? "/year" : monthlyPrice ? "/month" : null}</span>
           </div>
           {soldCount !== undefined && maxCount !== undefined && (
-            <span className="text-3xl font-bold text-white mb-1">
+            <span className="font-bold text-muted-foreground mb-1">
               {soldCount}/{maxCount}
             </span>
           )}
