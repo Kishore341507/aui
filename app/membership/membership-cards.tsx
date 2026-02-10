@@ -207,24 +207,25 @@ const PricingCard = ({ isYearly, title, monthlyPrice, yearlyPrice, description, 
                         <ToggleGroupItem value="500" aria-label="Add 500">
                           +500
                         </ToggleGroupItem>
-                        <ToggleGroupItem value="custom" aria-label="Custom amount">
-                          Custom
-                        </ToggleGroupItem>
+                        {diamondTopUp === "custom" ? (
+                          <div className="flex items-center rounded-md border border-input bg-background px-2">
+                            <input
+                              type="number"
+                              min={0}
+                              step={1}
+                              inputMode="numeric"
+                              placeholder="Support AUI (₹)"
+                              value={customTopUp}
+                              onChange={(event) => setCustomTopUp(event.target.value)}
+                              className="h-9 w-28 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+                            />
+                          </div>
+                        ) : (
+                          <ToggleGroupItem value="custom" aria-label="Custom amount">
+                            Custom
+                          </ToggleGroupItem>
+                        )}
                       </ToggleGroup>
-                    )}
-                    {isDiamond && diamondTopUp === "custom" && (
-                      <div className="w-full max-w-xs">
-                        <input
-                          type="number"
-                          min={0}
-                          step={1}
-                          inputMode="numeric"
-                          placeholder="Support more to AUI (₹)"
-                          value={customTopUp}
-                          onChange={(event) => setCustomTopUp(event.target.value)}
-                          className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
-                        />
-                      </div>
                     )}
                     <QRCodeCanvas className='border p-2 bg-foreground rounded ' value={paymentUrl} size={200} level='Q'
                         imageSettings={{
