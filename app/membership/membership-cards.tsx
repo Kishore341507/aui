@@ -9,6 +9,7 @@ import {cn} from "@/lib/utils"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import { QRCodeCanvas } from "qrcode.react"
 import { motion, AnimatePresence } from "framer-motion"
 import { useSession, signIn } from "next-auth/react"
@@ -43,7 +44,15 @@ const PricingCard = ({ isYearly, title, monthlyPrice, yearlyPrice, description, 
   const { data: session } = useSession()
   const isMobile = useIsMobile()
   const [view, setView] = useState<'features' | 'terms' | 'qr'>('features')
-  const amount = yearlyPrice && isYearly ? yearlyPrice : monthlyPrice ? monthlyPrice : "custom"
+  const [diamondTopUp, setDiamondTopUp] = useState("0")
+  const [customTopUp, setCustomTopUp] = useState("")
+  const isDiamond = title.trim().toLowerCase() === "diamond"
+  const baseAmount = yearlyPrice && isYearly ? yearlyPrice : monthlyPrice
+  const parsedCustomTopUp = Math.max(0, Number(customTopUp) || 0)
+  const topUpAmount = diamondTopUp === "custom" ? parsedCustomTopUp : Number(diamondTopUp)
+  const amount = isDiamond && baseAmount
+    ? baseAmount + (Number.isFinite(topUpAmount) ? topUpAmount : 0)
+    : baseAmount ?? "custom"
   const url = "upi://pay?pa=amongusindians@axl&pn=AmongUsIndians"
   const paymentUrl = url + ((session?.user?.userId) ? "&tn=" + session.user.userId + "|" + (session.user.name || "") : "") + ((amount && amount !== "custom") ? "&am=" + amount : "")
   const isSoldOut = soldCount !== undefined && maxCount !== undefined && soldCount >= maxCount
@@ -197,6 +206,42 @@ const PricingCard = ({ isYearly, title, monthlyPrice, yearlyPrice, description, 
                    transition={{ duration: 0.3 }}
                    className="absolute inset-0 flex items-center justify-center flex-col gap-4"
                  >
+                    {isDiamond && (
+                      <ToggleGroup
+                        type="single"
+                        className="mb-2"
+                        value={diamondTopUp}
+                        onValueChange={(value) => value && setDiamondTopUp(value)}
+                      >
+                        <ToggleGroupItem value="0" aria-label="Add 0">
+                          +0
+                        </ToggleGroupItem>
+                        <ToggleGroupItem value="100" aria-label="Add 100">
+                          +100
+                        </ToggleGroupItem>
+                        <ToggleGroupItem value="500" aria-label="Add 500">
+                          +500
+                        </ToggleGroupItem>
+                        {diamondTopUp === "custom" ? (
+                          <div className="flex items-center rounded-md border border-input bg-background px-2">
+                            <input
+                              type="number"
+                              min={0}
+                              step={1}
+                              inputMode="numeric"
+                              placeholder="Support AUI (₹)"
+                              value={customTopUp}
+                              onChange={(event) => setCustomTopUp(event.target.value)}
+                              className="h-9 w-28 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+                            />
+                          </div>
+                        ) : (
+                          <ToggleGroupItem value="custom" aria-label="Custom amount">
+                            Custom
+                          </ToggleGroupItem>
+                        )}
+                      </ToggleGroup>
+                    )}
                     <QRCodeCanvas className='border p-2 bg-foreground rounded ' value={paymentUrl} size={200} level='Q'
                         imageSettings={{
                             src: '/aui.png',
