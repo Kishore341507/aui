@@ -9,6 +9,7 @@ import {cn} from "@/lib/utils"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import { QRCodeCanvas } from "qrcode.react"
 import { motion, AnimatePresence } from "framer-motion"
 import { useSession, signIn } from "next-auth/react"
@@ -40,7 +41,15 @@ const PricingCard = ({ isYearly, title, monthlyPrice, yearlyPrice, description, 
   const { data: session } = useSession()
   const isMobile = useIsMobile()
   const [view, setView] = useState<'features' | 'terms' | 'qr'>('features')
-  const amount = yearlyPrice && isYearly ? yearlyPrice : monthlyPrice ? monthlyPrice : "custom"
+  const [diamondTopUp, setDiamondTopUp] = useState("0")
+  const [customTopUp, setCustomTopUp] = useState("")
+  const isDiamond = title.trim().toLowerCase() === "diamond"
+  const baseAmount = yearlyPrice && isYearly ? yearlyPrice : monthlyPrice
+  const parsedCustomTopUp = Math.max(0, Number(customTopUp) || 0)
+  const topUpAmount = diamondTopUp === "custom" ? parsedCustomTopUp : Number(diamondTopUp)
+  const amount = isDiamond && baseAmount
+    ? baseAmount + (Number.isFinite(topUpAmount) ? topUpAmount : 0)
+    : baseAmount ?? "custom"
   const url = "upi://pay?pa=amongusindians@axl&pn=AmongUsIndians"
   const paymentUrl = url + ((session?.user?.userId) ? "&tn=" + session.user.userId : "") + ((amount && amount !== "custom") ? "&am=" + amount : "")
 
@@ -182,6 +191,41 @@ const PricingCard = ({ isYearly, title, monthlyPrice, yearlyPrice, description, 
                    transition={{ duration: 0.3 }}
                    className="absolute inset-0 flex items-center justify-center flex-col gap-4"
                  >
+                    {isDiamond && (
+                      <ToggleGroup
+                        type="single"
+                        className="mb-2"
+                        value={diamondTopUp}
+                        onValueChange={(value) => value && setDiamondTopUp(value)}
+                      >
+                        <ToggleGroupItem value="0" aria-label="Add 0">
+                          +0
+                        </ToggleGroupItem>
+                        <ToggleGroupItem value="100" aria-label="Add 100">
+                          +100
+                        </ToggleGroupItem>
+                        <ToggleGroupItem value="500" aria-label="Add 500">
+                          +500
+                        </ToggleGroupItem>
+                        <ToggleGroupItem value="custom" aria-label="Custom amount">
+                          Custom
+                        </ToggleGroupItem>
+                      </ToggleGroup>
+                    )}
+                    {isDiamond && diamondTopUp === "custom" && (
+                      <div className="w-full max-w-xs">
+                        <input
+                          type="number"
+                          min={0}
+                          step={1}
+                          inputMode="numeric"
+                          placeholder="Support more to AUI (₹)"
+                          value={customTopUp}
+                          onChange={(event) => setCustomTopUp(event.target.value)}
+                          className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                        />
+                      </div>
+                    )}
                     <QRCodeCanvas className='border p-2 bg-foreground rounded ' value={paymentUrl} size={200} level='Q'
                         imageSettings={{
                             src: '/aui.png',
