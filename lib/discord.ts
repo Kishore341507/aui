@@ -19,6 +19,17 @@ async function getMember(guildId: string, userId: string) {
   return response.json();
 }
 
+interface Member {
+  nick: string | null;
+  user: {
+    id: string;
+    username: string;
+    avatar: string;
+    global_name: string;
+    bot: boolean;
+  };
+}
+
 export async function searchGuildMembers(
   query: string,
   limit?: number,
@@ -67,7 +78,7 @@ export async function searchGuildMembers(
 
   let data = await searchResponse.json();
   if (Array.isArray(data) && data.length > 0) {
-    data = data.filter((member: { user: { bot: boolean } }) => {
+    data = data.filter((member: Member) => {
       return member.user.bot !== true;
     });
   }
