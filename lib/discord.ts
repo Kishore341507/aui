@@ -67,7 +67,7 @@ export async function searchGuildMembers(
 
   let data = await searchResponse.json();
   if (Array.isArray(data) && data.length > 0) {
-    data = data.filter((member: any) => {
+    data = data.filter((member: { user: { bot: boolean } }) => {
       return member.user.bot !== true;
     });
   }
