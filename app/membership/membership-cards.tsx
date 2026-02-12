@@ -1,7 +1,7 @@
 "use client"
 
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { CheckCircle2, Eye, Palette, Mic, MessageSquare, Wrench, Brain, Lock, Crown, Sliders, Coins, Gift, TrendingUp, LucideIcon, Mail, Headphones, User, MessageCircle, Layers, CreditCard } from "lucide-react"
+import { CheckCircle2, Eye, Palette, Mic, MessageSquare, Wrench, Brain, Lock, Crown, Sliders, Coins, Gift, TrendingUp, LucideIcon, Mail, Headphones, User, MessageCircle, Layers, CreditCard, Copy, Check } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import React, { useState } from "react"
 import Link from "next/link"
@@ -47,6 +47,7 @@ const PricingCard = ({ isYearly, title, monthlyPrice, yearlyPrice, description, 
   const { data: session } = useSession()
   const isMobile = useIsMobile()
   const [view, setView] = useState<'features' | 'terms' | 'qr'>('features')
+  const [copied, setCopied] = useState(false)
   const [diamondTopUp, setDiamondTopUp] = useState("0")
   const [customTopUp, setCustomTopUp] = useState("")
   const isDiamond = title.trim().toLowerCase() === "diamond"
@@ -56,7 +57,8 @@ const PricingCard = ({ isYearly, title, monthlyPrice, yearlyPrice, description, 
   const amount = isDiamond && baseAmount
     ? baseAmount + (Number.isFinite(topUpAmount) ? topUpAmount : 0)
     : baseAmount ?? "custom"
-  const url = "upi://pay?pa=amongusindians@axl&pn=AmongUsIndians"
+  const upiId = "BHARATPE.8U0Z1L2A1X48538@fbpe"
+  const url = `upi://pay?pa=${upiId}&pn=BharatPe Merchant`
   const paymentUrl = url + ((session?.user?.userId) ? "&tn=" + session.user.userId + "|" + (session.user.name || "") : "") + ((amount && amount !== "custom") ? "&am=" + amount : "")
   const isSoldOut = soldCount !== undefined && maxCount !== undefined && soldCount >= maxCount
 
@@ -67,6 +69,16 @@ const PricingCard = ({ isYearly, title, monthlyPrice, yearlyPrice, description, 
       }
     } else {
       setView('features')
+    }
+  }
+
+  const handleCopyUpiId = async () => {
+    try {
+      await navigator.clipboard.writeText(upiId)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 2000)
+    } catch (err) {
+      console.error('Failed to copy:', err)
     }
   }
 
@@ -253,6 +265,19 @@ const PricingCard = ({ isYearly, title, monthlyPrice, yearlyPrice, description, 
                             excavate: true,
                         }}
                     />
+                    <div className="flex flex-col items-center gap-2">
+                      <div 
+                        onClick={handleCopyUpiId}
+                        className="flex items-center gap-2 bg-muted px-3 py-1.5 rounded border cursor-pointer hover:bg-muted/80 transition-colors group"
+                      >
+                        <code className="text-xs select-all">{upiId}</code>
+                        {copied ? (
+                          <Check size={14} className="text-green-500 flex-shrink-0" />
+                        ) : (
+                          <Copy size={14} className="text-muted-foreground group-hover:text-foreground transition-colors flex-shrink-0" />
+                        )}
+                      </div>
+                    </div>
                     <div className="flex flex-col gap-1 text-center text-muted-foreground text-sm">
                          <p><span className="font-semibold text-foreground">Step 1:</span> Pay on QR</p>
                          <p><span className="font-semibold text-foreground">Step 2:</span> Send screenshot on bottom right chat</p>
