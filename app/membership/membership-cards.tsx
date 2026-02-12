@@ -9,6 +9,7 @@ import {cn} from "@/lib/utils"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import { QRCodeCanvas } from "qrcode.react"
 import { motion, AnimatePresence } from "framer-motion"
 import { useSession, signIn } from "next-auth/react"
@@ -26,25 +27,40 @@ type PricingCardProps = {
   popular?: boolean
   exclusive?: boolean
   expandableFeatures?: Record<string, string[]>
+  soldCount?: number
+  maxCount?: number
+  isDisabled?: boolean
 }
 
 const PricingHeader = ({ title, subtitle }: { title: string; subtitle: string }) => (
   <section className="text-center">
     <h2 className="text-3xl font-bold">{title}</h2>
     <p className="text-xl pt-1">{subtitle}</p>
+    <p className="text-center text-sm italic text-muted-foreground pt-2">
+        100% of your contribution goes directly toward growing and improving AUI.
+    </p>
     <br />
   </section>
 )
 
-const PricingCard = ({ isYearly, title, monthlyPrice, yearlyPrice, description, features, allFeatures, actionLabel, popular, exclusive, expandableFeatures }: PricingCardProps) => {
+const PricingCard = ({ isYearly, title, monthlyPrice, yearlyPrice, description, features, allFeatures, actionLabel, popular, exclusive, expandableFeatures, soldCount, maxCount, isDisabled }: PricingCardProps) => {
   const { data: session } = useSession()
   const isMobile = useIsMobile()
   const [view, setView] = useState<'features' | 'terms' | 'qr'>('features')
   const [copied, setCopied] = useState(false)
-  const amount = yearlyPrice && isYearly ? yearlyPrice : monthlyPrice ? monthlyPrice : "custom"
+  const [diamondTopUp, setDiamondTopUp] = useState("0")
+  const [customTopUp, setCustomTopUp] = useState("")
+  const isDiamond = title.trim().toLowerCase() === "diamond"
+  const baseAmount = yearlyPrice && isYearly ? yearlyPrice : monthlyPrice
+  const parsedCustomTopUp = Math.max(0, Number(customTopUp) || 0)
+  const topUpAmount = diamondTopUp === "custom" ? parsedCustomTopUp : Number(diamondTopUp)
+  const amount = isDiamond && baseAmount
+    ? baseAmount + (Number.isFinite(topUpAmount) ? topUpAmount : 0)
+    : baseAmount ?? "custom"
   const upiId = "BHARATPE.8U0Z1L2A1X48538@fbpe"
   const url = `upi://pay?pa=${upiId}&pn=BharatPe Merchant`
-  const paymentUrl = url + ((session?.user?.userId) ? "&tn=" + session.user.userId : "") + ((amount && amount !== "custom") ? "&am=" + amount : "")
+  const paymentUrl = url + ((session?.user?.userId) ? "&tn=" + session.user.userId + "|" + (session.user.name || "") : "") + ((amount && amount !== "custom") ? "&am=" + amount : "")
+  const isSoldOut = soldCount !== undefined && maxCount !== undefined && soldCount >= maxCount
 
   const handleGetClick = () => {
     if (view === 'features') {
@@ -87,11 +103,20 @@ const PricingCard = ({ isYearly, title, monthlyPrice, yearlyPrice, description, 
         ) : (
           <CardTitle className="text-zinc-700 dark:text-zinc-300 text-lg">{title}</CardTitle>
         )}
-        <div className="flex gap-0.5">
-          <h3 className="text-3xl font-bold">{yearlyPrice && isYearly ? "₹" + yearlyPrice : monthlyPrice ? "₹" + monthlyPrice : "Custom"}</h3>
-          <span className="flex flex-col justify-end text-sm mb-1">{yearlyPrice && isYearly ? "/year" : monthlyPrice ? "/month" : null}</span>
+        <div className="flex gap-0.5 justify-between items-end">
+          <div className="flex gap-0.5">
+            <h3 className="text-3xl font-bold">{yearlyPrice && isYearly ? "₹" + yearlyPrice : monthlyPrice ? "₹" + monthlyPrice : "Custom"}</h3>
+            <span className="flex flex-col justify-end text-sm mb-1">{yearlyPrice && isYearly ? "/year" : monthlyPrice ? "/month" : null}</span>
+          </div>
+          {soldCount !== undefined && maxCount !== undefined && (
+            <span className="font-bold text-red-500 mb-1 animate-pulse">
+              {maxCount - soldCount} Left
+            </span>
+          )}
         </div>
-        <CardDescription className="pt-1.5 h-12">{description}</CardDescription>
+        <CardDescription className="pt-1.5 h-12">
+          {description}
+        </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-2">
         {features.map((feature: string) => (
@@ -102,9 +127,11 @@ const PricingCard = ({ isYearly, title, monthlyPrice, yearlyPrice, description, 
     <CardFooter className="mt-2">
       <Dialog onOpenChange={(open) => !open && setView('features')}>
         <DialogTrigger asChild>
-          <Button className="relative inline-flex w-full items-center justify-center rounded-md bg-black text-white dark:bg-white px-6 font-medium  dark:text-black transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50">
+          <Button 
+            disabled={isDisabled || isSoldOut}
+            className="relative inline-flex w-full items-center justify-center rounded-md bg-black text-white dark:bg-white px-6 font-medium  dark:text-black transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50 disabled:opacity-50 disabled:cursor-not-allowed">
             <div className="absolute -inset-0.5 -z-10 rounded-lg bg-gradient-to-b from-[#c7d2fe] to-[#8678f9] opacity-75 blur" />
-            {actionLabel}
+            {isSoldOut ? "Sold Out" : actionLabel}
           </Button>
         </DialogTrigger>
         <DialogContent className="max-w-2xl min-h-[500px]">
@@ -194,6 +221,42 @@ const PricingCard = ({ isYearly, title, monthlyPrice, yearlyPrice, description, 
                    transition={{ duration: 0.3 }}
                    className="absolute inset-0 flex items-center justify-center flex-col gap-4"
                  >
+                    {isDiamond && (
+                      <ToggleGroup
+                        type="single"
+                        className="mb-2"
+                        value={diamondTopUp}
+                        onValueChange={(value) => value && setDiamondTopUp(value)}
+                      >
+                        <ToggleGroupItem value="0" aria-label="Add 0">
+                          +0
+                        </ToggleGroupItem>
+                        <ToggleGroupItem value="100" aria-label="Add 100">
+                          +100
+                        </ToggleGroupItem>
+                        <ToggleGroupItem value="500" aria-label="Add 500">
+                          +500
+                        </ToggleGroupItem>
+                        {diamondTopUp === "custom" ? (
+                          <div className="flex items-center rounded-md border border-input bg-background px-2">
+                            <input
+                              type="number"
+                              min={0}
+                              step={1}
+                              inputMode="numeric"
+                              placeholder="Support AUI (₹)"
+                              value={customTopUp}
+                              onChange={(event) => setCustomTopUp(event.target.value)}
+                              className="h-9 w-28 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+                            />
+                          </div>
+                        ) : (
+                          <ToggleGroupItem value="custom" aria-label="Custom amount">
+                            Custom
+                          </ToggleGroupItem>
+                        )}
+                      </ToggleGroup>
+                    )}
                     <QRCodeCanvas className='border p-2 bg-foreground rounded ' value={paymentUrl} size={200} level='Q'
                         imageSettings={{
                             src: '/aui.png',
@@ -293,7 +356,7 @@ const CheckItemWithCategory = ({ text }: { text: string }) => {
   )
 }
 
-export default function MembershipCards() {
+export default function MembershipCards({ diamondSoldCount = 0 }: { diamondSoldCount?: number }) {
   const isYearly = false
 
   const goldFeaturesList = [
@@ -331,7 +394,7 @@ export default function MembershipCards() {
 
   const plans: Omit<PricingCardProps, "isYearly">[] = [
     {
-      title: " Gold",
+      title: "Gold",
       monthlyPrice: 149,
       yearlyPrice: 1999,
       description: "Stand out with your first premium badge.",
@@ -387,12 +450,14 @@ export default function MembershipCards() {
       },
       actionLabel: "Get Started with Diamond",
       exclusive: true,
+      soldCount: diamondSoldCount,
+      maxCount: 5,
     },
   ]
   return (
     <div className="py-8">
       <PricingHeader title="Membership Tiers" subtitle="Choose the tier that's right for you" />
-      <section className="flex flex-col sm:flex-row sm:flex-wrap justify-center gap-8 mt-8">
+      <section className="flex flex-col sm:flex-row sm:flex-wrap justify-center gap-8 mt-1">
         {plans.map((plan) => {
           return <PricingCard key={plan.title} {...plan} isYearly={isYearly} />
         })}

@@ -1,6 +1,7 @@
 import type { Metadata } from "next"
 import MembershipCards from "./membership-cards"
 import { TawkChat } from "@/components/tawk-chat"
+import prisma from "@/prisma/db"
 
 export const metadata: Metadata = {
   title: "Membership Tiers - AUI | India's Most Active Discord Server",
@@ -16,10 +17,21 @@ export const metadata: Metadata = {
 }
 
 export default async function Page() {
+  // Get Diamond plan and count active memberships
+  const diamondPlan = await prisma.plan.findFirst({
+    where: { slug: "Diamond" }
+  })
+
+  const diamondSoldCount = diamondPlan ? await prisma.membership.count({
+    where: {
+      planId: diamondPlan.id,
+      status: "ACTIVE"
+    }
+  }) : 0
 
   return (
     <>
-      <MembershipCards />
+      <MembershipCards diamondSoldCount={diamondSoldCount} />
       <TawkChat />
     </>
   )
