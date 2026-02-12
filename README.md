@@ -43,6 +43,12 @@ AUTH_SECRET="your_auth_secret"
 DATABASE_URL="postgres://username:password@host:port/database?sslmode=require"
 AUTH_DISCORD_ID="your_discord_client_id"
 AUTH_DISCORD_SECRET="your_discord_client_secret"
+
+# Optional: Discord webhook URLs for form submissions (one per form)
+CAP_MARSHAL_WEBHOOK_URL="https://discord.com/api/webhooks/..."
+EVENT_TEAM_WEBHOOK_URL="https://discord.com/api/webhooks/..."
+STAFF_REPORT_WEBHOOK_URL="https://discord.com/api/webhooks/..."
+MEDIA_TEAM_WEBHOOK_URL="https://discord.com/api/webhooks/..."
 ```
 
 > **Warning**: Do not share your `.env` file in public repositories. Use a `.gitignore` file to exclude it.

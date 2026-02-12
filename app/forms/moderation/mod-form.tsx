@@ -440,33 +440,30 @@ export default function ModerationForm() {
     );
   }
 
-  // Render unauthenticated state
-  if (sessionStatus === "unauthenticated") {
-    return (
-      <div className="min-h-screen">
-      {/* <div className="min-h-screen bg-black bg-gradient-to-br from-gray-900 via-black to-gray-900"> */}
-        <div className="container mx-auto py-12 flex flex-col items-center justify-center h-screen">
-          <Card className="w-full max-w-md bg-white/10 backdrop-blur-sm border-gray-200/20 shadow-lg p-8">
-            <CardHeader>
-              <CardTitle className="text-2xl font-bold text-center">Authentication Required</CardTitle>
-              <CardDescription className="text-center">
-                Please sign in with Discord to access the staff application.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="flex justify-center">
-              <Button onClick={() => signIn("discord")}>Sign In with Discord</Button>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-    );
-  }
+  // Allow unauthenticated users to fill the form, but require sign-in to submit
+  // We display an inline notice in the main form when the user is unauthenticated.
 
   // Render the main form
   return (
-    // <div className="min-h-screen bg-black bg-gradient-to-br from-gray-900 via-black to-gray-900">
-    <div >
-      <div className="container mx-auto py-12"> 
+    // <div className="min-h-screen bg-black bg-gradient-to-br from(gray-900 via-black to-gray-900">
+    <div>
+      <div className="container mx-auto py-12">
+        {sessionStatus === 'unauthenticated' && (
+          <div className="mb-6">
+            <Alert>
+              <Info className="h-4 w-4 mr-2" />
+              <div>
+                <AlertTitle>Sign in to submit</AlertTitle>
+                <AlertDescription>
+                  You can fill this form while unauthenticated, but you must sign in with Discord to submit your application.
+                  <div className="mt-2">
+                    <Button size="sm" onClick={() => signIn('discord')}>Sign in with Discord</Button>
+                  </div>
+                </AlertDescription>
+              </div>
+            </Alert>
+          </div>
+        )}
         <Form {...form}>
           <form onSubmit={form.handleSubmit(handleSubmit)}>
             <Card ref={formContainerRef} className="w-full max-w-2xl mx-auto bg-transparent backdrop-blur-sm border-gray-200/20 shadow-lg border-0">
@@ -486,16 +483,22 @@ export default function ModerationForm() {
                     </Button>
                   )}
                   {currentStep === 1 && (
-                    <Button type="submit" disabled={isSubmitting}>
-                      {isSubmitting ? (
-                        <>
-                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                          Submitting...
-                        </>
-                      ) : (
-                        "Submit"
-                      )}
-                    </Button>
+                    sessionStatus === 'authenticated' ? (
+                      <Button type="submit" disabled={isSubmitting}>
+                        {isSubmitting ? (
+                          <>
+                            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                            Submitting...
+                          </>
+                        ) : (
+                          "Submit"
+                        )}
+                      </Button>
+                    ) : (
+                      <Button onClick={() => signIn('discord')}>
+                        Sign in with Discord to submit
+                      </Button>
+                    )
                   )}
                 </div>
               </CardFooter>

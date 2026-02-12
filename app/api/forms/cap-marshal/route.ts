@@ -14,49 +14,44 @@ export async function POST(request: Request) {
     const formData = await request.json();
     const userId = session.user.id;
 
-    // Save the form data to the database
     await prisma.formResponse.create({
       data: {
         data: { ...formData },
         userId: userId,
-        form: "unban",
+        form: "cap-marshal",
       },
     });
 
-    if (process.env.UNBAN_WEBHOOK_URL) {
+    if (process.env.CAP_MARSHAL_WEBHOOK_URL) {
       try {
         const embed = buildFormEmbed({
-          title: "Unban Request",
-          emoji: "🔓",
-          color: 0xf59e0b,
+          title: "Cap/Marshal Application",
+          emoji: "🎖️",
+          color: 0x5865f2,
           session,
           fields: [
-            { name: "Ban Reason", value: formData.ban_reason },
-            { name: "Appeal Reason", value: formData.why_unban },
-            { name: "Extra Info", value: formData.extra },
+            { name: "Game", value: formData.game },
+            { name: "Active Timings", value: formData.activeTimings },
+            { name: "Dedication", value: formData.dedication },
+            { name: "Knows Bots", value: formData.knowBots },
+            { name: "Why", value: formData.why },
           ],
-          footerText: "AUI Unban Request",
+          footerText: "AUI Cap/Marshal Application",
         });
 
-        await fetch(process.env.UNBAN_WEBHOOK_URL, {
+        await fetch(process.env.CAP_MARSHAL_WEBHOOK_URL, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(embed),
         });
       } catch (err) {
-        console.error("Webhook error (unban):", err);
+        console.error("Webhook error (cap-marshal):", err);
       }
     }
 
-    return NextResponse.json(
-      { message: "Unban request submitted successfully!" },
-      { status: 200 }
-    );
+    return NextResponse.json({ message: "Application submitted successfully!" }, { status: 200 });
   } catch (error) {
-    console.error("Failed to process unban request:", error);
-    return NextResponse.json(
-      { message: "Failed to submit unban request." },
-      { status: 500 }
-    );
+    console.error("Failed to process application:", error);
+    return NextResponse.json({ message: "Failed to submit application." }, { status: 500 });
   }
 }

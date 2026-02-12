@@ -35,7 +35,7 @@ export default function HeroComponent() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.7, ease: "easeOut" }}
           >
-            Welcome to AUI
+            The Hub of Indian Gaming
           </motion.h1>
           <motion.p 
             className="text-sm lg:text-base text-muted-foreground mb-8"
@@ -43,7 +43,7 @@ export default function HeroComponent() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
           >
-            India&apos;s most active Discord server with 50,000+ members. Join Among US India for tournaments, 24/7 music, and an amazing community experience!
+            Join 100K+ gamers in India&apos;s most active Discord community. Experience epic tournaments, 24/7 gaming sessions, exclusive events, and a thriving community that never sleeps!
           </motion.p>
           
           <motion.div

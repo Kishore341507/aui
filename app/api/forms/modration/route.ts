@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import prisma from "@/prisma/db";
+import { buildFormEmbed } from "@/lib/discord";
 
 export async function POST(request: Request) {
   try {
@@ -25,76 +26,24 @@ export async function POST(request: Request) {
     // Send Discord webhook if MOD_FORM_WEBHOOK_URL exists
     if (process.env.MOD_FORM_WEBHOOK_URL) {
       try {
-        const embed = {
-          embeds: [
-            {
-              title: "🛡️ New Moderator Application",
-              color: 0x5865f2,
-              fields: [
-                {
-                  name: "👤 Applicant",
-                  value: `**${session.user.name || "Unknown"}**\nUser ID: \`${session.user.userId}\`\nEmail: ${session.user.email || "No email"}`,
-                  inline: false,
-                },
-                {
-                  name: "🌍 Country",
-                  value: formData.country || "Not provided",
-                  inline: true,
-                },
-                {
-                  name: "🎂 Age",
-                  value: formData.age || "Not provided",
-                  inline: true,
-                },
-                {
-                  name: "⏰ Available Time",
-                  value: formData.contributionTime || "Not provided",
-                  inline: false,
-                },
-                {
-                  name: "🎤 Voice Chat",
-                  value: formData.voiceChat || "Not provided",
-                  inline: true,
-                },
-                {
-                  name: "🤖 Bot Experience",
-                  value: `${formData.botExperience || "N/A"}/5`,
-                  inline: true,
-                },
-                {
-                  name: "📝 Moderation Definition",
-                  value: formData.moderationDefinition
-                    ? formData.moderationDefinition.substring(0, 1024)
-                    : "Not provided",
-                  inline: false,
-                },
-                {
-                  name: "📚 Past Experience",
-                  value: formData.pastExperience
-                    ? formData.pastExperience.substring(0, 1024)
-                    : "Not provided",
-                  inline: false,
-                },
-                {
-                  name: "⏳ Service Duration",
-                  value: formData.serviceDuration || "Not provided",
-                  inline: false,
-                },
-                {
-                  name: "ℹ️ About",
-                  value: formData.aboutYourself
-                    ? formData.aboutYourself.substring(0, 1024)
-                    : "Not provided",
-                  inline: false,
-                },
-              ],
-              timestamp: new Date().toISOString(),
-              footer: {
-                text: "AUI Moderation Application",
-              },
-            },
+        const embed = buildFormEmbed({
+          title: "Moderator Application",
+          emoji: "🛡️",
+          color: 0x5865f2,
+          session,
+          fields: [
+            { name: "Country", value: formData.country, inline: true },
+            { name: "Age", value: formData.age, inline: true },
+            { name: "Available Time", value: formData.contributionTime },
+            { name: "Voice Chat", value: formData.voiceChat, inline: true },
+            { name: "Bot Experience", value: formData.botExperience ? `${formData.botExperience}/5` : "N/A", inline: true },
+            { name: "Moderation Definition", value: formData.moderationDefinition },
+            { name: "Past Experience", value: formData.pastExperience },
+            { name: "Service Duration", value: formData.serviceDuration },
+            { name: "About", value: formData.aboutYourself },
           ],
-        };
+          footerText: "AUI Moderation Application",
+        });
 
         await fetch(process.env.MOD_FORM_WEBHOOK_URL, {
           method: "POST",

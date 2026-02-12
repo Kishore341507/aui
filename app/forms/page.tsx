@@ -75,6 +75,86 @@ export default function Forms() {
                         </Card>
                     </Link>
 
+                    <Link href='/forms/cap-marshal' className="group transition-transform hover:scale-105">
+                        <Card className="h-full border-2 hover:border-primary/50 transition-colors">
+                            <CardHeader>
+                                <CardTitle className="flex items-center justify-between">
+                                    Cap / Marshal Application
+                                    <ExternalLink className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                </CardTitle>
+                                <CardDescription>
+                                    Apply to be a Cap or Marshal for AUI events. Share your experience and availability.
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="flex items-center text-sm text-muted-foreground">
+                                    <Clock className="w-4 h-4 mr-1" />
+                                    Processing time: 3-7 days
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </Link>
+
+                    <Link href='/forms/event-team' className="group transition-transform hover:scale-105">
+                        <Card className="h-full border-2 hover:border-primary/50 transition-colors">
+                            <CardHeader>
+                                <CardTitle className="flex items-center justify-between">
+                                    Event Team Application
+                                    <ExternalLink className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                </CardTitle>
+                                <CardDescription>
+                                    Help organize and run community events—share ideas and past experience.
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="flex items-center text-sm text-muted-foreground">
+                                    <Clock className="w-4 h-4 mr-1" />
+                                    Processing time: 1-2 weeks
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </Link>
+
+                    <Link href='/forms/staff-report' className="group transition-transform hover:scale-105">
+                        <Card className="h-full border-2 hover:border-primary/50 transition-colors">
+                            <CardHeader>
+                                <CardTitle className="flex items-center justify-between">
+                                    Staff Report
+                                    <ExternalLink className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                </CardTitle>
+                                <CardDescription>
+                                    Report a staff member for misconduct or rule violations. Provide details and evidence.
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="flex items-center text-sm text-muted-foreground">
+                                    <Clock className="w-4 h-4 mr-1" />
+                                    Processing time: 2-5 days
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </Link>
+
+                    <Link href='/forms/media-team' className="group transition-transform hover:scale-105">
+                        <Card className="h-full border-2 hover:border-primary/50 transition-colors">
+                            <CardHeader>
+                                <CardTitle className="flex items-center justify-between">
+                                    Media Team Application
+                                    <ExternalLink className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                </CardTitle>
+                                <CardDescription>
+                                    Apply to join the media team for content creation, editing, and promotion.
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="flex items-center text-sm text-muted-foreground">
+                                    <Clock className="w-4 h-4 mr-1" />
+                                    Processing time: 1-2 weeks
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </Link>
+
                 </div>
             </div>
 

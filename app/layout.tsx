@@ -1,16 +1,38 @@
-import type { Metadata } from "next";
+
 import { Inter } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 
+import type { Metadata } from "next";
+import { Geist, Geist_Mono } from "next/font/google";
+import "./globals.css";
+
+import { Poppins } from "next/font/google";
+
+
 import { ThemeProvider } from "@/components/theme-provider"
 import NavBar from "./components/nav-bar";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 import { Analytics } from "@vercel/analytics/react"
 import { Toaster } from "@/components/ui/toaster"
 import AuthProvider from "./auth/Provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["300","400","500","600","700","800","900"],
+});
+const geistSans = Geist({
+  variable: "--font-geist-sans",
+  subsets: ["latin"],
+});
+
+const geistMono = Geist_Mono({
+  variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
 export const metadata: Metadata = {
   metadataBase: new URL('https://amongusindia.com'),
   title: "AUI - India's Most Active Discord Server | Among Us India Discord Community",
@@ -91,19 +113,24 @@ export default function RootLayout({
           `}
         </Script>
       </head>
-      <body className={inter.className}>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} ${poppins.className} antialiased bg-zinc-50 dark:bg-black`}
+      >
+        
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
           disableTransitionOnChange
         >
-          <NavBar />
+          
           <AuthProvider>
+            <Navbar />
             {children}
           </AuthProvider>
           <Toaster />
           <Analytics />
         </ThemeProvider>
+        <Footer />
       </body>
     </html>
   );

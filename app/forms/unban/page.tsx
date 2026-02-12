@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form"
 import { z } from "zod"
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useSession } from "next-auth/react";
+import { useSession, signIn } from "next-auth/react";
 
 import { Button } from "@/components/ui/button"
 import {
@@ -86,11 +86,7 @@ export default function UnbanForm() {
     }
   }
 
-  if (!data) return (
-    <div className="flex items-center justify-center h-[calc(100vh-4rem)]">
-      Not authenticated , please login from top right corner
-    </div>
-  )
+  // Allow guests to fill the form. They must sign in to submit. We show a sign-in CTA at submit time.
 
   return (
     <>
@@ -151,13 +147,19 @@ export default function UnbanForm() {
                 )}
               />
 
-              <Button type="submit" disabled={loading}>
-                {loading ? (
-                  <Loader2 className="w-5 h-5 animate-spin" />
-                ) : (
-                  "Submit Unban Request"
-                )}
-              </Button>
+              {data ? (
+                <Button type="submit" disabled={loading}>
+                  {loading ? (
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                  ) : (
+                    "Submit Unban Request"
+                  )}
+                </Button>
+              ) : (
+                <Button onClick={() => signIn('discord')}>
+                  Sign in with Discord to submit
+                </Button>
+              )}
             </form>
           </Form>
 
