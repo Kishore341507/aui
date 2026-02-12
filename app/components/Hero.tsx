@@ -186,7 +186,7 @@ export default function Hero() {
           </h1>
 
           <p className="mt-6 max-w-2xl mx-auto text-slate-300 text-sm sm:text-base md:text-lg">
-           India's most active Discord server with 50,000+ members. Join Among US India for tournaments, 24/7 music, and an amazing community experience!
+           India&apos;s most active Discord server with 50,000+ members. Join Among US India for tournaments, 24/7 music, and an amazing community experience!
           </p>
 
           {/* Buttons */}

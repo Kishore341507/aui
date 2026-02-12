@@ -28,8 +28,9 @@ import {
 import { ModeToggleSub } from "./mode-toggle-sub";
 import { ModeToggleMobile } from "./mode-toggle-mobile";
 import { handleSignIn, handleSignOut } from "@/app/actions/auth";
+import type { Session } from "next-auth";
 
-export default function NavbarClient({ session }: { session: any }) {
+export default function NavbarClient({ session }: { session: Session | null }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showNavbar, setShowNavbar] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -61,7 +62,7 @@ export default function NavbarClient({ session }: { session: any }) {
 
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
-          <Image src="/aui_dark.svg" alt="Logo" width={32} height={32} />
+          <Image src="/aui_dark.png" alt="Logo" width={32} height={32} />
           <span className="font-bold text-lg">AUI</span>
         </Link>
 
@@ -181,7 +182,11 @@ export default function NavbarClient({ session }: { session: any }) {
               {/* Sign In/Out */}
               <button
                 onClick={() => {
-                  session ? handleSignOut() : handleSignIn("discord");
+                  if (session) {
+                    handleSignOut();
+                  } else {
+                    handleSignIn("discord");
+                  }
                   setMobileMenuOpen(false);
                 }}
                 className="w-full flex items-center justify-between px-4 py-2 hover:bg-slate-700 rounded transition text-left mt-2"

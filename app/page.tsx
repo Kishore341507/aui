@@ -1,9 +1,5 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Instagram, Youtube, Twitter } from "lucide-react"
-import Link from "next/link";
 import Hero from "./components/Hero";
 import type { Metadata } from "next";
-import HeroComponent from "./components/hero-component";
 import TrustedBrandsMarquee from "./components/Trusted_brands";
 import FeaturesSection from "./components/Features";
 import ContentAISection from "./components/contentai";

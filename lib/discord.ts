@@ -1,5 +1,15 @@
 export type EmbedField = { name: string; value?: unknown; inline?: boolean };
 
+export type SessionData = {
+  user?: {
+    name?: string;
+    userId?: string;
+    id?: string;
+    email?: string;
+    image?: string;
+  };
+};
+
 const MAX_FIELD_LENGTH = 1024;
 
 function truncate(value: unknown, max = MAX_FIELD_LENGTH) {
@@ -12,7 +22,7 @@ export function buildFormEmbed(opts: {
   title: string;
   emoji?: string;
   color?: number;
-  session: any;
+  session: SessionData;
   fields?: EmbedField[];
   footerText?: string;
 }) {

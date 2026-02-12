@@ -1,24 +1,19 @@
 
-import { Inter } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import "./globals.css";
 
 import { Poppins } from "next/font/google";
 
 
 import { ThemeProvider } from "@/components/theme-provider"
-import NavBar from "./components/nav-bar";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import { Analytics } from "@vercel/analytics/react"
 import { Toaster } from "@/components/ui/toaster"
 import AuthProvider from "./auth/Provider";
-
-const inter = Inter({ subsets: ["latin"] });
 
 const poppins = Poppins({
   subsets: ["latin"],

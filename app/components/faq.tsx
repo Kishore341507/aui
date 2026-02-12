@@ -50,10 +50,10 @@ export default function FAQ() {
           alt="FAQ Illustration"
         />
         <div className="flex-1">
-          <p className="text-indigo-500 text-sm font-medium">FAQ's</p>
-          <h1 className="text-3xl font-semibold">Got Questions? We've Got Answers</h1>
+          <p className="text-indigo-500 text-sm font-medium">FAQ&apos;s</p>
+          <h1 className="text-3xl font-semibold">Got Questions? We&apos;ve Got Answers</h1>
           <p className="text-sm text-gray-400 mt-2 pb-4">
-            Everything you need to know about joining AUI, tournaments, gameplay, and being part of India's biggest gaming community.
+            Everything you need to know about joining AUI, tournaments, gameplay, and being part of India&apos;s biggest gaming community.
           </p>
 
           {/* FAQ Items */}

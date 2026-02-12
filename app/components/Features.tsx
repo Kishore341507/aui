@@ -57,7 +57,7 @@ export default function FeaturesSection() {
 
           {/* Intro Text */}
           <p className="text-lg max-w-3xl text-left">
-            Every day, thousands of players gather on our server to compete, collaborate, and celebrate gaming culture. From casual meetups to massive tournaments, we've built the ultimate platform for Indian gamers.
+            Every day, thousands of players gather on our server to compete, collaborate, and celebrate gaming culture. From casual meetups to massive tournaments, we&apos;ve built the ultimate platform for Indian gamers.
           </p>
 
           {/* Grid */}
