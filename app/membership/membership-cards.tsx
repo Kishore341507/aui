@@ -1,11 +1,11 @@
 "use client"
 
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { CheckCircle2, Eye, Palette, Mic, MessageSquare, Wrench, Brain, Lock, Crown, Sliders, Coins, Gift, TrendingUp, LucideIcon, Mail, Headphones, User, MessageCircle, Layers, CreditCard, Copy, Check } from "lucide-react"
+import { CheckCircle2, Eye, Palette, Mic, MessageSquare, Wrench, Brain, Lock, Crown, Sliders, Coins, Gift, TrendingUp, LucideIcon, Mail, Headphones, User, MessageCircle, Layers, CreditCard, Copy, Check, X, Search, Loader2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import Link from "next/link"
-import {cn} from "@/lib/utils"
+import { cn } from "@/lib/utils"
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
@@ -14,6 +14,22 @@ import { QRCodeCanvas } from "qrcode.react"
 import { motion, AnimatePresence } from "framer-motion"
 import { useSession, signIn } from "next-auth/react"
 import { useIsMobile } from "@/hooks/use-mobile"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+
+type DiscordUser = {
+  id: string
+  username: string
+  global_name: string
+  avatar: string
+  bot: boolean
+}
+
+type SearchResult = {
+  user: DiscordUser
+  nick?: string
+}
 
 type PricingCardProps = {
   isYearly?: boolean
@@ -50,6 +66,49 @@ const PricingCard = ({ isYearly, title, monthlyPrice, yearlyPrice, description, 
   const [copied, setCopied] = useState(false)
   const [diamondTopUp, setDiamondTopUp] = useState("0")
   const [customTopUp, setCustomTopUp] = useState("")
+
+  const [giftRecipient, setGiftRecipient] = useState<SearchResult | null>(null)
+  const [searchOpen, setSearchOpen] = useState(false)
+  const [searchQuery, setSearchQuery] = useState("")
+  const [searchResults, setSearchResults] = useState<SearchResult[]>([])
+  const [isSearching, setIsSearching] = useState(false)
+  
+  const [debouncedQuery, setDebouncedQuery] = useState(searchQuery)
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedQuery(searchQuery)
+    }, 500)
+
+    return () => {
+      clearTimeout(handler)
+    }
+  }, [searchQuery])
+
+  useEffect(() => {
+    async function searchUsers() {
+      if (!debouncedQuery) {
+        setSearchResults([])
+        return
+      }
+
+      setIsSearching(true)
+      try {
+        const res = await fetch(`/api/discord/search?query=${encodeURIComponent(debouncedQuery)}`)
+        const data = await res.json()
+        const filtered = (data.results || []).filter((r: SearchResult) => r.user.id !== session?.user?.userId)
+        setSearchResults(filtered)
+      } catch (error) {
+        console.error("Search failed", error)
+        setSearchResults([])
+      } finally {
+        setIsSearching(false)
+      }
+    }
+
+    searchUsers()
+  }, [debouncedQuery, session?.user?.userId])
+
   const isDiamond = title.trim().toLowerCase() === "diamond"
   const baseAmount = yearlyPrice && isYearly ? yearlyPrice : monthlyPrice
   const parsedCustomTopUp = Math.max(0, Number(customTopUp) || 0)
@@ -59,7 +118,16 @@ const PricingCard = ({ isYearly, title, monthlyPrice, yearlyPrice, description, 
     : baseAmount ?? "custom"
   const upiId = "BHARATPE.8U0Z1L2A1X48538@fbpe"
   const url = `upi://pay?pa=${upiId}&pn=BharatPe Merchant`
-  const paymentUrl = url + ((session?.user?.userId) ? "&tn=" + session.user.userId + "|" + (session.user.name || "") : "") + ((amount && amount !== "custom") ? "&am=" + amount : "")
+
+  let tn = ""
+  if (giftRecipient && session?.user) {
+      tn = `${session.user.userId}|${session.user.name}->${giftRecipient.user.id}|${giftRecipient.user.username}`
+  } else if (session?.user) {
+      tn = `${session.user.userId}|${session.user.name}`
+  }
+
+  const paymentUrl = url + (tn ? "&tn=" + tn : "") + ((amount && amount !== "custom") ? "&am=" + amount : "")
+
   const isSoldOut = soldCount !== undefined && maxCount !== undefined && soldCount >= maxCount
 
   const handleGetClick = () => {
@@ -146,10 +214,66 @@ const PricingCard = ({ isYearly, title, monthlyPrice, yearlyPrice, description, 
               <h3 className="text-3xl font-bold">{yearlyPrice && isYearly ? "₹" + yearlyPrice : monthlyPrice ? "₹" + monthlyPrice : "Custom"}</h3>
               <span className="text-sm text-muted-foreground">{yearlyPrice && isYearly ? "/year" : monthlyPrice ? "/month" : null}</span>
             </div>
-            <Button onClick={() => !session ? signIn('discord') : handleGetClick()}>
-                {!session ? "Login to Get" : view === 'features' ? "Get" : "Show Features"}
-            </Button>
+            <div className="flex items-center gap-2">
+              {session && (
+              <Popover open={searchOpen} onOpenChange={setSearchOpen}>
+                <PopoverTrigger asChild>
+                    <Button variant="outline" size="icon" className="shadow-[0_0_15px_rgba(236,72,153,0.6)] border-pink-500 text-pink-500 hover:text-pink-600 hover:border-pink-600 dark:text-pink-400 dark:hover:text-pink-300 dark:hover:border-pink-400 aspect-square p-0">
+                      <Gift className="h-4 w-4" />
+                    </Button>
+                </PopoverTrigger>
+                <PopoverContent className="p-0 w-[250px]" align="end">
+                  <Command shouldFilter={false}>
+                      <CommandInput placeholder="Search user..." value={searchQuery} onValueChange={setSearchQuery} />
+                      <CommandList>
+                        {isSearching && <div className="flex justify-center p-4"><Loader2 className="animate-spin h-4 w-4" /></div>}
+                        {!isSearching && searchResults.length === 0 && searchQuery && <CommandEmpty>No users found.</CommandEmpty>}
+                        {searchResults.map((result) => (
+                            <CommandItem 
+                              key={result.user.id} 
+                              value={result.user.username} 
+                              onSelect={() => {
+                                  setGiftRecipient(result);
+                                  setSearchOpen(false);
+                                  setSearchQuery("");
+                              }}
+                              className="flex items-center gap-2 cursor-pointer"
+                            >
+                              <Avatar className="h-6 w-6">
+                                  {result.user.avatar && <AvatarImage src={`https://cdn.discordapp.com/avatars/${result.user.id}/${result.user.avatar}.png`} />}
+                                  <AvatarFallback>{result.user.username[0]}</AvatarFallback>
+                              </Avatar>
+                              <div className="flex flex-col overflow-hidden">
+                                  <span className="text-sm font-medium truncate">{result.user.global_name || result.user.username}</span>
+                                  <span className="text-xs text-muted-foreground truncate">@{result.user.username}</span>
+                              </div>
+                            </CommandItem>
+                        ))}
+                      </CommandList>
+                  </Command>
+                </PopoverContent>
+              </Popover>
+              )}
+              <Button onClick={() => !session ? signIn('discord') : handleGetClick()}>
+                  {!session ? "Login to Get" : view === 'features' ? (giftRecipient ? `Gift to @${giftRecipient.user.username}` : "Get") : "Show Features"}
+              </Button>
+            </div>
           </div>
+          {giftRecipient && (
+              <div className="flex justify-end items-center mb-2 animate-in fade-in slide-in-from-top-1">
+                  <span className="text-xs text-muted-foreground mr-2">Gifting to:</span>
+                  <div className="flex items-center gap-1 bg-pink-100 dark:bg-pink-900/30 px-2 py-0.5 rounded-full border border-pink-200 dark:border-pink-800">
+                      <Avatar className="h-3 w-3">
+                        {giftRecipient.user.avatar && <AvatarImage src={`https://cdn.discordapp.com/avatars/${giftRecipient.user.id}/${giftRecipient.user.avatar}.png`} />}
+                        <AvatarFallback className="text-[8px]">{giftRecipient.user.username[0]}</AvatarFallback>
+                      </Avatar>
+                      <span className="text-xs font-semibold text-pink-700 dark:text-pink-300">@{giftRecipient.user.username}</span>
+                      <button onClick={() => setGiftRecipient(null)} className="ml-1 text-pink-500 hover:text-pink-700 dark:hover:text-pink-300 focus:outline-none">
+                          <X className="h-3 w-3" />
+                      </button>
+                  </div>
+              </div>
+          )}
           <div className="relative overflow-hidden" style={{ height: '50vh' }}>
             <AnimatePresence mode="wait" initial={false}>
               {view === 'features' ? (
@@ -219,76 +343,80 @@ const PricingCard = ({ isYearly, title, monthlyPrice, yearlyPrice, description, 
                    animate={{ rotateY: 0, opacity: 1 }}
                    exit={{ rotateY: -90, opacity: 0 }}
                    transition={{ duration: 0.3 }}
-                   className="absolute inset-0 flex items-center justify-center flex-col gap-4"
+                   className="absolute inset-0"
                  >
-                    {isDiamond && (
-                      <ToggleGroup
-                        type="single"
-                        className="mb-2"
-                        value={diamondTopUp}
-                        onValueChange={(value) => value && setDiamondTopUp(value)}
-                      >
-                        <ToggleGroupItem value="0" aria-label="Add 0">
-                          +0
-                        </ToggleGroupItem>
-                        <ToggleGroupItem value="100" aria-label="Add 100">
-                          +100
-                        </ToggleGroupItem>
-                        <ToggleGroupItem value="500" aria-label="Add 500">
-                          +500
-                        </ToggleGroupItem>
-                        {diamondTopUp === "custom" ? (
-                          <div className="flex items-center rounded-md border border-input bg-background px-2">
-                            <input
-                              type="number"
-                              min={0}
-                              step={1}
-                              inputMode="numeric"
-                              placeholder="Support AUI (₹)"
-                              value={customTopUp}
-                              onChange={(event) => setCustomTopUp(event.target.value)}
-                              className="h-9 w-28 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
-                            />
-                          </div>
-                        ) : (
-                          <ToggleGroupItem value="custom" aria-label="Custom amount">
-                            Custom
-                          </ToggleGroupItem>
+                    <ScrollArea className="h-full w-full">
+                      <div className="flex items-center justify-center flex-col gap-4 min-h-full py-4">
+                        {isDiamond && (
+                          <ToggleGroup
+                            type="single"
+                            className="mb-2"
+                            value={diamondTopUp}
+                            onValueChange={(value) => value && setDiamondTopUp(value)}
+                          >
+                            <ToggleGroupItem value="0" aria-label="Add 0">
+                              +0
+                            </ToggleGroupItem>
+                            <ToggleGroupItem value="100" aria-label="Add 100">
+                              +100
+                            </ToggleGroupItem>
+                            <ToggleGroupItem value="500" aria-label="Add 500">
+                              +500
+                            </ToggleGroupItem>
+                            {diamondTopUp === "custom" ? (
+                              <div className="flex items-center rounded-md border border-input bg-background px-2">
+                                <input
+                                  type="number"
+                                  min={0}
+                                  step={1}
+                                  inputMode="numeric"
+                                  placeholder="Support AUI (₹)"
+                                  value={customTopUp}
+                                  onChange={(event) => setCustomTopUp(event.target.value)}
+                                  className="h-9 w-28 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
+                                />
+                              </div>
+                            ) : (
+                              <ToggleGroupItem value="custom" aria-label="Custom amount">
+                                Custom
+                              </ToggleGroupItem>
+                            )}
+                          </ToggleGroup>
                         )}
-                      </ToggleGroup>
-                    )}
-                    <QRCodeCanvas className='border p-2 bg-foreground rounded ' value={paymentUrl} size={200} level='Q'
-                        imageSettings={{
-                            src: '/aui.png',
-                            height: 50,
-                            width: 50,
-                            excavate: true,
-                        }}
-                    />
-                    <div className="flex flex-col items-center gap-2">
-                      <div 
-                        onClick={handleCopyUpiId}
-                        className="flex items-center gap-2 bg-muted px-3 py-1.5 rounded border cursor-pointer hover:bg-muted/80 transition-colors group"
-                      >
-                        <code className="text-xs select-all">{upiId}</code>
-                        {copied ? (
-                          <Check size={14} className="text-green-500 flex-shrink-0" />
-                        ) : (
-                          <Copy size={14} className="text-muted-foreground group-hover:text-foreground transition-colors flex-shrink-0" />
+                        <QRCodeCanvas className='border p-2 bg-foreground rounded ' value={paymentUrl} size={200} level='Q'
+                            imageSettings={{
+                                src: '/aui.png',
+                                height: 50,
+                                width: 50,
+                                excavate: true,
+                            }}
+                        />
+                        <div className="flex flex-col items-center gap-2">
+                          <div 
+                            onClick={handleCopyUpiId}
+                            className="flex items-center gap-2 bg-muted px-3 py-1.5 rounded border cursor-pointer hover:bg-muted/80 transition-colors group"
+                          >
+                            <code className="text-xs select-all">{upiId}</code>
+                            {copied ? (
+                              <Check size={14} className="text-green-500 flex-shrink-0" />
+                            ) : (
+                              <Copy size={14} className="text-muted-foreground group-hover:text-foreground transition-colors flex-shrink-0" />
+                            )}
+                          </div>
+                        </div>
+                        <div className="flex flex-col gap-1 text-center text-muted-foreground text-sm">
+                            <p><span className="font-semibold text-foreground">Step 1:</span> Pay on QR</p>
+                            <p><span className="font-semibold text-foreground">Step 2:</span> Send screenshot on bottom right chat</p>
+                        </div>
+                        {isMobile && (
+                            <Button asChild className="w-full max-w-xs mt-2" variant="outline">
+                                <a href={paymentUrl}>
+                                    <CreditCard className="mr-2 h-4 w-4" /> Pay via UPI App
+                                </a>
+                            </Button>
                         )}
                       </div>
-                    </div>
-                    <div className="flex flex-col gap-1 text-center text-muted-foreground text-sm">
-                         <p><span className="font-semibold text-foreground">Step 1:</span> Pay on QR</p>
-                         <p><span className="font-semibold text-foreground">Step 2:</span> Send screenshot on bottom right chat</p>
-                    </div>
-                    {isMobile && (
-                        <Button asChild className="w-full max-w-xs mt-2" variant="outline">
-                            <a href={paymentUrl}>
-                                <CreditCard className="mr-2 h-4 w-4" /> Pay via UPI App
-                            </a>
-                        </Button>
-                    )}
+                    </ScrollArea>
                  </motion.div>
               )}
             </AnimatePresence>
