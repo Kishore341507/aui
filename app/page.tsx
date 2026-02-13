@@ -21,6 +21,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Join AUI Discord - India's Most Active Discord Server",
     description: "India's most active Discord server with 50,000+ members! Join Among US India Discord for gaming, events, and more.",
+    type: "website",
   },
 };
 
