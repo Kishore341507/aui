@@ -141,7 +141,7 @@ export default function MediaTeamForm() {
 
                 <FormField control={form.control} name="familiarity" render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Are you familiar with our server's theme?</FormLabel>
+                    <FormLabel>Are you familiar with our server&apos;s theme?</FormLabel>
                     <FormControl><Textarea {...field} /></FormControl>
                     <FormMessage />
                   </FormItem>
