@@ -218,8 +218,9 @@ const PricingCard = ({ isYearly, title, monthlyPrice, yearlyPrice, description, 
               {session && (
               <Popover open={searchOpen} onOpenChange={setSearchOpen}>
                 <PopoverTrigger asChild>
-                    <Button variant="outline" size="icon" className="shadow-[0_0_15px_rgba(236,72,153,0.6)] border-pink-500 text-pink-500 hover:text-pink-600 hover:border-pink-600 dark:text-pink-400 dark:hover:text-pink-300 dark:hover:border-pink-400 aspect-square p-0">
+                    <Button variant="outline" className="shadow-[0_0_15px_rgba(236,72,153,0.6)] border-pink-500 text-pink-500 hover:text-pink-600 hover:border-pink-600 dark:text-pink-400 dark:hover:text-pink-300 dark:hover:border-pink-400">
                       <Gift className="h-4 w-4" />
+                      Gift
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent className="p-0 w-[250px]" align="end">

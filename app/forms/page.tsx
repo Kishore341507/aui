@@ -75,66 +75,6 @@ export default function Forms() {
                         </Card>
                     </Link>
 
-                    <Link href='/forms/marshal' className="group transition-transform hover:scale-105">
-                        <Card className="h-full border-2 hover:border-primary/50 transition-colors">
-                            <CardHeader>
-                                <CardTitle className="flex items-center justify-between">
-                                    Marshal Recruitment
-                                    <ExternalLink className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
-                                </CardTitle>
-                                <CardDescription>
-                                    Apply to be a Marshal — active during peak gaming VC hours.
-                                </CardDescription>
-                            </CardHeader>
-                            <CardContent>
-                                <div className="flex items-center text-sm text-muted-foreground">
-                                    <Clock className="w-4 h-4 mr-1" />
-                                    Processing time: 1 week
-                                </div>
-                            </CardContent>
-                        </Card>
-                    </Link>
-
-                    <Link href='/forms/event-team' className="group transition-transform hover:scale-105">
-                        <Card className="h-full border-2 hover:border-primary/50 transition-colors">
-                            <CardHeader>
-                                <CardTitle className="flex items-center justify-between">
-                                    Events Team Application
-                                    <ExternalLink className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
-                                </CardTitle>
-                                <CardDescription>
-                                    Join the Events Team to plan and run community events and activities.
-                                </CardDescription>
-                            </CardHeader>
-                            <CardContent>
-                                <div className="flex items-center text-sm text-muted-foreground">
-                                    <Clock className="w-4 h-4 mr-1" />
-                                    Processing time: 1-2 weeks
-                                </div>
-                            </CardContent>
-                        </Card>
-                    </Link>
-
-                    <Link href='/forms/media-team' className="group transition-transform hover:scale-105">
-                        <Card className="h-full border-2 hover:border-primary/50 transition-colors">
-                            <CardHeader>
-                                <CardTitle className="flex items-center justify-between">
-                                    Media Team Application
-                                    <ExternalLink className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
-                                </CardTitle>
-                                <CardDescription>
-                                    Apply to create media content and promote AUI across platforms.
-                                </CardDescription>
-                            </CardHeader>
-                            <CardContent>
-                                <div className="flex items-center text-sm text-muted-foreground">
-                                    <Clock className="w-4 h-4 mr-1" />
-                                    Processing time: 1-2 weeks
-                                </div>
-                            </CardContent>
-                        </Card>
-                    </Link>
-
                     <Link href='/forms/staff-report' className="group transition-transform hover:scale-105">
                         <Card className="h-full border-2 hover:border-primary/50 transition-colors">
                             <CardHeader>
