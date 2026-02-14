@@ -32,7 +32,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { CheckCircle2, Loader2, Info, AlertTriangle, Shield } from "lucide-react";
+import { CheckCircle2, Loader2, Info, AlertTriangle, Shield, AlertCircle } from "lucide-react";
 
 // Banner component
 const Banner = () => (
@@ -67,6 +67,7 @@ export default function ModerationForm() {
   const { status: sessionStatus } = useSession();
   const { toast } = useToast();
   const router = useRouter();
+  const isAuthenticated = sessionStatus === "authenticated";
 
   // State for multi-step form
   const [currentStep, setCurrentStep] = useState(0);
@@ -150,6 +151,26 @@ export default function ModerationForm() {
                   Welcome! We appreciate your interest in joining our moderation team.
                 </CardDescription>
               </CardHeader>
+              
+              {/* Login Alert */}
+              {!isAuthenticated && (
+                <Alert className="mb-6 mx-6 border-blue-200 bg-blue-50 dark:border-blue-900 dark:bg-blue-950 w-auto">
+                  <div className="flex items-center gap-4 w-full">
+                    <AlertCircle className="h-4 w-4 text-blue-600 dark:text-blue-400 shrink-0" />
+                    <AlertDescription className="text-blue-800 dark:text-blue-200 flex items-center justify-between flex-1">
+                      <span>Please login with Discord to submit an application</span>
+                      <Button 
+                        onClick={() => signIn("discord")}
+                        size="sm"
+                        className="ml-4 shrink-0"
+                      >
+                        Login to Discord
+                      </Button>
+                    </AlertDescription>
+                  </div>
+                </Alert>
+              )}
+
               <div className="space-y-6 text-white">
                 {/* Important Information Alert */}
                 <Alert className="bg-blue-950/30 border-blue-400/30 backdrop-blur-sm">
@@ -209,6 +230,7 @@ export default function ModerationForm() {
                               <Checkbox
                                 checked={field.value}
                                 onCheckedChange={field.onChange}
+                                disabled={!isAuthenticated}
                                 className="border-amber-400 data-[state=checked]:bg-amber-500 data-[state=checked]:text-amber-950"
                               />
                             </FormControl>
@@ -245,7 +267,7 @@ export default function ModerationForm() {
                     <FormItem>
                       <FormLabel>What country do you currently reside in?</FormLabel>
                       <FormControl>
-                        <Input placeholder="e.g. India" {...field} />
+                        <Input placeholder="e.g. India" {...field} disabled={!isAuthenticated} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -258,7 +280,7 @@ export default function ModerationForm() {
                     <FormItem>
                       <FormLabel>What is your suitable time to contribute to the server?</FormLabel>
                       <FormControl>
-                        <Input placeholder="e.g. 8 PM - 11 PM IST" {...field} />
+                        <Input placeholder="e.g. 8 PM - 11 PM IST" {...field} disabled={!isAuthenticated} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -271,7 +293,7 @@ export default function ModerationForm() {
                     <FormItem>
                       <FormLabel>What is your age?</FormLabel>
                       <FormControl>
-                        <Input placeholder="e.g. 18" type="number" {...field} />
+                        <Input placeholder="e.g. 18" type="number" {...field} disabled={!isAuthenticated} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -284,7 +306,7 @@ export default function ModerationForm() {
                     <FormItem>
                       <FormLabel>Tell us about yourself, if you&apos;d like!</FormLabel>
                       <FormControl>
-                        <Textarea placeholder="Your answer (optional, but helps us know you better!)" {...field} />
+                        <Textarea placeholder="Your answer (optional, but helps us know you better!)" {...field} disabled={!isAuthenticated} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -297,7 +319,7 @@ export default function ModerationForm() {
                     <FormItem>
                       <FormLabel>Describe in your own words what it means to be a moderator and what moderation entails?</FormLabel>
                       <FormControl>
-                        <Textarea placeholder="Your detailed answer" {...field} />
+                        <Textarea placeholder="Your detailed answer" {...field} disabled={!isAuthenticated} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -310,7 +332,7 @@ export default function ModerationForm() {
                     <FormItem>
                       <FormLabel>Please describe any past moderation or leadership experience you feel is relevant?</FormLabel>
                       <FormControl>
-                        <Textarea placeholder="Enter your past experience if you have any, otherwise enter 'None'" {...field} />
+                        <Textarea placeholder="Enter your past experience if you have any, otherwise enter 'None'" {...field} disabled={!isAuthenticated} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -330,6 +352,7 @@ export default function ModerationForm() {
                           onValueChange={field.onChange}
                           value={field.value}
                           className="rounded-lg p-2"
+                          disabled={!isAuthenticated}
                         >
                           <div className="flex items-center space-x-2">
                             <RadioGroupItem value="yes" id="vc-yes" />
@@ -356,7 +379,7 @@ export default function ModerationForm() {
                     <FormItem>
                       <FormLabel>For how long will you be able to provide service in moderation before taking any sort of major break or completely step down?</FormLabel>
                       <FormControl>
-                        <Textarea placeholder="e.g., 6 months, 1 year, indefinitely" {...field} />
+                        <Textarea placeholder="e.g., 6 months, 1 year, indefinitely" {...field} disabled={!isAuthenticated} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -373,6 +396,7 @@ export default function ModerationForm() {
                           onValueChange={field.onChange}
                           value={field.value}
                           className="px-6 rounded-lg p-2"
+                          disabled={!isAuthenticated}
                         >
                           <div className="flex justify-between">
                             <Label>Very Poor</Label>
@@ -440,28 +464,6 @@ export default function ModerationForm() {
     );
   }
 
-  // Render unauthenticated state
-  if (sessionStatus === "unauthenticated") {
-    return (
-      <div className="min-h-screen">
-      {/* <div className="min-h-screen bg-black bg-gradient-to-br from-gray-900 via-black to-gray-900"> */}
-        <div className="container mx-auto py-12 flex flex-col items-center justify-center h-screen">
-          <Card className="w-full max-w-md bg-white/10 backdrop-blur-sm border-gray-200/20 shadow-lg p-8">
-            <CardHeader>
-              <CardTitle className="text-2xl font-bold text-center">Authentication Required</CardTitle>
-              <CardDescription className="text-center">
-                Please sign in with Discord to access the staff application.
-              </CardDescription>
-            </CardHeader>
-            <CardContent className="flex justify-center">
-              <Button onClick={() => signIn("discord")}>Sign In with Discord</Button>
-            </CardContent>
-          </Card>
-        </div>
-      </div>
-    );
-  }
-
   // Render the main form
   return (
     // <div className="min-h-screen bg-black bg-gradient-to-br from-gray-900 via-black to-gray-900">
@@ -486,7 +488,7 @@ export default function ModerationForm() {
                     </Button>
                   )}
                   {currentStep === 1 && (
-                    <Button type="submit" disabled={isSubmitting}>
+                    <Button type="submit" disabled={isSubmitting || !isAuthenticated}>
                       {isSubmitting ? (
                         <>
                           <Loader2 className="mr-2 h-4 w-4 animate-spin" />

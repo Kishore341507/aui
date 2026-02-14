@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import prisma from "@/prisma/db";
+import { sendChannelMessage } from "@/lib/discord";
 
 export async function POST(request: Request) {
   try {
@@ -20,16 +21,17 @@ export async function POST(request: Request) {
       },
     });
 
-    if (process.env.EVENT_TEAM_WEBHOOK_URL) {
+    if (process.env.EVENT_TEAM_CHANNEL_ID) {
       try {
+        if (!process.env.DISCORD_BOT_TOKEN) throw new Error("DISCORD_BOT_TOKEN is missing");
         const embed = {
           embeds: [
             {
               title: "🎪 New Events Team Application",
               color: 0xf1c40f,
               fields: [
-                { name: "Discord Username", value: formData.discordUsername || "N/A", inline: true },
-                { name: "Discord ID", value: formData.discordId || "N/A", inline: true },
+                { name: "Applicant", value: session.user.userId ? `<@${session.user.userId}> (${session.user.name})` : session.user.name || "N/A", inline: true },
+                { name: "User ID", value: session.user.userId || "N/A", inline: true },
                 { name: "Available Evenings", value: formData.availableEvenings || "N/A", inline: true },
                 { name: "Weekly Hours", value: formData.weeklyHours || "N/A", inline: true },
                 { name: "Voice Calls", value: formData.voiceCalls || "N/A", inline: true },
@@ -42,13 +44,9 @@ export async function POST(request: Request) {
           ],
         };
 
-        await fetch(process.env.EVENT_TEAM_WEBHOOK_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(embed),
-        });
-      } catch (webhookError) {
-        console.error("Discord webhook error:", webhookError);
+        await sendChannelMessage(process.env.EVENT_TEAM_CHANNEL_ID, embed);
+      } catch (discordError) {
+        console.error("Discord notification error:", discordError);
       }
     }
 

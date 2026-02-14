@@ -18,11 +18,10 @@ import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useToast } from "@/hooks/use-toast";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
 
 const formSchema = z.object({
-  discordUsername: z.string().min(1, "Username required"),
-  discordId: z.string().min(1, "User ID required"),
   availableEvenings: z.string().min(1, "Select availability"),
   weeklyHours: z.string().min(1, "Enter hours"),
   voiceCalls: z.string().min(1, "Select option"),
@@ -35,13 +34,12 @@ export default function EventTeamForm() {
   const { toast } = useToast();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showSignIn, setShowSignIn] = useState(false);
+
+  const isAuthenticated = sessionStatus === "authenticated";
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      discordUsername: "",
-      discordId: "",
       availableEvenings: "",
       weeklyHours: "",
       voiceCalls: "",
@@ -51,8 +49,8 @@ export default function EventTeamForm() {
   });
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
-    if (sessionStatus === "unauthenticated") {
-      setShowSignIn(true);
+    if (!isAuthenticated) {
+      signIn("discord");
       return;
     }
 
@@ -80,6 +78,25 @@ export default function EventTeamForm() {
 
   return (
     <div className="container mx-auto py-12">
+      {/* Login Alert */}
+      {!isAuthenticated && (
+        <Alert className="mb-6 border-blue-200 bg-blue-50 dark:border-blue-900 dark:bg-blue-950 max-w-2xl mx-auto">
+          <div className="flex items-center gap-4 w-full">
+            <AlertCircle className="h-4 w-4 text-blue-600 dark:text-blue-400 shrink-0" />
+            <AlertDescription className="text-blue-800 dark:text-blue-200 flex items-center justify-between flex-1">
+              <span>Please login with Discord to submit an application</span>
+              <Button 
+                onClick={() => signIn("discord")}
+                size="sm"
+                className="ml-4 shrink-0"
+              >
+                Login to Discord
+              </Button>
+            </AlertDescription>
+          </div>
+        </Alert>
+      )}
+
       <Form {...form}>
         <form onSubmit={form.handleSubmit(handleSubmit)}>
           <Card className="w-full max-w-2xl mx-auto">
@@ -88,27 +105,11 @@ export default function EventTeamForm() {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <FormField control={form.control} name="discordUsername" render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Your Discord Username</FormLabel>
-                    <FormControl><Input {...field} /></FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )} />
-
-                <FormField control={form.control} name="discordId" render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Your Discord User ID</FormLabel>
-                    <FormControl><Input type="number" {...field} /></FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )} />
-
                 <FormField control={form.control} name="availableEvenings" render={({ field }) => (
                   <FormItem>
                     <FormLabel>Are you available to work evenings and weekends?</FormLabel>
                     <FormControl>
-                      <RadioGroup onValueChange={field.onChange} value={field.value} className="flex gap-4">
+                      <RadioGroup onValueChange={field.onChange} value={field.value} className="flex gap-4" disabled={!isAuthenticated}>
                         <label className="inline-flex items-center gap-2"><RadioGroupItem value="Yes"/> Yes</label>
                         <label className="inline-flex items-center gap-2"><RadioGroupItem value="No"/> No</label>
                       </RadioGroup>
@@ -120,7 +121,7 @@ export default function EventTeamForm() {
                 <FormField control={form.control} name="weeklyHours" render={({ field }) => (
                   <FormItem>
                     <FormLabel>How much time can you dedicate each week?</FormLabel>
-                    <FormControl><Input {...field} /></FormControl>
+                    <FormControl><Input {...field} disabled={!isAuthenticated} /></FormControl>
                     <FormMessage />
                   </FormItem>
                 )} />
@@ -129,7 +130,7 @@ export default function EventTeamForm() {
                   <FormItem>
                     <FormLabel>Are you available for occasional voice calls?</FormLabel>
                     <FormControl>
-                      <RadioGroup onValueChange={field.onChange} value={field.value} className="flex gap-4">
+                      <RadioGroup onValueChange={field.onChange} value={field.value} className="flex gap-4" disabled={!isAuthenticated}>
                         <label className="inline-flex items-center gap-2"><RadioGroupItem value="Yes"/> Yes</label>
                         <label className="inline-flex items-center gap-2"><RadioGroupItem value="No"/> No</label>
                       </RadioGroup>
@@ -142,7 +143,7 @@ export default function EventTeamForm() {
                   <FormItem>
                     <FormLabel>Do you use Discord on Mobile or PC?</FormLabel>
                     <FormControl>
-                      <RadioGroup onValueChange={field.onChange} value={field.value} className="flex gap-4">
+                      <RadioGroup onValueChange={field.onChange} value={field.value} className="flex gap-4" disabled={!isAuthenticated}>
                         <label className="inline-flex items-center gap-2"><RadioGroupItem value="Mobile"/> Mobile</label>
                         <label className="inline-flex items-center gap-2"><RadioGroupItem value="PC"/> PC</label>
                         <label className="inline-flex items-center gap-2"><RadioGroupItem value="Both"/> Both</label>
@@ -155,31 +156,18 @@ export default function EventTeamForm() {
                 <FormField control={form.control} name="games" render={({ field }) => (
                   <FormItem>
                     <FormLabel>Which games do you play regularly?</FormLabel>
-                    <FormControl><Input {...field} /></FormControl>
+                    <FormControl><Input {...field} disabled={!isAuthenticated} /></FormControl>
                     <FormMessage />
                   </FormItem>
                 )} />
               </div>
             </CardContent>
             <CardFooter className="flex justify-end">
-              <Button type="submit" disabled={isSubmitting}>{isSubmitting ? "Submitting..." : "Submit"}</Button>
+              <Button type="submit" disabled={isSubmitting || !isAuthenticated}>{isSubmitting ? "Submitting..." : "Submit"}</Button>
             </CardFooter>
           </Card>
         </form>
       </Form>
-
-      <Dialog open={showSignIn} onOpenChange={(open) => setShowSignIn(open)}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Sign in required</DialogTitle>
-          </DialogHeader>
-          <div className="py-2">You must sign in with Discord to submit this form.</div>
-          <DialogFooter className="flex gap-2 justify-end">
-            <Button variant="ghost" onClick={() => setShowSignIn(false)}>Close</Button>
-            <Button onClick={() => signIn("discord")}>Sign In</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }
