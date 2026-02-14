@@ -6,13 +6,6 @@ import { useSession, signIn } from "next-auth/react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardFooter,
-} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
@@ -77,10 +70,19 @@ export default function EventTeamForm() {
   };
 
   return (
-    <div className="container mx-auto py-12">
-      {/* Login Alert */}
-      {!isAuthenticated && (
-        <Alert className="mb-6 border-blue-200 bg-blue-50 dark:border-blue-900 dark:bg-blue-950 max-w-2xl mx-auto">
+    <div className="container mx-auto py-12 px-4">
+      <div className="w-full max-w-3xl mx-auto">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold tracking-tight mb-2">Events Team Recruitment</h1>
+          <p className="text-muted-foreground">
+            Join the Events Team to plan and run community events and activities.
+          </p>
+        </div>
+
+        {/* Login Alert */}
+        {!isAuthenticated && (
+          <Alert className="mb-6 border-blue-200 bg-blue-50 dark:border-blue-900 dark:bg-blue-950">
           <div className="flex items-center gap-4 w-full">
             <AlertCircle className="h-4 w-4 text-blue-600 dark:text-blue-400 shrink-0" />
             <AlertDescription className="text-blue-800 dark:text-blue-200 flex items-center justify-between flex-1">
@@ -94,22 +96,16 @@ export default function EventTeamForm() {
               </Button>
             </AlertDescription>
           </div>
-        </Alert>
-      )}
+          </Alert>
+        )}
 
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit)}>
-          <Card className="w-full max-w-2xl mx-auto">
-            <CardHeader>
-              <CardTitle>AUI Events Team Recruitment</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <FormField control={form.control} name="availableEvenings" render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Are you available to work evenings and weekends?</FormLabel>
-                    <FormControl>
-                      <RadioGroup onValueChange={field.onChange} value={field.value} className="flex gap-4" disabled={!isAuthenticated}>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+            <FormField control={form.control} name="availableEvenings" render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-base font-semibold">Are you available to work evenings and weekends?</FormLabel>
+                <FormControl>
+                  <RadioGroup onValueChange={field.onChange} value={field.value} className="flex gap-4 mt-2" disabled={!isAuthenticated}>
                         <label className="inline-flex items-center gap-2"><RadioGroupItem value="Yes"/> Yes</label>
                         <label className="inline-flex items-center gap-2"><RadioGroupItem value="No"/> No</label>
                       </RadioGroup>
@@ -118,19 +114,19 @@ export default function EventTeamForm() {
                   </FormItem>
                 )} />
 
-                <FormField control={form.control} name="weeklyHours" render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>How much time can you dedicate each week?</FormLabel>
-                    <FormControl><Input {...field} disabled={!isAuthenticated} /></FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )} />
+            <FormField control={form.control} name="weeklyHours" render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-base font-semibold">How much time can you dedicate each week?</FormLabel>
+                <FormControl><Input {...field} disabled={!isAuthenticated} placeholder="e.g. 5-10 hours" /></FormControl>
+                <FormMessage />
+              </FormItem>
+            )} />
 
-                <FormField control={form.control} name="voiceCalls" render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Are you available for occasional voice calls?</FormLabel>
-                    <FormControl>
-                      <RadioGroup onValueChange={field.onChange} value={field.value} className="flex gap-4" disabled={!isAuthenticated}>
+            <FormField control={form.control} name="voiceCalls" render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-base font-semibold">Are you available for occasional voice calls?</FormLabel>
+                <FormControl>
+                  <RadioGroup onValueChange={field.onChange} value={field.value} className="flex gap-4 mt-2" disabled={!isAuthenticated}>
                         <label className="inline-flex items-center gap-2"><RadioGroupItem value="Yes"/> Yes</label>
                         <label className="inline-flex items-center gap-2"><RadioGroupItem value="No"/> No</label>
                       </RadioGroup>
@@ -139,11 +135,11 @@ export default function EventTeamForm() {
                   </FormItem>
                 )} />
 
-                <FormField control={form.control} name="device" render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Do you use Discord on Mobile or PC?</FormLabel>
-                    <FormControl>
-                      <RadioGroup onValueChange={field.onChange} value={field.value} className="flex gap-4" disabled={!isAuthenticated}>
+            <FormField control={form.control} name="device" render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-base font-semibold">Do you use Discord on Mobile or PC?</FormLabel>
+                <FormControl>
+                  <RadioGroup onValueChange={field.onChange} value={field.value} className="flex gap-4 mt-2" disabled={!isAuthenticated}>
                         <label className="inline-flex items-center gap-2"><RadioGroupItem value="Mobile"/> Mobile</label>
                         <label className="inline-flex items-center gap-2"><RadioGroupItem value="PC"/> PC</label>
                         <label className="inline-flex items-center gap-2"><RadioGroupItem value="Both"/> Both</label>
@@ -153,21 +149,28 @@ export default function EventTeamForm() {
                   </FormItem>
                 )} />
 
-                <FormField control={form.control} name="games" render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Which games do you play regularly?</FormLabel>
-                    <FormControl><Input {...field} disabled={!isAuthenticated} /></FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )} />
-              </div>
-            </CardContent>
-            <CardFooter className="flex justify-end">
-              <Button type="submit" disabled={isSubmitting || !isAuthenticated}>{isSubmitting ? "Submitting..." : "Submit"}</Button>
-            </CardFooter>
-          </Card>
-        </form>
-      </Form>
+            <FormField control={form.control} name="games" render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-base font-semibold">Which games do you play regularly?</FormLabel>
+                <FormControl><Input {...field} disabled={!isAuthenticated} placeholder="Among Us, Minecraft, etc." /></FormControl>
+                <FormMessage />
+              </FormItem>
+            )} />
+
+            {/* Submit Button */}
+            <div className="pt-4 flex justify-end border-t">
+              <Button 
+                type="submit" 
+                size="lg"
+                disabled={isSubmitting || !isAuthenticated}
+                className="min-w-[200px]"
+              >
+                {isSubmitting ? "Submitting..." : "Submit Application"}
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </div>
     </div>
   );
 }
