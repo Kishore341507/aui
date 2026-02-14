@@ -38,11 +38,27 @@ npm install
 
 Create a `.env` file in the root directory and configure the required variables:
 
+#### Required Variables
+
 ```env
 AUTH_SECRET="your_auth_secret"
 DATABASE_URL="postgres://username:password@host:port/database?sslmode=require"
 AUTH_DISCORD_ID="your_discord_client_id"
 AUTH_DISCORD_SECRET="your_discord_client_secret"
+```
+
+#### Optional Variables
+
+These variables enable additional features but are not required for basic functionality:
+
+```env
+# Discord Bot Integration (enables user search in forms)
+DISCORD_BOT_TOKEN="your_discord_bot_token"  # Optional - enables Discord user search functionality
+GUILD_ID="your_discord_server_id"  # Optional - required for Discord member search
+
+# Form Notifications
+MOD_FORM_WEBHOOK_URL="discord_webhook_url"  # Optional - enables Discord notifications for moderation applications
+STAFF_REPORT_CHANNEL_ID="discord_channel_id"  # Optional - enables Discord notifications for staff reports
 ```
 
 > **Warning**: Do not share your `.env` file in public repositories. Use a `.gitignore` file to exclude it.
