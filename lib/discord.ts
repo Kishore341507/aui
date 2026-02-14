@@ -85,3 +85,29 @@ export async function searchGuildMembers(
 
   return data;
 }
+
+export async function sendChannelMessage(channelId: string, body: unknown) {
+  if (!process.env.DISCORD_BOT_TOKEN) {
+    console.error("DISCORD_BOT_TOKEN is not defined");
+    return null;
+  }
+
+  const response = await fetch(
+    `${DISCORD_API_URL}/channels/${channelId}/messages`,
+    {
+      method: "POST",
+      headers: {
+        Authorization: `Bot ${process.env.DISCORD_BOT_TOKEN}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    }
+  );
+
+  if (!response.ok) {
+    console.error(`Failed to send message to channel ${channelId}:`, await response.text());
+    return null;
+  }
+
+  return response.json();
+}
