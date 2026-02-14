@@ -6,36 +6,37 @@ import { useSession, signIn } from "next-auth/react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardFooter,
-} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useToast } from "@/hooks/use-toast";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
 
 const formSchema = z.object({
   game: z.string().min(1, "Please select a game"),
-  activeTimes: z.string().min(1, "Active timings required"),
-  dedicateTime: z.string().min(1, "Please enter how much time you can dedicate"),
-  botExperience: z.string().min(1, "Please select an option"),
-  reason: z.string().min(4, "Please provide a reason"),
+  activeTimes: z.string().min(1, "Required"),
+  dedicateTime: z.string().min(1, "Required"),
+  botExperience: z.string().min(1, "Required"),
+  reason: z.string().min(10, "Please provide a detailed reason"),
 });
+
+const GAMES = [
+  "Among Us", "Codenames", "Cambio", "Taboo", "Monopoly", 
+  "Skribbl", "Stumble Guys", "Chess", "SmashKarts", 
+  "Brawlhalla", "Valorant", "GTA V", "Minecraft", "BGMI"
+];
 
 export default function MarshalForm() {
   const { status: sessionStatus } = useSession();
   const { toast } = useToast();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showSignIn, setShowSignIn] = useState(false);
-
+  
+  const isAuthenticated = sessionStatus === "authenticated";
+ 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -48,8 +49,8 @@ export default function MarshalForm() {
   });
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
-    if (sessionStatus === "unauthenticated") {
-      setShowSignIn(true);
+    if (!isAuthenticated) {
+      signIn("discord");
       return;
     }
 
@@ -62,7 +63,7 @@ export default function MarshalForm() {
       });
 
       if (res.ok) {
-        toast({ title: "Submitted", description: "Marshal application sent." });
+        toast({ title: "Submitted", description: "Marshal application received." });
         setTimeout(() => router.push("/"), 500);
       } else {
         toast({ title: "Error", description: "Failed to submit.", variant: "destructive" });
@@ -76,115 +77,119 @@ export default function MarshalForm() {
   };
 
   return (
-    <div className="container mx-auto py-12">
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit)}>
-          <Card className="w-full max-w-2xl mx-auto">
-            <CardHeader>
-              <CardTitle>Marshal Recruitment</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <FormField
-                  control={form.control}
-                  name="game"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Which game do you play regularly on the server?</FormLabel>
-                      <FormControl>
-                        <Input placeholder="e.g. Valorant" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+    <div className="container mx-auto py-12 px-4">
+      <div className="w-full max-w-3xl mx-auto">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold tracking-tight mb-2">Marshal Recruitment</h1>
+          <p className="text-muted-foreground">
+            To become a Marshal you need to have dedicated role and regular activity during active hours in any Gaming VC.
+          </p>
+        </div>
 
-                <FormField
-                  control={form.control}
-                  name="activeTimes"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>What are your active timings on the server?</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Answer here.." {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+        {/* Login Alert */}
+        {!isAuthenticated && (
+          <Alert className="mb-6 border-blue-200 bg-blue-50 dark:border-blue-900 dark:bg-blue-950">
+            <div className="flex items-center gap-4 w-full">
+              <AlertCircle className="h-4 w-4 text-blue-600 dark:text-blue-400 shrink-0" />
+              <AlertDescription className="text-blue-800 dark:text-blue-200 flex items-center justify-between flex-1">
+                <span>Please login with Discord to submit an application</span>
+                <Button 
+                  onClick={() => signIn("discord")}
+                  size="sm"
+                  className="ml-4 shrink-0"
+                >
+                  Login to Discord
+                </Button>
+              </AlertDescription>
+            </div>
+          </Alert>
+        )}
 
-                <FormField
-                  control={form.control}
-                  name="dedicateTime"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>How much time can you dedicate as a Marshal?</FormLabel>
-                      <FormControl>
-                        <Input placeholder="Answer here.." {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+        {/* Form */}
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+            
+            <FormField 
+              control={form.control} 
+              name="game" 
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-base font-semibold">Which game do you play regularly on the server?</FormLabel>
+                  <FormControl>
+                    <RadioGroup 
+                      onValueChange={field.onChange} 
+                      value={field.value} 
+                      className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2"
+                      disabled={!isAuthenticated}
+                    >
+                      {GAMES.map((game) => (
+                        <label key={game} className={`flex items-center space-x-3 space-y-0 rounded-md border p-3 hover:bg-accent hover:text-accent-foreground ${!isAuthenticated ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}>
+                          <RadioGroupItem value={game} disabled={!isAuthenticated} />
+                          <span className="font-normal">{game}</span>
+                        </label>
+                      ))}
+                    </RadioGroup>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )} 
+            />
 
-                <FormField
-                  control={form.control}
-                  name="botExperience"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Do you know how to use Discord Bots?</FormLabel>
-                      <FormControl>
-                        <RadioGroup onValueChange={field.onChange} value={field.value} className="flex gap-4">
-                          <label className="inline-flex items-center gap-2">
-                            <RadioGroupItem value="Yes" /> Yes
-                          </label>
-                          <label className="inline-flex items-center gap-2">
-                            <RadioGroupItem value="No" /> No
-                          </label>
-                          <label className="inline-flex items-center gap-2">
-                            <RadioGroupItem value="Maybe" /> Maybe
-                          </label>
-                        </RadioGroup>
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
+            <FormField control={form.control} name="activeTimes" render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-base font-semibold">What are your active timings on the server?</FormLabel>
+                <FormControl><Input {...field} disabled={!isAuthenticated} placeholder="e.g. 8 PM - 11 PM IST" /></FormControl>
+                <FormMessage />
+              </FormItem>
+            )} />
 
-                <FormField
-                  control={form.control}
-                  name="reason"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Why do you want to become a Marshal?</FormLabel>
-                      <FormControl>
-                        <Textarea placeholder="Answer here.." {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              </div>
-            </CardContent>
-            <CardFooter className="flex justify-end">
-              <Button type="submit" disabled={isSubmitting}>{isSubmitting ? "Submitting..." : "Submit"}</Button>
-            </CardFooter>
-          </Card>
-        </form>
-      </Form>
+            <FormField control={form.control} name="dedicateTime" render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-base font-semibold">How much time can you dedicate as a Marshal?</FormLabel>
+                <FormControl><Input {...field} disabled={!isAuthenticated} placeholder="e.g. 2 hours daily" /></FormControl>
+                <FormMessage />
+              </FormItem>
+            )} />
 
-      <Dialog open={showSignIn} onOpenChange={(open) => setShowSignIn(open)}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Sign in required</DialogTitle>
-          </DialogHeader>
-          <div className="py-2">You must sign in with Discord to submit this form.</div>
-          <DialogFooter className="flex gap-2 justify-end">
-            <Button variant="ghost" onClick={() => setShowSignIn(false)}>Close</Button>
-            <Button onClick={() => signIn("discord")}>Sign In</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+            <FormField control={form.control} name="botExperience" render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-base font-semibold">Do you know how to use Discord Bots?</FormLabel>
+                <FormControl>
+                  <RadioGroup onValueChange={field.onChange} value={field.value} className="flex gap-4 mt-2" disabled={!isAuthenticated}>
+                    <label className="inline-flex items-center gap-2 cursor-pointer"><RadioGroupItem value="Yes"/> Yes</label>
+                    <label className="inline-flex items-center gap-2 cursor-pointer"><RadioGroupItem value="No"/> No</label>
+                    <label className="inline-flex items-center gap-2 cursor-pointer"><RadioGroupItem value="Maybe"/> Maybe</label>
+                  </RadioGroup>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )} />
+
+            <FormField control={form.control} name="reason" render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-base font-semibold">Why do you want to become a Marshal?</FormLabel>
+                <FormControl>
+                  <Textarea {...field} rows={4} disabled={!isAuthenticated} placeholder="Tell us why you are a good fit..." />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )} />
+
+            {/* Submit Button */}
+            <div className="pt-4 flex justify-end border-t">
+              <Button 
+                type="submit" 
+                size="lg"
+                disabled={isSubmitting || !isAuthenticated}
+                className="min-w-[200px]"
+              >
+                {isSubmitting ? "Submitting..." : "Submit Application"}
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </div>
     </div>
   );
 }
