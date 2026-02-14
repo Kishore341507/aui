@@ -14,24 +14,23 @@ export async function POST(request: Request) {
     const userId = session.user.id;
     
     // Extract only necessary fields, ignoring reporter inputs if sent
-    const { marshalName, offense, description, additional } = formData;
+    const { moderatorName, offense, description, additional } = formData;
     
     // Save to DB without reporter info
     await prisma.formResponse.create({
       data: {
-        data: { marshalName, offense, description, additional },
+        data: { moderatorName, offense, description, additional },
         userId,
-        form: "marshal-report",
+        form: "staff-report",
       },
     });
 
-    if (process.env.MARSHAL_REPORT_CHANNEL_ID) {
+    if (process.env.STAFF_REPORT_CHANNEL_ID) {
       try {
-        if (!process.env.DISCORD_BOT_TOKEN) throw new Error("DISCORD_BOT_TOKEN is missing");
         const embed = {
           embeds: [
             {
-              title: "⚠️ New Marshal Report",
+              title: "⚠️ New Staff Report",
               color: 0xe74c3c,
               fields: [
                 {
@@ -39,7 +38,7 @@ export async function POST(request: Request) {
                    value: session.user.userId ? `<@${session.user.userId}> (${session.user.name})` : session.user.name || "N/A", 
                    inline: true 
                 },
-                { name: "Marshal", value: marshalName || "N/A", inline: true },
+                { name: "Moderator", value: moderatorName || "N/A", inline: true },
                 { name: "Offense", value: offense || "N/A", inline: true },
                 { name: "Details", value: description ? description.substring(0, 1024) : "N/A", inline: false },
                 { name: "Additional", value: additional || "N/A", inline: false },
@@ -50,7 +49,7 @@ export async function POST(request: Request) {
           ],
         };
 
-        await sendChannelMessage(process.env.MARSHAL_REPORT_CHANNEL_ID, embed);
+        await sendChannelMessage(process.env.STAFF_REPORT_CHANNEL_ID, embed);
       } catch (discordError) {
         console.error("Discord notification error:", discordError);
       }
