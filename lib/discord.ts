@@ -47,6 +47,14 @@ export async function searchGuildMembers(
     return [];
   }
 
+  // Return empty if query length is less than 2
+  if (query.length < 2) {
+    return [];
+  }
+
+  // Restrict max limit to 10
+  const effectiveLimit = Math.min(limit || 10, 10);
+
   // If query is a snowflake ID
   if (query.match(/^\d{17,20}$/)) {
     const member = await getMember(targetGuildId, query);
@@ -57,7 +65,7 @@ export async function searchGuildMembers(
 
   const searchParams = new URLSearchParams({
     query: query,
-    limit: (limit || 10).toString(),
+    limit: effectiveLimit.toString(),
   });
 
   const searchResponse = await fetch(
