@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import prisma from "@/prisma/db";
+import { sendChannelMessage } from "@/lib/discord";
 
 export async function POST(request: Request) {
   try {
@@ -21,14 +22,17 @@ export async function POST(request: Request) {
       },
     });
 
-    if (process.env.CAP_MARSHAL_WEBHOOK_URL) {
+    if (process.env.CAP_MARSHAL_CHANNEL_ID) {
       try {
+        if (!process.env.DISCORD_BOT_TOKEN) throw new Error("DISCORD_BOT_TOKEN is missing");
         const embed = {
           embeds: [
             {
               title: "🧭 New Marshal Application",
               color: 0x57f287,
               fields: [
+                { name: "Applicant", value: session.user.userId ? `<@${session.user.userId}> (${session.user.name})` : session.user.name || "N/A", inline: true },
+                { name: "User ID", value: session.user.userId || "N/A", inline: true },
                 { name: "Game", value: formData.game || "Not provided", inline: true },
                 { name: "Active Times", value: formData.activeTimes || "Not provided", inline: true },
                 { name: "Dedicated Time", value: formData.dedicateTime || "Not provided", inline: true },
@@ -41,13 +45,9 @@ export async function POST(request: Request) {
           ],
         };
 
-        await fetch(process.env.CAP_MARSHAL_WEBHOOK_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(embed),
-        });
-      } catch (webhookError) {
-        console.error("Discord webhook error:", webhookError);
+        await sendChannelMessage(process.env.CAP_MARSHAL_CHANNEL_ID, embed);
+      } catch (discordError) {
+        console.error("Discord notification error:", discordError);
       }
     }
 

@@ -6,24 +6,16 @@ import { useSession, signIn } from "next-auth/react";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardFooter,
-} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useToast } from "@/hooks/use-toast";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "@/components/ui/dialog";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
 
 const formSchema = z.object({
-  discordUsername: z.string().min(1, "Required"),
-  discordId: z.string().min(1, "Required"),
   platform: z.string().min(1, "Required"),
   socialHandle: z.string().min(1, "Required"),
   contentType: z.string().min(1, "Required"),
@@ -37,13 +29,12 @@ export default function MediaTeamForm() {
   const { toast } = useToast();
   const router = useRouter();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showSignIn, setShowSignIn] = useState(false);
+
+  const isAuthenticated = sessionStatus === "authenticated";
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      discordUsername: "",
-      discordId: "",
       platform: "",
       socialHandle: "",
       contentType: "",
@@ -54,8 +45,8 @@ export default function MediaTeamForm() {
   });
 
   const handleSubmit = async (values: z.infer<typeof formSchema>) => {
-    if (sessionStatus === "unauthenticated") {
-      setShowSignIn(true);
+    if (!isAuthenticated) {
+      signIn("discord");
       return;
     }
 
@@ -82,36 +73,42 @@ export default function MediaTeamForm() {
   };
 
   return (
-    <div className="container mx-auto py-12">
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(handleSubmit)}>
-          <Card className="w-full max-w-2xl mx-auto">
-            <CardHeader>
-              <CardTitle>AUI Media Team Application</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <FormField control={form.control} name="discordUsername" render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>What is your Discord username?</FormLabel>
-                    <FormControl><Input {...field} /></FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )} />
+    <div className="container mx-auto py-12 px-4">
+      <div className="w-full max-w-3xl mx-auto">
+        {/* Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold tracking-tight mb-2">Media Team Application</h1>
+          <p className="text-muted-foreground">
+            Apply to create media content and promote AUI across platforms.
+          </p>
+        </div>
 
-                <FormField control={form.control} name="discordId" render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>What is your Discord ID?</FormLabel>
-                    <FormControl><Input {...field} /></FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )} />
+        {/* Login Alert */}
+        {!isAuthenticated && (
+          <Alert className="mb-6 border-blue-200 bg-blue-50 dark:border-blue-900 dark:bg-blue-950">
+          <div className="flex items-center gap-4 w-full">
+            <AlertCircle className="h-4 w-4 text-blue-600 dark:text-blue-400 shrink-0" />
+            <AlertDescription className="text-blue-800 dark:text-blue-200 flex items-center justify-between flex-1">
+              <span>Please login with Discord to submit an application</span>
+              <Button 
+                onClick={() => signIn("discord")}
+                size="sm"
+                className="ml-4 shrink-0"
+              >
+                Login to Discord
+              </Button>
+            </AlertDescription>
+          </div>
+          </Alert>
+        )}
 
-                <FormField control={form.control} name="platform" render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Primary social media platform</FormLabel>
-                    <FormControl>
-                      <RadioGroup onValueChange={field.onChange} value={field.value} className="flex gap-4">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+            <FormField control={form.control} name="platform" render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-base font-semibold">Primary social media platform</FormLabel>
+                <FormControl>
+                  <RadioGroup onValueChange={field.onChange} value={field.value} className="flex flex-wrap gap-4 mt-2" disabled={!isAuthenticated}>
                         <label className="inline-flex items-center gap-2"><RadioGroupItem value="YouTube"/> YouTube</label>
                         <label className="inline-flex items-center gap-2"><RadioGroupItem value="Instagram"/> Instagram</label>
                         <label className="inline-flex items-center gap-2"><RadioGroupItem value="Twitch"/> Twitch</label>
@@ -123,66 +120,60 @@ export default function MediaTeamForm() {
                   </FormItem>
                 )} />
 
-                <FormField control={form.control} name="socialHandle" render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Link to your social handles</FormLabel>
-                    <FormControl><Input {...field} /></FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )} />
+            <FormField control={form.control} name="socialHandle" render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-base font-semibold">Link to your social handles</FormLabel>
+                <FormControl><Input {...field} disabled={!isAuthenticated} placeholder="https://..." /></FormControl>
+                <FormMessage />
+              </FormItem>
+            )} />
 
-                <FormField control={form.control} name="contentType" render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>What type of content do you specialize in?</FormLabel>
-                    <FormControl><Textarea {...field} /></FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )} />
+            <FormField control={form.control} name="contentType" render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-base font-semibold">What type of content do you specialize in?</FormLabel>
+                <FormControl><Textarea {...field} disabled={!isAuthenticated} placeholder="Video editing, graphic design, streaming..." /></FormControl>
+                <FormMessage />
+              </FormItem>
+            )} />
 
-                <FormField control={form.control} name="familiarity" render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Are you familiar with our server&apos;s theme?</FormLabel>
-                    <FormControl><Textarea {...field} /></FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )} />
+            <FormField control={form.control} name="familiarity" render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-base font-semibold">Are you familiar with our server&apos;s theme?</FormLabel>
+                <FormControl><Textarea {...field} disabled={!isAuthenticated} placeholder="Tell us what you know about AUI..." /></FormControl>
+                <FormMessage />
+              </FormItem>
+            )} />
 
-                <FormField control={form.control} name="tools" render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>What tools or software do you use?</FormLabel>
-                    <FormControl><Input {...field} /></FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )} />
+            <FormField control={form.control} name="tools" render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-base font-semibold">What tools or software do you use?</FormLabel>
+                <FormControl><Input {...field} disabled={!isAuthenticated} placeholder="Photoshop, Premiere Pro, OBS..." /></FormControl>
+                <FormMessage />
+              </FormItem>
+            )} />
 
-                <FormField control={form.control} name="examples" render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Examples of previous work (links)</FormLabel>
-                    <FormControl><Input {...field} /></FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )} />
-              </div>
-            </CardContent>
-            <CardFooter className="flex justify-end">
-              <Button type="submit" disabled={isSubmitting}>{isSubmitting ? "Submitting..." : "Submit"}</Button>
-            </CardFooter>
-          </Card>
-        </form>
-      </Form>
+            <FormField control={form.control} name="examples" render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-base font-semibold">Examples of previous work (links)</FormLabel>
+                <FormControl><Input {...field} disabled={!isAuthenticated} placeholder="Portfolio or content links" /></FormControl>
+                <FormMessage />
+              </FormItem>
+            )} />
 
-      <Dialog open={showSignIn} onOpenChange={(open) => setShowSignIn(open)}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Sign in required</DialogTitle>
-          </DialogHeader>
-          <div className="py-2">You must sign in with Discord to submit this form.</div>
-          <DialogFooter className="flex gap-2 justify-end">
-            <Button variant="ghost" onClick={() => setShowSignIn(false)}>Close</Button>
-            <Button onClick={() => signIn("discord")}>Sign In</Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+            {/* Submit Button */}
+            <div className="pt-4 flex justify-end border-t">
+              <Button 
+                type="submit" 
+                size="lg"
+                disabled={isSubmitting || !isAuthenticated}
+                className="min-w-[200px]"
+              >
+                {isSubmitting ? "Submitting..." : "Submit Application"}
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </div>
     </div>
   );
 }
