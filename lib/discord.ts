@@ -53,7 +53,7 @@ export async function searchGuildMembers(
   }
 
   // Restrict max limit to 10
-  const effectiveLimit = limit && limit > 10 ? 10 : (limit || 10);
+  const effectiveLimit = Math.min(limit || 10, 10);
 
   // If query is a snowflake ID
   if (query.match(/^\d{17,20}$/)) {
