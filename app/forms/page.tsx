@@ -95,6 +95,66 @@ export default function Forms() {
                         </Card>
                     </Link>
 
+                    <Link href='/forms/event-team' className="group transition-transform hover:scale-105">
+                        <Card className="h-full border-2 hover:border-primary/50 transition-colors">
+                            <CardHeader>
+                                <CardTitle className="flex items-center justify-between">
+                                    Event Team Application
+                                    <ExternalLink className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                </CardTitle>
+                                <CardDescription>
+                                    Join our event team to help organize and manage community events and activities.
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="flex items-center text-sm text-muted-foreground">
+                                    <Clock className="w-4 h-4 mr-1" />
+                                    Processing time: 1-2 weeks
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </Link>
+
+                    <Link href='/forms/marshal' className="group transition-transform hover:scale-105">
+                        <Card className="h-full border-2 hover:border-primary/50 transition-colors">
+                            <CardHeader>
+                                <CardTitle className="flex items-center justify-between">
+                                    Marshal Application
+                                    <ExternalLink className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                </CardTitle>
+                                <CardDescription>
+                                    Apply to become a marshal and help coordinate gaming sessions and tournaments.
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="flex items-center text-sm text-muted-foreground">
+                                    <Clock className="w-4 h-4 mr-1" />
+                                    Processing time: 1-2 weeks
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </Link>
+
+                    <Link href='/forms/media-team' className="group transition-transform hover:scale-105">
+                        <Card className="h-full border-2 hover:border-primary/50 transition-colors">
+                            <CardHeader>
+                                <CardTitle className="flex items-center justify-between">
+                                    Media Team Application
+                                    <ExternalLink className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                </CardTitle>
+                                <CardDescription>
+                                    Join the media team to create content, graphics, and promotional materials for the community.
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="flex items-center text-sm text-muted-foreground">
+                                    <Clock className="w-4 h-4 mr-1" />
+                                    Processing time: 1-2 weeks
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </Link>
+
                 </div>
             </div>
 
