@@ -26,6 +26,7 @@ export type PlanData = {
   description: string
   price: number
   interval: string
+  category: "BASIC" | "POPULAR" | "EXCLUSIVE"
   features: string[]
   allFeatures: string[]
   expandableFeatures: Record<string, string[]> | null
@@ -505,9 +506,9 @@ export default function MembershipCards({ plans }: { plans: PlanData[] }) {
 
   const renderPlanGroup = (groupPlans: PlanData[]) => (
     <section className="flex flex-col sm:flex-row sm:flex-wrap justify-center gap-8 mt-1">
-      {groupPlans.map((plan, index) => {
-        const popular = groupPlans.length >= 3 && index === 1
-        const exclusive = index === groupPlans.length - 1
+      {groupPlans.map((plan) => {
+        const popular = plan.category === "POPULAR"
+        const exclusive = plan.category === "EXCLUSIVE"
         return <PricingCard key={plan.id} plan={plan} popular={popular} exclusive={exclusive} />
       })}
     </section>
@@ -517,14 +518,16 @@ export default function MembershipCards({ plans }: { plans: PlanData[] }) {
     <div className="py-8">
       <PricingHeader title="Membership Tiers" subtitle="Choose the tier that's right for you" />
       {hasMultipleIntervals ? (
-        <Tabs defaultValue={intervals[0]} className="w-full">
-          <TabsList className="flex justify-center mb-6">
-            {intervals.map((interval) => (
-              <TabsTrigger key={interval} value={interval}>
-                {INTERVAL_TAB_LABELS[interval] ?? interval}
-              </TabsTrigger>
-            ))}
-          </TabsList>
+        <Tabs defaultValue={intervals[0]}>
+          <div className="flex justify-center mb-6">
+            <TabsList>
+              {intervals.map((interval) => (
+                <TabsTrigger key={interval} value={interval}>
+                  {INTERVAL_TAB_LABELS[interval] ?? interval}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </div>
           {intervals.map((interval) => (
             <TabsContent key={interval} value={interval}>
               {renderPlanGroup(plans.filter((p) => p.interval === interval))}

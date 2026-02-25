@@ -39,6 +39,7 @@ export default async function Page() {
         description: plan.description ?? "",
         price: plan.price.toNumber(),
         interval: plan.interval,
+        category: plan.category,
         features: plan.features,
         allFeatures: plan.allFeatures,
         expandableFeatures: (plan.expandableFeatures as Record<string, string[]> | null) ?? null,

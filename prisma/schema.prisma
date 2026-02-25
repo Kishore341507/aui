@@ -113,6 +113,7 @@ model Plan {
   description String?
   price       Decimal  @db.Decimal(10, 2)
   interval    PlanInterval
+  category    PlanCategory @default(BASIC)
   features    String[]
   allFeatures String[] @default([])
   expandableFeatures Json?
@@ -160,4 +161,10 @@ enum PlanInterval {
   QUARTERLY
   YEARLY
   LIFETIME
+}
+
+enum PlanCategory {
+  BASIC
+  POPULAR
+  EXCLUSIVE
 }
