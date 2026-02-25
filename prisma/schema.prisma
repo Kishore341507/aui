@@ -114,6 +114,12 @@ model Plan {
   price       Decimal  @db.Decimal(10, 2)
   interval    PlanInterval
   features    String[]
+  allFeatures String[] @default([])
+  expandableFeatures Json?
+  discount    Int?
+  maxCount    Int?
+  isGiftable  Boolean  @default(true)
+  isSupportable Boolean @default(false)
   isActive    Boolean  @default(true)
   roles       BigInt[]
 
