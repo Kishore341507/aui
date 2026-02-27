@@ -17,6 +17,25 @@ import { useIsMobile } from "@/hooks/use-mobile"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Command, CommandEmpty, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
+
+export type PlanData = {
+  id: string
+  slug: string
+  name: string
+  description: string
+  price: number
+  interval: string
+  category: "BASIC" | "POPULAR" | "EXCLUSIVE"
+  features: string[]
+  allFeatures: string[]
+  expandableFeatures: Record<string, string[]> | null
+  discount: number | null
+  maxCount: number | null
+  isGiftable: boolean
+  isSupportable: boolean
+  soldCount?: number
+}
 
 type DiscordUser = {
   id: string
@@ -31,21 +50,18 @@ type SearchResult = {
   nick?: string
 }
 
-type PricingCardProps = {
-  isYearly?: boolean
-  title: string
-  monthlyPrice?: number
-  yearlyPrice?: number
-  description: string
-  features: string[]
-  allFeatures: string[]
-  actionLabel: string
-  popular?: boolean
-  exclusive?: boolean
-  expandableFeatures?: Record<string, string[]>
-  soldCount?: number
-  maxCount?: number
-  isDisabled?: boolean
+const INTERVAL_LABELS: Record<string, string> = {
+  MONTHLY: "/month",
+  QUARTERLY: "/quarter",
+  YEARLY: "/year",
+  LIFETIME: "one-time",
+}
+
+const INTERVAL_TAB_LABELS: Record<string, string> = {
+  MONTHLY: "Monthly",
+  QUARTERLY: "Quarterly",
+  YEARLY: "Yearly",
+  LIFETIME: "Lifetime",
 }
 
 const PricingHeader = ({ title, subtitle }: { title: string; subtitle: string }) => (
@@ -59,12 +75,12 @@ const PricingHeader = ({ title, subtitle }: { title: string; subtitle: string })
   </section>
 )
 
-const PricingCard = ({ isYearly, title, monthlyPrice, yearlyPrice, description, features, allFeatures, actionLabel, popular, exclusive, expandableFeatures, soldCount, maxCount, isDisabled }: PricingCardProps) => {
+const PricingCard = ({ plan, popular, exclusive }: { plan: PlanData; popular: boolean; exclusive: boolean }) => {
   const { data: session } = useSession()
   const isMobile = useIsMobile()
   const [view, setView] = useState<'features' | 'terms' | 'qr'>('features')
   const [copied, setCopied] = useState(false)
-  const [diamondTopUp, setDiamondTopUp] = useState("0")
+  const [supportTopUp, setSupportTopUp] = useState("0")
   const [customTopUp, setCustomTopUp] = useState("")
 
   const [giftRecipient, setGiftRecipient] = useState<SearchResult | null>(null)
@@ -109,13 +125,12 @@ const PricingCard = ({ isYearly, title, monthlyPrice, yearlyPrice, description, 
     searchUsers()
   }, [debouncedQuery, session?.user?.userId])
 
-  const isDiamond = title.trim().toLowerCase() === "diamond"
-  const baseAmount = yearlyPrice && isYearly ? yearlyPrice : monthlyPrice
   const parsedCustomTopUp = Math.max(0, Number(customTopUp) || 0)
-  const topUpAmount = diamondTopUp === "custom" ? parsedCustomTopUp : Number(diamondTopUp)
-  const amount = isDiamond && baseAmount
+  const topUpAmount = supportTopUp === "custom" ? parsedCustomTopUp : Number(supportTopUp)
+  const baseAmount = plan.price
+  const amount = plan.isSupportable
     ? baseAmount + (Number.isFinite(topUpAmount) ? topUpAmount : 0)
-    : baseAmount ?? "custom"
+    : baseAmount
   const upiId = "BHARATPE.8U0Z1L2A1X48538@fbpe"
   const url = `upi://pay?pa=${upiId}&pn=BharatPe Merchant`
 
@@ -126,10 +141,13 @@ const PricingCard = ({ isYearly, title, monthlyPrice, yearlyPrice, description, 
       tn = `${session.user.userId}|${session.user.name}`
   }
 
-  const paymentUrl = url + (tn ? "&tn=" + tn : "") + ((amount && amount !== "custom") ? "&am=" + amount : "")
+  const paymentUrl = url + (tn ? "&tn=" + tn : "") + `&am=${amount}`
 
-  const isSoldOut = soldCount !== undefined && maxCount !== undefined && soldCount >= maxCount
+  const intervalLabel = INTERVAL_LABELS[plan.interval] ?? ""
+  const actionLabel = `Get Started with ${plan.name}`
 
+  const isSoldOut = plan.maxCount != null && plan.soldCount !== undefined && plan.soldCount >= plan.maxCount
+  console.log(plan);
   const handleGetClick = () => {
     if (view === 'features') {
       if (session?.user?.userId) {
@@ -158,36 +176,33 @@ const PricingCard = ({ isYearly, title, monthlyPrice, yearlyPrice, description, 
     })}>
     <div>
       <CardHeader className="pb-8 pt-4">
-        {popular ? (
-          <div className="flex justify-between">
-            <CardTitle className="text-zinc-700 dark:text-zinc-300 text-lg">{title}</CardTitle>
-            {/* <div
-              className={cn("px-2.5 rounded-xl h-fit text-sm py-1 bg-zinc-200 text-black dark:bg-zinc-800 dark:text-white", {
-                "bg-gradient-to-r from-orange-400 to-rose-400 dark:text-black ": popular,
-              })}>
-              Save 17%
-            </div> */}
-          </div>
-        ) : (
-          <CardTitle className="text-zinc-700 dark:text-zinc-300 text-lg">{title}</CardTitle>
-        )}
+        <div className="flex justify-between">
+          <CardTitle className="text-zinc-700 dark:text-zinc-300 text-lg">{plan.name}</CardTitle>
+          {plan.discount != null && plan.discount > 0 && (
+            <div className={cn("px-2.5 rounded-xl h-fit text-sm py-1 bg-zinc-200 text-black dark:bg-zinc-800 dark:text-white", {
+              "bg-gradient-to-r from-orange-400 to-rose-400 dark:text-black": popular,
+            })}>
+              Save {plan.discount}%
+            </div>
+          )}
+        </div>
         <div className="flex gap-0.5 justify-between items-end">
           <div className="flex gap-0.5">
-            <h3 className="text-3xl font-bold">{yearlyPrice && isYearly ? "₹" + yearlyPrice : monthlyPrice ? "₹" + monthlyPrice : "Custom"}</h3>
-            <span className="flex flex-col justify-end text-sm mb-1">{yearlyPrice && isYearly ? "/year" : monthlyPrice ? "/month" : null}</span>
+            <h3 className="text-3xl font-bold">₹{plan.price}</h3>
+            <span className="flex flex-col justify-end text-sm mb-1">{intervalLabel}</span>
           </div>
-          {soldCount !== undefined && maxCount !== undefined && (
+          {plan.maxCount != null && plan.soldCount !== undefined && (
             <span className="font-bold text-red-500 mb-1 animate-pulse">
-              {maxCount - soldCount} Left
+              {plan.maxCount - plan.soldCount} Left
             </span>
           )}
         </div>
         <CardDescription className="pt-1.5 h-12">
-          {description}
+          {plan.description}
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-2">
-        {features.map((feature: string) => (
+        {plan.features.map((feature: string) => (
           <CheckItem key={feature} text={feature} />
         ))}
       </CardContent>
@@ -196,7 +211,7 @@ const PricingCard = ({ isYearly, title, monthlyPrice, yearlyPrice, description, 
       <Dialog onOpenChange={(open) => !open && setView('features')}>
         <DialogTrigger asChild>
           <Button 
-            disabled={isDisabled || isSoldOut}
+            disabled={isSoldOut}
             className="relative inline-flex w-full items-center justify-center rounded-md bg-black text-white dark:bg-white px-6 font-medium  dark:text-black transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50 disabled:opacity-50 disabled:cursor-not-allowed">
             <div className="absolute -inset-0.5 -z-10 rounded-lg bg-gradient-to-b from-[#c7d2fe] to-[#8678f9] opacity-75 blur" />
             {isSoldOut ? "Sold Out" : actionLabel}
@@ -204,18 +219,18 @@ const PricingCard = ({ isYearly, title, monthlyPrice, yearlyPrice, description, 
         </DialogTrigger>
         <DialogContent className="max-w-2xl min-h-[500px]">
           <DialogHeader>
-            <DialogTitle className="text-2xl">{title} - All Features</DialogTitle>
+            <DialogTitle className="text-2xl">{plan.name} - All Features</DialogTitle>
             <DialogDescription className="text-base pt-2">
-              {description}
+              {plan.description}
             </DialogDescription>
           </DialogHeader>
           <div className="flex justify-between items-center mt-4 mb-2">
             <div className="flex gap-0.5 items-baseline">
-              <h3 className="text-3xl font-bold">{yearlyPrice && isYearly ? "₹" + yearlyPrice : monthlyPrice ? "₹" + monthlyPrice : "Custom"}</h3>
-              <span className="text-sm text-muted-foreground">{yearlyPrice && isYearly ? "/year" : monthlyPrice ? "/month" : null}</span>
+              <h3 className="text-3xl font-bold">₹{plan.price}</h3>
+              <span className="text-sm text-muted-foreground">{intervalLabel}</span>
             </div>
             <div className="flex items-center gap-2">
-              {session && (
+              {plan.isGiftable && session && (
               <Popover open={searchOpen} onOpenChange={setSearchOpen}>
                 <PopoverTrigger asChild>
                     <Button variant="outline" className="shadow-[0_0_15px_rgba(236,72,153,0.6)] border-pink-500 text-pink-500 hover:text-pink-600 hover:border-pink-600 dark:text-pink-400 dark:hover:text-pink-300 dark:hover:border-pink-400">
@@ -288,8 +303,8 @@ const PricingCard = ({ isYearly, title, monthlyPrice, yearlyPrice, description, 
                  >
                     <ScrollArea className="h-full pr-4">
                       <div className="flex flex-col gap-3 pb-4">
-                        {allFeatures.map((feature: string, index: number) => {
-                          if (expandableFeatures?.[feature]) {
+                        {plan.allFeatures.map((feature: string, index: number) => {
+                          if (plan.expandableFeatures?.[feature]) {
                              return (
                                <Accordion type="single" collapsible className="w-full" key={`${feature}-${index}`}>
                                   <AccordionItem value="item-1" className="border-none">
@@ -297,7 +312,7 @@ const PricingCard = ({ isYearly, title, monthlyPrice, yearlyPrice, description, 
                                         <CheckItemWithCategory text={feature} />
                                      </AccordionTrigger>
                                      <AccordionContent className="pl-6 flex flex-col gap-3 pt-2">
-                                        {expandableFeatures[feature].map((subFeature, subIndex) => (
+                                        {plan.expandableFeatures[feature].map((subFeature, subIndex) => (
                                            <CheckItemWithCategory key={`sub-${subIndex}`} text={subFeature} />
                                         ))}
                                      </AccordionContent>
@@ -348,12 +363,12 @@ const PricingCard = ({ isYearly, title, monthlyPrice, yearlyPrice, description, 
                  >
                     <ScrollArea className="h-full w-full">
                       <div className="flex items-center justify-center flex-col gap-4 min-h-full py-4">
-                        {isDiamond && (
+                        {plan.isSupportable && (
                           <ToggleGroup
                             type="single"
                             className="mb-2"
-                            value={diamondTopUp}
-                            onValueChange={(value) => value && setDiamondTopUp(value)}
+                            value={supportTopUp}
+                            onValueChange={(value) => value && setSupportTopUp(value)}
                           >
                             <ToggleGroupItem value="0" aria-label="Add 0">
                               +0
@@ -364,7 +379,7 @@ const PricingCard = ({ isYearly, title, monthlyPrice, yearlyPrice, description, 
                             <ToggleGroupItem value="500" aria-label="Add 500">
                               +500
                             </ToggleGroupItem>
-                            {diamondTopUp === "custom" ? (
+                            {supportTopUp === "custom" ? (
                               <div className="flex items-center rounded-md border border-input bg-background px-2">
                                 <input
                                   type="number"
@@ -485,113 +500,44 @@ const CheckItemWithCategory = ({ text }: { text: string }) => {
   )
 }
 
-export default function MembershipCards({ diamondSoldCount = 0 }: { diamondSoldCount?: number }) {
-  const isYearly = false
+export default function MembershipCards({ plans }: { plans: PlanData[] }) {
+  const intervals = [...new Set(plans.map((p) => p.interval))]
+  const hasMultipleIntervals = intervals.length > 1
 
-  const goldFeaturesList = [
-    "Utility: WV (Which VC is person in?)",
-    "Audio: Private Music VC Access",
-    "Visual: Special Role Colors",
-    "Chat: Spoiler Messages",
-    "Chat: Add Reactions",
-    "Chat: External Emojis & Stickers",
-    "Identity: Change Own Nickname",
-    "Chat: Role Income (Casino)",
-    "Economy: 250k PVC Coins (Weekly)",
-    "Status: Role Hoisting",
-    "Social: Private Chat (with Staff)"
-  ]
+  const renderPlanGroup = (groupPlans: PlanData[]) => (
+    <section className="flex flex-col sm:flex-row sm:flex-wrap justify-center gap-8 mt-1">
+      {groupPlans.map((plan) => {
+        const popular = plan.category === "POPULAR"
+        const exclusive = plan.category === "EXCLUSIVE"
+        return <PricingCard key={plan.id} plan={plan} popular={popular} exclusive={exclusive} />
+      })}
+    </section>
+  )
 
-  const platinumFeaturesList = [
-    "Visual: Gradient Role Colors",
-    "Utility: AV Command",
-    "VC: Stream/ Cam Perms",
-    "VC: Soundboard Access",
-    "Economy: 500k PVC Coins (Weekly)",
-    "Chat/Utility: AFK Command",
-    "Social: Private Chat (Elite Only)",
-    "Chat: Slowmode Bypass",
-  ]
-
-  const diamondFeaturesList = [
-    "Visual: Custom Role Colors",
-    "VC: VVIP Entrance Sound",
-    "Exclusivity: Limited to 5 users",
-    "Chat: Voice Notes",
-    "Reward: Returning Gifts (Nitro/Decor)",
-  ]
-
-  const plans: Omit<PricingCardProps, "isYearly">[] = [
-    {
-      title: "Gold",
-      monthlyPrice: 149,
-      yearlyPrice: 1999,
-      description: "Stand out with your first premium badge.",
-      features: [
-        "WV (Which VC is person in?)",
-        "Private Music VC Access",
-        "Special Role Colors",
-        "Spoiler Messages"
-      ],
-      allFeatures: goldFeaturesList,
-      actionLabel: "Get Started with Gold",
-    },
-    {
-      title: "Platinum",
-      monthlyPrice: 299,
-      yearlyPrice: 2999,
-      description: "Direct access, priority support, and elite status.",
-      features: [
-        "All in Gold",
-        "Gradient Role Colors",
-        "Stream/ Cam Perms",
-        "Soundboard Access",
-        "Many More..."
-      ],
-      allFeatures: [
-        ...platinumFeaturesList,
-        "Included: All in Gold",
-      ],
-      expandableFeatures: {
-        "Included: All in Gold": goldFeaturesList
-      },
-      actionLabel: "Get Started with Platinum",
-      popular: true,
-    },
-    {
-      title: "Diamond",
-      monthlyPrice: 1999,
-      yearlyPrice: 19999,
-      description: "The ultimate tier for power users.",
-      features: [
-        "All in Gold and Platinum",
-        "Custom Role Colors",
-        "VVIP Entrance Sound",
-        "Exclusivity (Limited to 5 users)",
-        "Many More..."
-      ],
-      allFeatures: [
-        ...diamondFeaturesList,
-        "Included: All in Gold and Platinum",
-      ],
-      expandableFeatures: {
-        "Included: All in Gold and Platinum": [...goldFeaturesList, ...platinumFeaturesList]
-      },
-      actionLabel: "Get Started with Diamond",
-      exclusive: true,
-      soldCount: diamondSoldCount,
-      maxCount: 5,
-    },
-  ]
   return (
     <div className="py-8">
       <PricingHeader title="Membership Tiers" subtitle="Choose the tier that's right for you" />
-      <section className="flex flex-col sm:flex-row sm:flex-wrap justify-center gap-8 mt-1">
-        {plans.map((plan) => {
-          return <PricingCard key={plan.title} {...plan} isYearly={isYearly} />
-        })}
-      </section>
-      
+      {hasMultipleIntervals ? (
+        <Tabs defaultValue={intervals[0]}>
+          <div className="flex justify-center mb-6">
+            <TabsList>
+              {intervals.map((interval) => (
+                <TabsTrigger key={interval} value={interval}>
+                  {INTERVAL_TAB_LABELS[interval] ?? interval}
+                </TabsTrigger>
+              ))}
+            </TabsList>
+          </div>
+          {intervals.map((interval) => (
+            <TabsContent key={interval} value={interval}>
+              {renderPlanGroup(plans.filter((p) => p.interval === interval))}
+            </TabsContent>
+          ))}
+        </Tabs>
+      ) : (
+        renderPlanGroup(plans)
+      )}
+
       {/* Contact Link */}
       <div className="text-center mt-2">
         <Link 
