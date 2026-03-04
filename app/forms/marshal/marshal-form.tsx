@@ -11,12 +11,13 @@ import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle } from "lucide-react";
 
 const formSchema = z.object({
-  game: z.string().min(1, "Please select a game"),
+  game: z.array(z.string()).min(1, "Please select at least one game"),
   activeTimes: z.string().min(1, "Required"),
   dedicateTime: z.string().min(1, "Required"),
   botExperience: z.string().min(1, "Required"),
@@ -40,7 +41,7 @@ export default function MarshalForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      game: "",
+      game: [],
       activeTimes: "",
       dedicateTime: "",
       botExperience: "",
@@ -117,19 +118,24 @@ export default function MarshalForm() {
                 <FormItem>
                   <FormLabel className="text-base font-semibold">Which game do you play regularly on the server?</FormLabel>
                   <FormControl>
-                    <RadioGroup 
-                      onValueChange={field.onChange} 
-                      value={field.value} 
-                      className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2"
-                      disabled={!isAuthenticated}
-                    >
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-2">
                       {GAMES.map((game) => (
                         <label key={game} className={`flex items-center space-x-3 space-y-0 rounded-md border p-3 hover:bg-accent hover:text-accent-foreground ${!isAuthenticated ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}`}>
-                          <RadioGroupItem value={game} disabled={!isAuthenticated} />
+                          <Checkbox
+                            checked={field.value.includes(game)}
+                            onCheckedChange={(checked) => {
+                              if (checked) {
+                                field.onChange([...field.value, game]);
+                              } else {
+                                field.onChange(field.value.filter((g: string) => g !== game));
+                              }
+                            }}
+                            disabled={!isAuthenticated}
+                          />
                           <span className="font-normal">{game}</span>
                         </label>
                       ))}
-                    </RadioGroup>
+                    </div>
                   </FormControl>
                   <FormMessage />
                 </FormItem>
