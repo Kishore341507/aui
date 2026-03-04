@@ -132,11 +132,14 @@ model Plan {
 
 model Membership {
   id        String           @id @default(cuid())
-  userId    String
-  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
-
+  userId    String?
+  user      User?            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  discordUserId String?
+  
   planId    String
   plan      Plan             @relation(fields: [planId], references: [id])
+  
+  amount    Decimal?          @db.Decimal(10, 2)
 
   status    MembershipStatus @default(PENDING)
 
