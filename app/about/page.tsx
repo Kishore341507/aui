@@ -20,7 +20,7 @@ export default function AboutPage() {
             AUI is an individually owned online gaming and social community that offers free and paid digital memberships focused on Discord-based events, perks, and entertainment.
           </p>
           <p className="text-base text-muted-foreground">
-            With over 50,000+ members and counting, we provide a space where gamers, content creators, and friends come together to connect, play, and build lasting relationships in a safe and engaging environment.
+            With over 60,000+ members and counting, we provide a space where gamers, content creators, and friends come together to connect, play, and build lasting relationships in a safe and engaging environment.
           </p>
         </section>
 
@@ -114,7 +114,7 @@ export default function AboutPage() {
           <h2 className="text-2xl font-semibold mb-4">Our Journey</h2>
           <div className="space-y-3">
             <ul className="list-disc pl-6 space-y-2 text-base text-muted-foreground">
-              <li>Grown to 50,000+ active members across India</li>
+              <li>Grown to 60,000+ active members across India</li>
               <li>Introduced premium membership tiers with exclusive digital features</li>
               <li>Built an in‑server economy system with PVC Coins and interactive games (no real‑money value)</li>
               <li>Established 24/7 moderation and support</li>
