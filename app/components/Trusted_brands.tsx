@@ -1,15 +1,7 @@
 "use client";
 import Image from "next/image";
 export default function TrustedBrandsMarquee() {
-  const logos = [
-    "slack",
-    "framer",
-    "netflix",
-    "google",
-    "linkedin",
-    "instagram",
-    "facebook",
-  ];
+
 
   return (
     <section className="trusted-brands py-16 relative bg-black">

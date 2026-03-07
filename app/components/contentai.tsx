@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 
 import { motion } from "framer-motion";
 
@@ -63,9 +64,11 @@ export default function ContentAISection() {
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.8 }}
         >
-          <img
-            src="https://framerusercontent.com/images/opU4u9tpFihLry6OpmKv0EfPk.png"
+          <Image
+            src="/con1.avif"
             alt="mockup"
+            width={800}
+            height={600}
             className="w-full rounded-xl object-cover"
           />
         </motion.div>
@@ -81,10 +84,12 @@ export default function ContentAISection() {
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.8 }}
         >
-          <img
-            src="https://framerusercontent.com/images/QnUrRrOnqyfoKpIqi3ZtGg1F6w.png"
-            alt="social cards"
-            className="w-full rounded-xl object-contain"
+          <Image
+            src="/con2.avif"
+            alt="mockup"
+            width={800}
+            height={600}
+            className="w-full rounded-xl object-cover"
           />
         </motion.div>
 
