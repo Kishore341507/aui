@@ -37,7 +37,7 @@ export default function FAQ() {
   };
 
   return (
-    <section className="bg-balck-900 text-white py-10 px-4 md:px-0">
+    <section className="bg-black text-white py-10 px-4 md:px-0">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-start justify-center gap-8">
         <img
           className="max-w-sm w-full rounded-xl h-auto"

@@ -40,14 +40,6 @@ export default function Footer() {
         "
       />
 
-      <style>
-                {`
-                    @import url('https://fonts.googleapis.com/css2?family=Geist:wght@100..900&display=swap');
-                    *{
-                        font-family: "Geist", sans-serif;
-                    }
-                `}
-            </style>
             <div className='bg-black px-4'>
                 <footer className="bg-[#131314] w-full max-w-[1350px] mx-auto text-white pt-8 lg:pt-12 px-4 sm:px-8 md:px-16 lg:px-28 rounded-tl-3xl rounded-tr-3xl overflow-hidden">
                     <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-6 gap-8 md:gap-12">
