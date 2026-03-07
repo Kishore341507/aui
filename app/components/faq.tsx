@@ -42,7 +42,7 @@ export default function FAQ() {
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-start justify-center gap-8">
         <Image
           className="max-w-sm w-full rounded-xl h-auto"
-          src="https://images.unsplash.com/photo-1555212697-194d092e3b8f?q=80&w=830&h=844&auto=format&fit=crop"
+          src="/faq.avif"
           alt="FAQ Illustration"
           width={830}
           height={844}

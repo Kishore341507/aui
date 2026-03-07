@@ -5,45 +5,23 @@ import Link from "next/link";
 export default function Footer() {
   return (
     <div className="relative mt-[28rem] md:mt-[35rem]">
-      {/* Footer top image */}
-      <Image
-        src="/footertop.webp"
-        alt="Footer top decoration"
-        className="
-          absolute
-          -top-[12rem]
-          md:-top-[27rem]
-          left-1/2
-          -translate-x-1/2
-          w-full
-          max-w-[32rem]
-          md:max-w-[53rem]
-          h-auto
-          pointer-events-none
-        "
-        fill
-        unoptimized
-      />
+     <Image
+            src="/footertop.webp"
+            alt="Footer top decoration"
+            width={1000}
+            height={600}
+            unoptimized
+            className="absolute -top-[12rem] md:-top-[27rem] left-1/2 -translate-x-1/2 w-full max-w-[32rem] md:max-w-[53rem] h-auto pointer-events-none"
+        />
 
-      {/* Overlapping image */}
-      <Image
-        src="/footeroverlap.webp"
-        alt="Footer overlap decoration"
-        className="
-          absolute
-          -top-[2.5rem]
-          md:-top-[9rem]
-          left-1/2
-          -translate-x-1/2
-          z-10
-          w-[5rem]
-          md:w-[10rem]
-          lg:w-[13rem]
-          pointer-events-none
-        "
-        fill
-        unoptimized
-      />
+        <Image
+            src="/footeroverlap.webp"
+            alt="Footer overlap decoration"
+            width={300}
+            height={200}
+            unoptimized
+            className="absolute -top-[2.5rem] md:-top-[9rem] left-1/2 -translate-x-1/2 z-10 w-[5rem] md:w-[10rem] lg:w-[13rem] h-auto pointer-events-none"
+        />
 
             <div className='bg-black px-4'>
                 <footer className="bg-[#131314] w-full max-w-[1350px] mx-auto text-white pt-8 lg:pt-12 px-4 sm:px-8 md:px-16 lg:px-28 rounded-tl-3xl rounded-tr-3xl overflow-hidden">

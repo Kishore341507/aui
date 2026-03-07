@@ -18,42 +18,42 @@ const testimonials: Testimonial[] = [
     name: "Cristofer Levin",
     role: "Active community member",
     image:
-      "https://images.unsplash.com/photo-1633332755192-727a05c4013d?q=80&w=200",
+      "/test1.jfif",
   },
   {
     text: "I joined AUI to find better Among Us lobbies and stayed for the amazing community. The events and voice chats are always lively.",
     name: "Rohan Mehta",
     role: "Discord gamer",
     image:
-      "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=200",
+      "/test2.jfif",
   },
   {
     text: "AUI made Among Us way more fun. Playing with organized lobbies and friendly players makes every game exciting.",
     name: "Jason Kim",
     role: "Community player",
     image:
-      "https://images.unsplash.com/photo-1527980965255-d3b416303d12?w=200&auto=format&fit=crop&q=60",
+      "/test3.avif",
   },
   {
     text: "If you love Among Us and want a great Indian community, AUI is the place to be. The moderators and players keep it welcoming.",
     name: "Alex Turner",
     role: "Regular player",
     image:
-      "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=200&auto=format&fit=crop&q=60",
+      "/test4.avif",
   },
   {
     text: "The vibe in AUI is amazing. From casual games to competitive rounds, there's always something happening.",
     name: "Sofia Martinez",
     role: "Discord community member",
     image:
-      "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=100",
+      "/test5.jfif",
   },
   {
     text: "AUI helped me connect with other Among Us players across India. The community is active, friendly, and always ready to play.",
     name: "Daniel Wong",
     role: "Among Us enthusiast",
     image:
-      "https://raw.githubusercontent.com/prebuiltui/prebuiltui/main/assets/userImage/userImage1.png",
+      "/test6.png",
   },
 ];
 
