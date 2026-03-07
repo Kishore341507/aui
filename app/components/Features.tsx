@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 
 export default function FeaturesSection() {
@@ -59,18 +60,25 @@ export default function FeaturesSection() {
 
           {/* Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 mt-8">
-            <div className="md:col-span-2">
-              <img
+            <div className="md:col-span-2" style={{ width: '80%'}}>
+              <Image
                 alt="features showcase"
                 src="/newone.webp"
-                className="rounded-lg " style={{ width: '80%'}}
+                width={0}
+                height={0}
+                sizes="100vw"
+                className="rounded-lg w-full h-auto"
               />
             </div>
             <div className="md:col-span-1 flex flex-col gap-4">
-              <img
+              <Image
                 alt="features showcase"
                 className="hover:-translate-y-0.5 transition duration-300 rounded-lg w-full"
                 src="/auinew.webp"
+                width={0}
+                height={0}
+                sizes="100vw"
+                style={{ height: 'auto' }}
               />
               <h3 className="text-[24px]/7.5 text-white font-800 font-medium mt-6">
                 Built for Gamers, By Gamers

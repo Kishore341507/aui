@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
 
 export default function ContentAISection() {
@@ -57,16 +58,17 @@ export default function ContentAISection() {
 
         {/* Right Column - Image */}
         <motion.div
-          className="lg:flex-1"
+          className="lg:flex-1 relative w-full aspect-video"
           initial={{ opacity: 0, x: 50 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.8 }}
         >
-          <img
+          <Image
             src="https://framerusercontent.com/images/opU4u9tpFihLry6OpmKv0EfPk.png"
             alt="mockup"
-            className="w-full rounded-xl object-cover"
+            fill
+            className="rounded-xl object-cover"
           />
         </motion.div>
       </div>
@@ -75,16 +77,17 @@ export default function ContentAISection() {
       <div className="max-w-6xl mx-auto px-4 mt-16 flex flex-col lg:flex-row gap-16 items-center">
         {/* Left Image */}
         <motion.div
-          className="lg:flex-1"
+          className="lg:flex-1 relative w-full aspect-video"
           initial={{ opacity: 0, x: -50 }}
           whileInView={{ opacity: 1, x: 0 }}
           viewport={{ once: true, amount: 0.3 }}
           transition={{ duration: 0.8 }}
         >
-          <img
+          <Image
             src="https://framerusercontent.com/images/QnUrRrOnqyfoKpIqi3ZtGg1F6w.png"
             alt="social cards"
-            className="w-full rounded-xl object-contain"
+            fill
+            className="rounded-xl object-contain"
           />
         </motion.div>
 

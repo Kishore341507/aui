@@ -1,11 +1,12 @@
 import Image from "next/image";
+import Link from "next/link";
 
 
 export default function Footer() {
   return (
     <div className="relative mt-[28rem] md:mt-[35rem]">
       {/* Footer top image */}
-      <img
+      <Image
         src="/footertop.webp"
         alt="Footer top decoration"
         className="
@@ -20,10 +21,12 @@ export default function Footer() {
           h-auto
           pointer-events-none
         "
+        fill
+        unoptimized
       />
 
       {/* Overlapping image */}
-      <img
+      <Image
         src="/footeroverlap.webp"
         alt="Footer overlap decoration"
         className="
@@ -38,6 +41,8 @@ export default function Footer() {
           lg:w-[13rem]
           pointer-events-none
         "
+        fill
+        unoptimized
       />
 
             <div className='bg-black px-4'>
@@ -45,7 +50,7 @@ export default function Footer() {
                     <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-6 gap-8 md:gap-12">
                         
                         <div className="lg:col-span-3 space-y-6">
-                            <a href="/" className="block">
+                            <Link href="/" className="block">
                                 <Image
                                   src="/aui_dark.svg"
                                   alt="Logo"
@@ -53,7 +58,7 @@ export default function Footer() {
                                   height={32}
                                   className="rounded-full"
                                 />
-                            </a>
+                            </Link>
                             <p className="text-sm/6 text-neutral-300 max-w-96">AUI(Among Us India) is a community for fans of the game Among Us in India.</p>
                             <div className="flex gap-5 md:gap-6 order-1 md:order-2">
                                 {/* X (Twitter) */}
@@ -92,11 +97,11 @@ export default function Footer() {
                             <div>
                                 <h3 className="font-medium text-sm mb-4">Pages</h3>
                                 <ul className="space-y-3 text-sm text-neutral-300">
-                                    <li><a href="/" className="hover:text-neutral-400">Home</a></li>
-                                    <li><a href="/about" className="hover:text-neutral-400">About</a></li>
-                                    <li><a href="/membership" className="hover:text-neutral-400">Membership</a></li>
-                                    <li><a href="/forms" className="hover:text-neutral-400">Forms</a></li>
-                                    <li><a href="/contact" className="hover:text-neutral-400">Contact</a></li>
+                                    <li><Link href="/" className="hover:text-neutral-400">Home</Link></li>
+                                    <li><Link href="/about" className="hover:text-neutral-400">About</Link></li>
+                                    <li><Link href="/membership" className="hover:text-neutral-400">Membership</Link></li>
+                                    <li><Link href="/forms" className="hover:text-neutral-400">Forms</Link></li>
+                                    <li><Link href="/contact" className="hover:text-neutral-400">Contact</Link></li>
                                 </ul>
                             </div>
 
@@ -104,12 +109,12 @@ export default function Footer() {
                             <div>
                                 <h3 className="font-medium text-sm mb-4">Forms & Applications</h3>
                                 <ul className="space-y-3 text-sm text-neutral-300">
-                                    <li><a href="/forms/moderation" className="hover:text-neutral-400">Moderation Application</a></li>
-                                    <li><a href="/forms/unban" className="hover:text-neutral-400">Unban Request</a></li>
-                                    <li><a href="/forms/staff-report" className="hover:text-neutral-400">Staff Report</a></li>
-                                    <li><a href="/forms/event-team" className="hover:text-neutral-400">Event Team</a></li>
-                                    <li><a href="/forms/media-team" className="hover:text-neutral-400">Media Team</a></li>
-                                    <li><a href="/forms/marshal" className="hover:text-neutral-400">Marshal Application</a></li>
+                                    <li><Link href="/forms/moderation" className="hover:text-neutral-400">Moderation Application</Link></li>
+                                    <li><Link href="/forms/unban" className="hover:text-neutral-400">Unban Request</Link></li>
+                                    <li><Link href="/forms/staff-report" className="hover:text-neutral-400">Staff Report</Link></li>
+                                    <li><Link href="/forms/event-team" className="hover:text-neutral-400">Event Team</Link></li>
+                                    <li><Link href="/forms/media-team" className="hover:text-neutral-400">Media Team</Link></li>
+                                    <li><Link href="/forms/marshal" className="hover:text-neutral-400">Marshal Application</Link></li>
                                 </ul>
                             </div>
 

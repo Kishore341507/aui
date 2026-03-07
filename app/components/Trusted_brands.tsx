@@ -1,16 +1,6 @@
 "use client";
 
 export default function TrustedBrandsMarquee() {
-  const logos = [
-    "slack",
-    "framer",
-    "netflix",
-    "google",
-    "linkedin",
-    "instagram",
-    "facebook",
-  ];
-
   return (
     <section className="trusted-brands py-16 relative bg-black">
       <h3 className="text-lg font-medium text-white text-600 text-center ">

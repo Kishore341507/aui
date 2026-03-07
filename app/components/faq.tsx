@@ -1,16 +1,17 @@
 'use client';
 import { useState } from "react";
+import Image from "next/image";
 
 const faqs = [
   {
     question: "What is this Discord server about?",
     answer:
-      "This server is built to bring people together around shared interests, discussions, and collaboration. It’s a space to connect, learn, and grow with an active community.",
+      "This server is built to bring people together around shared interests, discussions, and collaboration. It's a space to connect, learn, and grow with an active community.",
   },
   {
     question: "How do I get started after joining?",
     answer:
-      "Once you join, head to the welcome and rules channels, pick your roles, and introduce yourself. You’ll unlock channels and features as you get involved.",
+      "Once you join, head to the welcome and rules channels, pick your roles, and introduce yourself. You'll unlock channels and features as you get involved.",
   },
   {
     question: "Is the server moderated?",
@@ -39,13 +40,15 @@ export default function FAQ() {
   return (
     <section className="bg-black text-white py-10 px-4 md:px-0">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-start justify-center gap-8">
-        <img
+        <Image
           className="max-w-sm w-full rounded-xl h-auto"
           src="https://images.unsplash.com/photo-1555212697-194d092e3b8f?q=80&w=830&h=844&auto=format&fit=crop"
           alt="FAQ Illustration"
+          width={830}
+          height={844}
         />
         <div className="flex-1">
-          <p className="text-indigo-500 text-sm font-medium">FAQ's</p>
+          <p className="text-indigo-500 text-sm font-medium">FAQ&apos;s</p>
           <h1 className="text-3xl font-semibold">Looking for answers?</h1>
           <p className="text-sm text-gray-400 mt-2 pb-4">
             Build a thriving Discord community without the chaos — automated, scalable,

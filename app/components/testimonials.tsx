@@ -1,11 +1,18 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 import React from "react";
 
+interface Testimonial {
+  text: string;
+  name: string;
+  role: string;
+  image: string;
+}
 
 export default function TestimonialSection() {
-const testimonials = [
+const testimonials: Testimonial[] = [
   {
     text: "AUI is easily the most active Among Us community in India. Finding lobbies and playing with fun people here is super easy.",
     name: "Cristofer Levin",
@@ -55,7 +62,7 @@ const testimonials = [
     { start: 3, end: 6, className: "animate-scroll-reverse" },
   ];
 
-  const renderCard = (testimonial: any, index: number) => (
+  const renderCard = (testimonial: Testimonial, index: number) => (
     <div
       key={index}
       className="bg-neutral-900 border border-neutral-800 hover:border-neutral-600 rounded-xl p-6 shrink-0 w-[340px] transition"
@@ -80,9 +87,11 @@ const testimonials = [
       <p className="text-neutral-300 text-sm mb-6">{testimonial.text}</p>
 
       <div className="flex items-center gap-3">
-        <img
+        <Image
           src={testimonial.image}
           alt={testimonial.name}
+          width={44}
+          height={44}
           className="w-11 h-11 rounded-full object-cover"
         />
         <div>
