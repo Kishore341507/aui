@@ -34,7 +34,7 @@ export default function Home() {
       <TrustedBrandsMarquee />
       <FeaturesSection />
       <ContentAISection />
-      <TestimonialSection />
+      {/* <TestimonialSection /> */}
       <FAQ />
     </main>
   );
