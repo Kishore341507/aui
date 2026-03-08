@@ -3,7 +3,7 @@ import Hero from "./components/Hero";
 import TrustedBrandsMarquee from "./components/Trusted_brands";
 import FeaturesSection from "./components/Features";
 import ContentAISection from "./components/contentai";
-import TestimonialSection from "./components/testimonials";
+// import TestimonialSection from "./components/testimonials";
 import FAQ from "./components/faq";
 
 export const metadata: Metadata = {
