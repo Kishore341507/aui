@@ -98,7 +98,7 @@ export default function Hero() {
   className="w-44 sm:w-56 md:w-72"
 >
   <Image
-    src="/discord.jfif"
+    src="/discord.png"
     alt="Right Top"
     width={250}
     height={500}
@@ -126,7 +126,7 @@ export default function Hero() {
   className="w-36 sm:w-48 md:w-64"
 >
   <Image
-    src="/nitro.jfif"
+    src="/nitro.png"
     alt="Right Bottom"
     width={280}
     height={560}
