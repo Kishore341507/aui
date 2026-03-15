@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import {
     Card,
     CardDescription,
@@ -26,10 +27,33 @@ export const metadata: Metadata = {
 export default function Forms() {
 
     return (
-        <div className='container mx-auto mt-8 px-4 space-y-8'>
-            <div className="text-center space-y-4">
-                <h1 className="text-4xl font-bold tracking-tight">Forms & Applications</h1>
-            </div>
+       <>
+           <section
+             className="relative min-h-[10vh] flex items-center justify-center overflow-hidden"
+           >
+       
+       
+             {/* Background */}
+             <Image
+               src="/heroback.avif"
+               alt="Hero background"
+               fill
+               priority
+               className="object-cover"
+             />
+               {/* content */}
+               <div className="relative z-10 max-w-4xl h-[20vh] m-auto px-4 text-center ">
+                   <h1 className="text-4xl md:text-5xl font-bold text-white">Forms & Applications</h1>
+                   <p className="mt-4 text-lg md:text-xl text-white/90">
+                       Submit applications or requests for various roles and services.
+                   </p>
+               </div>
+        
+           </section>
+       
+
+       <div className='container mx-auto mt-8 px-4 space-y-8'>
+          
 
             <div className="space-y-6">
                 
@@ -95,10 +119,74 @@ export default function Forms() {
                         </Card>
                     </Link>
 
+                    <Link href='/forms/event-team' className="group transition-transform hover:scale-105">
+                        <Card className="h-full border-2 hover:border-primary/50 transition-colors">
+                            <CardHeader>
+                                <CardTitle className="flex items-center justify-between">
+                                    Event Team Application
+                                    <ExternalLink className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                </CardTitle>
+                                <CardDescription>
+                                    Join our event team to help organize and manage community events and activities.
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="flex items-center text-sm text-muted-foreground">
+                                    <Clock className="w-4 h-4 mr-1" />
+                                    Processing time: 1-2 weeks
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </Link>
+
+                    <Link href='/forms/marshal' className="group transition-transform hover:scale-105">
+                        <Card className="h-full border-2 hover:border-primary/50 transition-colors">
+                            <CardHeader>
+                                <CardTitle className="flex items-center justify-between">
+                                    Marshal Application
+                                    <ExternalLink className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                </CardTitle>
+                                <CardDescription>
+                                    Apply to become a marshal and help coordinate gaming sessions and tournaments.
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="flex items-center text-sm text-muted-foreground">
+                                    <Clock className="w-4 h-4 mr-1" />
+                                    Processing time: 1-2 weeks
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </Link>
+
+                    <Link href='/forms/media-team' className="group transition-transform hover:scale-105">
+                        <Card className="h-full border-2 hover:border-primary/50 transition-colors">
+                            <CardHeader>
+                                <CardTitle className="flex items-center justify-between">
+                                    Media Team Application
+                                    <ExternalLink className="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity" />
+                                </CardTitle>
+                                <CardDescription>
+                                    Join the media team to create content, graphics, and promotional materials for the community.
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="flex items-center text-sm text-muted-foreground">
+                                    <Clock className="w-4 h-4 mr-1" />
+                                    Processing time: 1-2 weeks
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </Link>
+
                 </div>
             </div>
 
             <Separator />
         </div>
+   
+       
+       </>
+           
     )
 }

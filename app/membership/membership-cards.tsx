@@ -48,17 +48,6 @@ type PricingCardProps = {
   isDisabled?: boolean
 }
 
-const PricingHeader = ({ title, subtitle }: { title: string; subtitle: string }) => (
-  <section className="text-center">
-    <h2 className="text-3xl font-bold">{title}</h2>
-    <p className="text-xl pt-1">{subtitle}</p>
-    <p className="text-center text-sm italic text-muted-foreground pt-2">
-        100% of your contribution goes directly toward growing and improving AUI.
-    </p>
-    <br />
-  </section>
-)
-
 const PricingCard = ({ isYearly, title, monthlyPrice, yearlyPrice, description, features, allFeatures, actionLabel, popular, exclusive, expandableFeatures, soldCount, maxCount, isDisabled }: PricingCardProps) => {
   const { data: session } = useSession()
   const isMobile = useIsMobile()
@@ -584,8 +573,8 @@ export default function MembershipCards({ diamondSoldCount = 0 }: { diamondSoldC
     },
   ]
   return (
-    <div className="py-8">
-      <PricingHeader title="Membership Tiers" subtitle="Choose the tier that's right for you" />
+    <div className="py-8 mt-[3rem]">
+     
       <section className="flex flex-col sm:flex-row sm:flex-wrap justify-center gap-8 mt-1">
         {plans.map((plan) => {
           return <PricingCard key={plan.title} {...plan} isYearly={isYearly} />

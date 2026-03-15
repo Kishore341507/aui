@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import { Mail, MapPin, Phone } from "lucide-react"
+import Image from "next/image"
 
 export const metadata: Metadata = {
   title: "Contact Us - AUI | Among Us India",
@@ -8,8 +9,32 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
-      <h1 className="text-4xl font-bold mb-8">Contact Us</h1>
+<>
+    <section
+                 className="relative min-h-[10vh] flex items-center justify-center overflow-hidden"
+               >
+           
+           
+                 {/* Background */}
+                 <Image
+                   src="/heroback.avif"
+                   alt="Hero background"
+                   fill
+                   priority
+                   className="object-cover"
+                 />
+                   {/* content */}
+                   <div className="relative z-10 max-w-4xl h-[20vh] m-auto px-4 text-center ">
+                       <h1 className="text-4xl md:text-5xl font-bold text-white">Contact Us</h1>
+                       <p className="mt-4 text-lg md:text-xl text-white/90">
+                           Get in touch with us for any inquiries or support.
+                       </p>
+                   </div>
+            
+               </section>
+
+    <div className="container mx-auto px-4 py-8 max-w-4xl ">
+    
       
       <div className="space-y-8">
         <section>
@@ -172,5 +197,7 @@ export default function ContactPage() {
         </section>
       </div>
     </div>
+
+    </>
   )
 }
