@@ -2,6 +2,7 @@ import { Card } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Crown } from "lucide-react"
 import { Metadata } from "next"
+import Image from "next/image"
 
 export const metadata: Metadata = {
   title: "Most Active Discord Servers in India | Best Indian Gaming Communities",
@@ -93,10 +94,12 @@ export default async function ActiveServersPage() {
 
                       <div className="w-10 h-10 bg-muted relative shrink-0 ml-4 rounded-md overflow-hidden">
                           {server.icon ? (
-                              <img
-                                  src={`https://cdn.discordapp.com/icons/${server.id}/${server.icon}.png?size=512`}
-                                  alt={server.name}
-                                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                              <Image
+                                src={`https://cdn.discordapp.com/icons/${server.id}/${server.icon}.png?size=512`}
+                                alt={server.name}
+                                width={512}
+                                height={512}
+                                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                               />
                           ) : (
                               <div className="flex items-center justify-center h-full text-muted-foreground bg-secondary/50 text-[10px]">

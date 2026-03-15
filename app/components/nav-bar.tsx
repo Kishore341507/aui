@@ -87,29 +87,29 @@ export default async function NavBar() {
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem>
-                {/* <Link href={session ? "/api/auth/signout" : "/api/auth/signin"} className="flex" >
+                <form
+                  action={async () => {
+                    "use server";
+                    if (session) {
+                      await signOut();
+                    } else {
+                      await signIn("discord");
+                    }
+                  }}
+                  className="w-full"
+                >
+                  <button
+                    type="submit"
+                    className="flex items-center w-full"
+                  >
                   {session ? (
                     <LogOut className="mr-2 h-4 w-4" />
                   ) : (
                     <KeyRound className="mr-2 h-4 w-4" />
                   )}
                   {session ? <span className="inline-span">Sign Out</span> : <span className="inline-span">Sign In</span>}
-                </Link> */}
-                <button className="flex" onClick={async () => {
-                  'use server'
-                  if (session) {
-                    await signOut();
-                  } else {
-                    await signIn("discord");
-                  }
-                }}>
-                  {session ? (
-                    <LogOut className="mr-2 h-4 w-4" />
-                  ) : (
-                    <KeyRound className="mr-2 h-4 w-4" />
-                  )}
-                  {session ? <span className="inline-span">Sign Out</span> : <span className="inline-span">Sign In</span>}
-                </button>
+                  </button>
+                </form>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
