@@ -65,7 +65,7 @@ export default function ContentAISection() {
           transition={{ duration: 0.8 }}
         >
           <Image
-            src="/con1.avif"
+            src="/events.png"
             alt="mockup"
             width={800}
             height={600}
@@ -85,7 +85,7 @@ export default function ContentAISection() {
           transition={{ duration: 0.8 }}
         >
           <Image
-            src="/con2.avif"
+            src="/graph.jpg"
             alt="mockup"
             width={800}
             height={600}
