@@ -8,7 +8,7 @@ import FAQ from "./components/faq";
 
 export const metadata: Metadata = {
   title: "AUI - India's Most Active Discord Server",
-  description: "Join AUI Discord - India's most active Discord server with 50,000+ members! Among US India Discord community offering gaming, tournaments, 24/7 music, Valorant, Minecraft, BGMI tournaments. Best Indian gaming Discord server. Join now!",
+  description: "Join AUI Discord - India's most active Discord server with 60,000+ members! Among US India Discord community offering gaming, tournaments, 24/7 music, Valorant, Minecraft, BGMI tournaments. Best Indian gaming Discord server. Join now!",
   keywords: [
     "India's most active Discord server",
     "AUI discord",
@@ -22,7 +22,7 @@ export const metadata: Metadata = {
   ],
   openGraph: {
     title: "Join AUI Discord - India's Most Active Discord Server",
-    description: "India's most active Discord server with 50,000+ members! Join Among US India Discord for gaming, events, and more.",
+    description: "India's most active Discord server with 60,000+ members! Join Among US India Discord for gaming, events, and more.",
     type: "website",
   },
 };

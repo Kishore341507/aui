@@ -43,7 +43,7 @@ export default function HeroComponent() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
           >
-            India&apos;s most active Discord server with 50,000+ members. Join Among US India for tournaments, 24/7 music, and an amazing community experience!
+            India&apos;s most active Discord server with 60,000+ members. Join Among US India for tournaments, 24/7 music, and an amazing community experience!
           </motion.p>
           
           <motion.div

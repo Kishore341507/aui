@@ -28,7 +28,7 @@ const poppins = Poppins({
 export const metadata: Metadata = {
   metadataBase: new URL('https://amongusindia.com'),
   title: "AUI - India's Most Active Discord Server | Among Us India Discord Community",
-  description: "Join AUI Discord - India's most active Discord server with 50,000+ members! Among US India Discord community for gaming, tournaments, events, and fun. Best Indian gaming Discord server with 24/7 music, Valorant, Minecraft, BGMI & more.",
+  description: "Join AUI Discord - India's most active Discord server with 60,000+ members! Among US India Discord community for gaming, tournaments, events, and fun. Best Indian gaming Discord server with 24/7 music, Valorant, Minecraft, BGMI & more.",
   authors: [{ name: "Team AUI", url: "https://amongusindia.com/aboutus" }],
   keywords: [
     "India's most active Discord server",
@@ -55,7 +55,7 @@ export const metadata: Metadata = {
   creator: "Kishore",
   openGraph: {
     title: "AUI - India's Most Active Discord Server | All AUI Discord",
-    description: "Join All AUI Discord - India's most active Discord server with 50,000+ members! Among US India Discord community for gaming, tournaments, events, and fun. Best Indian gaming Discord server with 24/7 music, Valorant, Minecraft, BGMI & more.",
+    description: "Join All AUI Discord - India's most active Discord server with 60,000+ members! Among US India Discord community for gaming, tournaments, events, and fun. Best Indian gaming Discord server with 24/7 music, Valorant, Minecraft, BGMI & more.",
     url: "https://amongusindia.com",
     siteName: "Among Us India - AUI Discord",
     type: "website",

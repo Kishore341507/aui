@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/auth";
 import prisma from "@/prisma/db";
+import { sendChannelMessage } from "@/lib/discord";
 
 export async function POST(request: Request) {
   try {
@@ -22,9 +23,10 @@ export async function POST(request: Request) {
       },
     });
 
-    // Send Discord webhook if MOD_FORM_WEBHOOK_URL exists
-    if (process.env.MOD_FORM_WEBHOOK_URL) {
+    // Send Discord message if MOD_APPLICATION_CHANNEL_ID exists
+    if (process.env.MOD_APPLICATION_CHANNEL_ID) {
       try {
+        if (!process.env.DISCORD_BOT_TOKEN) throw new Error("DISCORD_BOT_TOKEN is missing");
         const embed = {
           embeds: [
             {
@@ -96,13 +98,7 @@ export async function POST(request: Request) {
           ],
         };
 
-        await fetch(process.env.MOD_FORM_WEBHOOK_URL, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(embed),
-        });
+        await sendChannelMessage(process.env.MOD_APPLICATION_CHANNEL_ID, embed);
       } catch (webhookError) {
         console.error("Discord webhook error:", webhookError);
         // Continue even if webhook fails
