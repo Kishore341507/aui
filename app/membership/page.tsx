@@ -3,6 +3,7 @@ import MembershipCards from "./membership-cards"
 import { TawkChat } from "@/components/tawk-chat"
 import prisma from "@/prisma/db"
 import type { PlanData } from "./membership-cards"
+export const dynamic = "force-dynamic"
 
 export const metadata: Metadata = {
   title: "Membership Tiers - AUI | India's Most Active Discord Server",
