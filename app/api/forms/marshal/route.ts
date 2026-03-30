@@ -33,7 +33,7 @@ export async function POST(request: Request) {
               fields: [
                 { name: "Applicant", value: session.user.userId ? `<@${session.user.userId}> (${session.user.name})` : session.user.name || "N/A", inline: true },
                 { name: "User ID", value: session.user.userId || "N/A", inline: true },
-                { name: "Game", value: formData.games?.length ? formData.games.join(", ") : "Not provided", inline: true },
+                { name: "Game", value: formData.game?.length ? formData.game.join(", ") : "Not provided", inline: true },
                 { name: "Active Times", value: formData.activeTimes || "Not provided", inline: true },
                 { name: "Dedicated Time", value: formData.dedicateTime || "Not provided", inline: true },
                 { name: "Bot Experience", value: formData.botExperience || "Not provided", inline: true },
