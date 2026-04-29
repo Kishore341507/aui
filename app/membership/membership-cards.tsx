@@ -52,14 +52,14 @@ type SearchResult = {
 
 const INTERVAL_LABELS: Record<string, string> = {
   MONTHLY: "/month",
-  QUARTERLY: "/quarter",
+  QUARTERLY: "/3 months",
   YEARLY: "/year",
   LIFETIME: "one-time",
 }
 
 const INTERVAL_TAB_LABELS: Record<string, string> = {
   MONTHLY: "Monthly",
-  QUARTERLY: "Quarterly",
+  QUARTERLY: "3 months",
   YEARLY: "Yearly",
   LIFETIME: "Lifetime",
 }
