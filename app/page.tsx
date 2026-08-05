@@ -27,10 +27,27 @@ export const metadata: Metadata = {
   },
 };
 
-export default function Home() {
+async function getMemberCount(): Promise<string | null> {
+  try {
+    const res = await fetch(
+      "https://discord.com/api/v10/invites/amongusindians?with_counts=true",
+      { next: { revalidate: 3600 } }
+    );
+    if (!res.ok) return null;
+    const data = await res.json();
+    if (!data?.approximate_member_count) return null;
+    const rounded = Math.round(data.approximate_member_count / 1000) * 1000;
+    return rounded.toLocaleString();
+  } catch {
+    return null;
+  }
+}
+
+export default async function Home() {
+  const memberCount = await getMemberCount();
   return (
     <main className="min-h-screen">
-      <Hero />
+      <Hero memberCount={memberCount} />
       <TrustedBrandsMarquee />
       <FeaturesSection />
       <ContentAISection />
