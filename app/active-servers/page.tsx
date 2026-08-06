@@ -23,6 +23,10 @@ export const metadata: Metadata = {
   }
 }
 
+// Force dynamic rendering to avoid build-time API calls
+export const dynamic = 'force-dynamic'
+export const revalidate = 3600
+
 interface Server {
   id: string
   name: string
@@ -36,15 +40,27 @@ interface Server {
 }
 
 async function getServers(): Promise<Server[]> {
-  const res = await fetch(
-    "https://discord.com/api/discovery/search?query=active%20server%20india&limit=25",
-    { next: { revalidate: 3600 } }
-  )
-  if (!res.ok) {
-    throw new Error("Failed to fetch servers")
+  try {
+    const res = await fetch(
+      "https://discord.com/api/discovery/search?query=active%20server%20india&limit=25",
+      { 
+        next: { revalidate: 3600 },
+        // Add timeout and other fetch options
+        signal: AbortSignal.timeout(10000) // 10 second timeout
+      }
+    )
+    
+    if (!res.ok) {
+      console.error(`Discord API responded with status: ${res.status}`)
+      return []
+    }
+    
+    const data = await res.json()
+    return data.hits || []
+  } catch (error) {
+    console.error("Failed to fetch servers:", error)
+    return []
   }
-  const data = await res.json()
-  return data.hits
 }
 
 export default async function ActiveServersPage() {
@@ -73,7 +89,14 @@ export default async function ActiveServersPage() {
           </p>
         </div>
 
-        <div className="grid gap-6">
+        {servers.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-muted-foreground text-lg">
+              Unable to load servers at this time. Please try again later.
+            </p>
+          </div>
+        ) : (
+          <div className="grid gap-6">
             {servers.map((server, index) => (
                 <a
                   key={server.id}
@@ -133,7 +156,8 @@ export default async function ActiveServersPage() {
                   </Card>
                 </a>
             ))}
-        </div>
+          </div>
+        )}
     </div>
   )
 }
