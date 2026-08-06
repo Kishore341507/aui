@@ -43,23 +43,26 @@ async function getServers(): Promise<Server[]> {
   try {
     const res = await fetch(
       "https://discord.com/api/v9/index/servers/search?limit=12&query=active+server+india",
-      { 
+      {
         next: { revalidate: 3600 },
-        // Add timeout and other fetch options
-        signal: AbortSignal.timeout(10000) // 10 second timeout
       }
-    )
-    
+    );
+
     if (!res.ok) {
-      console.error(`Discord API responded with status: ${res.status}`)
-      return []
+      console.error(
+        "Discord API Error:",
+        res.status,
+        await res.text()
+      );
+      return [];
     }
-    
-    const data = await res.json()
-    return data.hits || []
+
+    const data = await res.json();
+
+    return data.data?.hits ?? [];
   } catch (error) {
-    console.error("Failed to fetch servers:", error)
-    return []
+    console.error("Failed to fetch servers:", error);
+    return [];
   }
 }
 
