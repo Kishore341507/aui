@@ -4,7 +4,7 @@ import Image from "next/image";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 
-export default function Hero() {
+export default function Hero({ memberCount }: { memberCount: string | null }) {
   const sectionRef = useRef(null);
 
   // Scroll progress inside hero
@@ -187,7 +187,7 @@ export default function Hero() {
           </h1>
 
           <p className="mt-6 max-w-2xl mx-auto text-slate-300 text-sm sm:text-base md:text-lg">
-           India&apos;s most active Discord server with 50,000+ members. Join Among US India for tournaments, 24/7 music, and an amazing community experience!
+           India&apos;s most active Discord server {memberCount ? `with ${memberCount}+ members.` : ""} Join Among US India for tournaments, 24/7 music, and an amazing community experience!
           </p>
 
           {/* Buttons */}
