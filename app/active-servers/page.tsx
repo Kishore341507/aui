@@ -42,7 +42,7 @@ interface Server {
 async function getServers(): Promise<Server[]> {
   try {
     const res = await fetch(
-      "https://discord.com/api/discovery/search?query=active%20server%20india&limit=25",
+      "https://discord.com/api/v9/index/servers/search?limit=12&query=active+server+india",
       { 
         next: { revalidate: 3600 },
         // Add timeout and other fetch options
