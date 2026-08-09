@@ -25,64 +25,85 @@ const poppins = Poppins({
   weight: ["300","400","500","600","700","800","900"],
 });
 
-export const metadata: Metadata = {
-  metadataBase: new URL('https://amongusindia.com'),
-  title: "AUI - India's Most Active Discord Server | Among Us India Discord Community",
-  description: "Join AUI Discord - India's most active Discord server with 60,000+ members! Among US India Discord community for gaming, tournaments, events, and fun. Best Indian gaming Discord server with 24/7 music, Valorant, Minecraft, BGMI & more.",
-  authors: [{ name: "Team AUI", url: "https://amongusindia.com/aboutus" }],
-  keywords: [
-    "India's most active Discord server",
-    "AUI discord",
-    "Among US India Discord",
-    "AUI discord server",
-    "amongusindia",
-    "AUI",
-    "among us india",
-    "among us indians",
-    "Indian Discord server",
-    "India gaming Discord",
-    "most active Indian Discord",
-    "biggest Indian Discord server",
-    "among us india discord server",
-    "among us india community",
-    "Indian gaming community Discord",
-    "India Discord community",
-    "Valorant India Discord",
-    "BGMI India Discord",
-    "Minecraft India Discord",
-    "Indian Discord community server"
-  ],
-  creator: "Kishore",
-  openGraph: {
-    title: "AUI - India's Most Active Discord Server | All AUI Discord",
-    description: "Join All AUI Discord - India's most active Discord server with 60,000+ members! Among US India Discord community for gaming, tournaments, events, and fun. Best Indian gaming Discord server with 24/7 music, Valorant, Minecraft, BGMI & more.",
-    url: "https://amongusindia.com",
-    siteName: "Among Us India - AUI Discord",
-    type: "website",
-    images: [
-      {
-        url: "/aui.jpg",
-        width: 256,
-        height: 256,
-        alt: "AUI Logo - India's Most Active Discord Server",
-      },
+async function getMemberCount(): Promise<string | null> {
+  try {
+    const res = await fetch(
+      "https://discord.com/api/v10/invites/amongusindians?with_counts=true",
+      { next: { revalidate: 3600 } }
+    );
+    if (!res.ok) return null;
+    const data = await res.json();
+    if (!data?.approximate_member_count) return null;
+    const rounded = Math.round(data.approximate_member_count / 1000) * 1000;
+    return rounded.toLocaleString();
+  } catch {
+    return null;
+  }
+}
+
+export async function generateMetadata(): Promise<Metadata> {
+  const memberCount = await getMemberCount();
+  const memberText = memberCount ? `${memberCount}+` : "60,000+";
+  
+  return {
+    metadataBase: new URL('https://amongusindia.com'),
+    title: "AUI - India's Most Active Discord Server | Among Us India Discord Community",
+    description: `Join AUI Discord - India's most active Discord server with ${memberText} members! Among US India Discord community for gaming, tournaments, events, and fun. Best Indian gaming Discord server with 24/7 music, Valorant, Minecraft, BGMI & more.`,
+    authors: [{ name: "Team AUI", url: "https://amongusindia.com/aboutus" }],
+    keywords: [
+      "India's most active Discord server",
+      "AUI discord",
+      "Among US India Discord",
+      "AUI discord server",
+      "amongusindia",
+      "AUI",
+      "among us india",
+      "among us indians",
+      "Indian Discord server",
+      "India gaming Discord",
+      "most active Indian Discord",
+      "biggest Indian Discord server",
+      "among us india discord server",
+      "among us india community",
+      "Indian gaming community Discord",
+      "India Discord community",
+      "Valorant India Discord",
+      "BGMI India Discord",
+      "Minecraft India Discord",
+      "Indian Discord community server"
     ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "AUI - India's Most Active Discord Server",
-    description: "Join All AUI Discord - India's most active Discord server! Among US India Discord community.",
-    images: ["/aui.jpg"],
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
+    creator: "Kishore",
+    openGraph: {
+      title: "AUI - India's Most Active Discord Server | All AUI Discord",
+      description: `Join All AUI Discord - India's most active Discord server with ${memberText} members! Among US India Discord community for gaming, tournaments, events, and fun. Best Indian gaming Discord server with 24/7 music, Valorant, Minecraft, BGMI & more.`,
+      url: "https://amongusindia.com",
+      siteName: "Among Us India - AUI Discord",
+      type: "website",
+      images: [
+        {
+          url: "/aui.jpg",
+          width: 256,
+          height: 256,
+          alt: "AUI Logo - India's Most Active Discord Server",
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: "AUI - India's Most Active Discord Server",
+      description: "Join All AUI Discord - India's most active Discord server! Among US India Discord community.",
+      images: ["/aui.jpg"],
+    },
+    robots: {
       index: true,
       follow: true,
+      googleBot: {
+        index: true,
+        follow: true,
+      },
     },
-  },
-};
+  };
+}
 
 export default function RootLayout({
   children,

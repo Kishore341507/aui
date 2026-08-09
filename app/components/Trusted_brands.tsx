@@ -1,12 +1,14 @@
 "use client";
+
 import Image from "next/image";
-export default function TrustedBrandsMarquee() {
 
-
+export default function TrustedBrandsMarquee({ memberCount }: { memberCount: string | null }) {
+  const memberText = memberCount ? `${memberCount}+` : "100K+";
+  
   return (
     <section className="trusted-brands py-16 relative bg-black">
       <h3 className="text-lg font-medium text-white text-600 text-center ">
-        Trusted by 100K+ Active Members from India
+        Trusted by {memberText} Active Members from India
       </h3>
 
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 mt-16 w-max mx-auto">
