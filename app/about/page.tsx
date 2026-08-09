@@ -1,11 +1,35 @@
-import type { Metadata } from "next"
+import type { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "About Us - Among Us India",
-  description: "Learn about AUI - India's most active Discord community",
+async function getMemberCount(): Promise<string | null> {
+  try {
+    const res = await fetch(
+      "https://discord.com/api/v10/invites/amongusindians?with_counts=true",
+      { next: { revalidate: 3600 } }
+    );
+    if (!res.ok) return null;
+    const data = await res.json();
+    if (!data?.approximate_member_count) return null;
+    const rounded = Math.round(data.approximate_member_count / 1000) * 1000;
+    return rounded.toLocaleString();
+  } catch {
+    return null;
+  }
 }
 
-export default function AboutPage() {
+export async function generateMetadata(): Promise<Metadata> {
+  const memberCount = await getMemberCount();
+  const memberText = memberCount ? `${memberCount}+` : "60,000+";
+  
+  return {
+    title: "About Us - Among Us India",
+    description: `Learn about AUI - India's most active Discord community with ${memberText} members`,
+  };
+}
+
+export default async function AboutPage() {
+  const memberCount = await getMemberCount();
+  const memberText = memberCount ? `${memberCount}+` : "60,000+";
+  
   return (
     <main className="container mx-auto px-12 lg:px-24 py-8">
       <h1 className="text-4xl font-bold mb-8">About AUI (Among Us India)</h1>
@@ -20,7 +44,7 @@ export default function AboutPage() {
             AUI is an individually owned online gaming and social community that offers free and paid digital memberships focused on Discord-based events, perks, and entertainment.
           </p>
           <p className="text-base text-muted-foreground">
-            With over 60,000+ members and counting, we provide a space where gamers, content creators, and friends come together to connect, play, and build lasting relationships in a safe and engaging environment.
+            With over {memberText} members and counting, we provide a space where gamers, content creators, and friends come together to connect, play, and build lasting relationships in a safe and engaging environment.
           </p>
         </section>
 
@@ -114,7 +138,7 @@ export default function AboutPage() {
           <h2 className="text-2xl font-semibold mb-4">Our Journey</h2>
           <div className="space-y-3">
             <ul className="list-disc pl-6 space-y-2 text-base text-muted-foreground">
-              <li>Grown to 60,000+ active members across India</li>
+              <li>Grown to {memberText} active members across India</li>
               <li>Introduced premium membership tiers with exclusive digital features</li>
               <li>Built an in‑server economy system with PVC Coins and interactive games (no real‑money value)</li>
               <li>Established 24/7 moderation and support</li>

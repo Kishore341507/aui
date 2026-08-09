@@ -4,7 +4,9 @@ import { Button } from "@/components/ui/button"
 import Link from "next/link"
 import { motion } from "framer-motion"
 
-export default function HeroComponent() {
+export default function HeroComponent({ memberCount }: { memberCount: string | null }) {
+  const memberText = memberCount ? `with ${memberCount}+ members` : "with 60,000+ members";
+  
   return (
     <section className="mb-12">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center lg:min-h-screen">
@@ -43,7 +45,7 @@ export default function HeroComponent() {
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
           >
-            India&apos;s most active Discord server with 60,000+ members. Join Among US India for tournaments, 24/7 music, and an amazing community experience!
+            India&apos;s most active Discord server {memberText}. Join Among US India for tournaments, 24/7 music, and an amazing community experience!
           </motion.p>
           
           <motion.div
