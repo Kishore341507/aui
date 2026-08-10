@@ -115,7 +115,7 @@ export default async function Page() {
   }
 
   return (
-    <main className="min-h-screen bg-background text-foreground antialiased selection:bg-rose-500/20">
+    <main className="min-h-screen  text-foreground antialiased">
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
