@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
+import Link from "next/link";
+import { cache } from "react";
 
-async function getMemberCount(): Promise<string | null> {
+// React cache prevents fetching data twice during metadata and page rendering
+const getMemberCount = cache(async (): Promise<string | null> => {
   try {
     const res = await fetch(
       "https://discord.com/api/v10/invites/amongusindians?with_counts=true",
@@ -14,12 +17,12 @@ async function getMemberCount(): Promise<string | null> {
   } catch {
     return null;
   }
-}
+});
 
 export async function generateMetadata(): Promise<Metadata> {
   const memberCount = await getMemberCount();
   const memberText = memberCount ? `${memberCount}+` : "60,000+";
-  
+
   return {
     title: "About Us - Among Us India",
     description: `Learn about AUI - India's most active Discord community with ${memberText} members`,
@@ -29,220 +32,189 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function AboutPage() {
   const memberCount = await getMemberCount();
   const memberText = memberCount ? `${memberCount}+` : "60,000+";
-  
+
+  const offers = [
+    {
+      title: "Active Community",
+      description:
+        "24/7 active voice channels and text chats with thousands of engaged members ready to play, talk, and hang out.",
+    },
+    {
+      title: "Premium Features",
+      description:
+        "Exclusive membership tiers with unique perks including custom roles, private channels, music features, special permissions, and other digital benefits delivered through our Discord server after successful payment.",
+    },
+    {
+      title: "Events & Activities",
+      description:
+        "Regular community events, gaming tournaments, giveaways, movie nights, and interactive activities designed for entertainment and fair play. (Events do not guarantee financial rewards).",
+    },
+    {
+      title: "Economy System (PVC Coins)",
+      description:
+        "A virtual, non-monetary points system used strictly for in-server fun. PVC Coins cannot be bought, sold, traded, or exchanged for real currency.",
+    },
+    {
+      title: "Safe Environment",
+      description:
+        "Strict moderation, clear rules, and a dedicated staff team to keep the community safe, respectful, and free from harassment or toxicity.",
+    },
+  ];
+
+  const values = [
+    { title: "Community First", desc: "Every decision prioritizes overall member experience and feedback." },
+    { title: "Safety & Respect", desc: "Zero tolerance for toxicity, harassment, or discrimination." },
+    { title: "Excellence & Innovation", desc: "Continuous improvements powered by modern Discord tools." },
+    { title: "Inclusivity & Diversity", desc: "A welcoming space for members from all regions and backgrounds." },
+  ];
+
+  const resources = [
+    { name: "Terms & Conditions", href: "/policies/terms" },
+    { name: "Privacy Policy", href: "/policies/privacy" },
+    { name: "Return & Refund Policy", href: "/policies/refund" },
+    { name: "Cancellation Policy", href: "/policies/cancellation" },
+    { name: "Shipping Policy", href: "/policies/shipping" },
+    { name: "Contact Us", href: "/contact" },
+  ];
+
   return (
-    <main className="container mx-auto px-12 lg:px-24 py-8">
-      <h1 className="text-4xl font-bold mb-8">About AUI (Among Us India)</h1>
-      
-      <div className="space-y-8">
-        {/* Introduction */}
-        <section className="space-y-4">
-          <p className="text-base text-muted-foreground">
-            Welcome to AUI (Among Us India) – India&apos;s most active and vibrant Discord community! Founded and operated by Chirag Solanki, AUI has grown from a simple gaming server to become one of the largest and most engaged Discord communities in India.
-          </p>
-          <p className="text-base text-muted-foreground">
-            AUI is an individually owned online gaming and social community that offers free and paid digital memberships focused on Discord-based events, perks, and entertainment.
-          </p>
-          <p className="text-base text-muted-foreground">
-            With over {memberText} members and counting, we provide a space where gamers, content creators, and friends come together to connect, play, and build lasting relationships in a safe and engaging environment.
-          </p>
-        </section>
+    <main className="container mx-auto px-6 md:px-12 lg:px-24 py-12 max-w-6xl">
+      {/* Header / Hero */}
+      <section className="mb-12 border-b border-border pb-8">
+        <span className="inline-block px-3 py-1 text-xs font-semibold rounded-full bg-primary/10 text-primary mb-3">
+          India&apos;s Gaming Hub
+        </span>
+        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-4">
+          About AUI (Among Us India)
+        </h1>
+        <p className="text-lg text-muted-foreground leading-relaxed max-w-3xl">
+          Welcome to AUI – India&apos;s most active and vibrant Discord community! Founded and operated by Chirag Solanki, AUI has grown from a simple gaming server to one of the largest and most engaged digital communities in the nation.
+        </p>
+      </section>
 
-        {/* Our Mission */}
-        <section>
-          <h2 className="text-2xl font-semibold mb-3">Our Mission</h2>
-          <p className="text-base text-muted-foreground">
-            To create the most welcoming, entertaining, and feature‑rich Discord community in India where every member feels valued, heard, and connected. We strive to provide high‑quality social gaming experiences while fostering genuine friendships and memorable moments through purely digital services.
-          </p>
-        </section>
+      <div className="space-y-16">
+        {/* Community Highlight Section */}
+        <section className="grid md:grid-cols-2 gap-8 items-stretch">
+          <div className="p-6 rounded-xl border border-border bg-card/50 flex flex-col justify-center space-y-3">
+            <h2 className="text-2xl font-bold">Our Overview</h2>
+            <p className="text-muted-foreground leading-relaxed">
+              AUI is an individually owned online gaming and social community that offers free and paid digital memberships focused on Discord-based events, perks, and entertainment.
+            </p>
+            <p className="text-muted-foreground leading-relaxed">
+              With over <span className="font-semibold text-foreground">{memberText}</span> members and counting, we provide a safe and engaging space where gamers, content creators, and friends connect and build lasting relationships.
+            </p>
+          </div>
 
-        {/* What We Offer */}
-        <section>
-          <h2 className="text-2xl font-semibold mb-6">What We Offer</h2>
-          <div className="space-y-4">
-            <div>
-              <h3 className="text-lg font-semibold mb-2">Active Community</h3>
-              <p className="text-base text-muted-foreground">
-                24/7 active voice channels and text chats with thousands of engaged members ready to play, talk, and hang out.
-              </p>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-2">Premium Features</h3>
-              <p className="text-base text-muted-foreground">
-                Exclusive membership tiers with unique perks including custom roles, private channels, music features, special permissions, and other digital benefits delivered through our Discord server after successful payment.
-              </p>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-2">Events & Activities</h3>
-              <p className="text-base text-muted-foreground">
-                Regular community events, gaming tournaments, giveaways, movie nights, and interactive activities designed for entertainment and fair play.
-              </p>
-              <p className="text-base text-muted-foreground">
-                Events do not guarantee any financial rewards; they are for fun and community engagement.
-              </p>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-2">Economy System (PVC Coins)</h3>
-              <p className="text-base text-muted-foreground">
-                A fun in‑server economy featuring PVC Coins and rewards that make your server activity more engaging.
-              </p>
-              <p className="text-base text-muted-foreground">
-                PVC Coins are virtual, non‑monetary points used only inside the AUI community for entertainment and in‑server rewards.
-              </p>
-              <p className="text-base text-muted-foreground">
-                PVC Coins cannot be bought, sold, traded, withdrawn, or exchanged for real money, cryptocurrency, or any other currency, and they have no monetary or investment value.
-              </p>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-2">Safe Environment</h3>
-              <p className="text-base text-muted-foreground">
-                Strict moderation, clear rules, and a dedicated staff team to keep the community safe, respectful, and free from harassment or toxicity.
-              </p>
-            </div>
+          <div className="p-6 rounded-xl border border-border bg-card/50 flex flex-col justify-center space-y-3">
+            <h2 className="text-2xl font-bold">Our Mission</h2>
+            <p className="text-muted-foreground leading-relaxed">
+              To create the most welcoming, entertaining, and feature-rich Discord community in India where every member feels valued, heard, and connected. We strive to provide high-quality social gaming experiences while fostering genuine friendships through purely digital services.
+            </p>
           </div>
         </section>
 
-        {/* Our Values */}
+        {/* What We Offer Grid */}
         <section>
-          <h2 className="text-2xl font-semibold mb-6">Our Values</h2>
-          <div className="space-y-4">
-            <div>
-              <h3 className="text-lg font-semibold mb-1">Community First</h3>
-              <p className="text-base text-muted-foreground">
-                Every decision prioritizes the overall community experience, member feedback, and collective enjoyment.
-              </p>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-1">Safety & Respect</h3>
-              <p className="text-base text-muted-foreground">
-                Zero tolerance for harassment, discrimination, or toxicity so everyone feels safe and respected.
-              </p>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-1">Excellence & Innovation</h3>
-              <p className="text-base text-muted-foreground">
-                Continuous improvement of features and perks, using the latest Discord tools.
-              </p>
-            </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-1">Inclusivity & Diversity</h3>
-              <p className="text-base text-muted-foreground">
-                A welcoming space for members from all backgrounds, regions, and gaming preferences.
-              </p>
-            </div>
+          <h2 className="text-3xl font-bold mb-6">What We Offer</h2>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {offers.map((item, index) => (
+              <div key={index} className="p-5 rounded-lg border border-border bg-card space-y-2">
+                <h3 className="text-lg font-semibold">{item.title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">{item.description}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Core Values */}
+        <section>
+          <h2 className="text-3xl font-bold mb-6">Our Core Values</h2>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {values.map((val, idx) => (
+              <div key={idx} className="p-4 rounded-lg border border-border bg-muted/30">
+                <h3 className="font-semibold mb-1">{val.title}</h3>
+                <p className="text-xs text-muted-foreground leading-normal">{val.desc}</p>
+              </div>
+            ))}
           </div>
         </section>
 
         {/* Our Journey */}
-        <section>
-          <h2 className="text-2xl font-semibold mb-4">Our Journey</h2>
-          <div className="space-y-3">
-            <ul className="list-disc pl-6 space-y-2 text-base text-muted-foreground">
-              <li>Grown to {memberText} active members across India</li>
-              <li>Introduced premium membership tiers with exclusive digital features</li>
-              <li>Built an in‑server economy system with PVC Coins and interactive games (no real‑money value)</li>
-              <li>Established 24/7 moderation and support</li>
-              <li>Created a wide ecosystem of channels, features, and activities</li>
-              <li>Helped form countless friendships and gaming squads</li>
-            </ul>
+        <section className="p-6 rounded-xl border border-border bg-card">
+          <h2 className="text-2xl font-semibold mb-4">Our Journey So Far</h2>
+          <ul className="grid sm:grid-cols-2 gap-3 text-muted-foreground list-disc pl-5 text-sm">
+            <li>Grown to {memberText} active members across India</li>
+            <li>Introduced premium membership tiers with exclusive digital features</li>
+            <li>Built an in-server economy with PVC Coins & mini-games</li>
+            <li>Established round-the-clock 24/7 moderation and support</li>
+            <li>Created a expansive ecosystem of channels, features, and events</li>
+            <li>Helped form countless friendships and gaming squads</li>
+          </ul>
+        </section>
+
+        {/* Premium Membership Banner */}
+        <section className="p-8 rounded-xl border border-border bg-muted/40 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+          <div className="space-y-2 max-w-2xl">
+            <h2 className="text-2xl font-bold">Premium Memberships</h2>
+            <p className="text-sm text-muted-foreground">
+              Take your experience to the next level with our Gold, Platinum, and Diamond tiers. Unlock custom roles, private channels, and special server perks.
+            </p>
           </div>
-        </section>
-
-        {/* Membership Benefits */}
-        <section>
-          <h2 className="text-2xl font-semibold mb-3">Premium Memberships</h2>
-          <p className="text-base text-muted-foreground mb-4">
-            Take your AUI experience to the next level with our premium membership tiers – Gold, Platinum, and Diamond. Each tier unlocks exclusive digital features, special roles, private channels, and unique perks designed to enhance your community experience on our Discord server.
-          </p>
-          <p className="text-base text-muted-foreground mb-4">
-            All purchases are governed by our Terms & Conditions, Privacy Policy, Return & Refund Policy, Cancellation Policy, and Shipping (Digital Delivery) Policy.
-          </p>
-          <a 
-            href="/membership" 
-            className="text-base underline"
+          <Link
+            href="/membership"
+            className="px-5 py-2.5 rounded-md bg-primary text-primary-foreground font-medium text-sm hover:opacity-90 transition-opacity whitespace-nowrap"
           >
-            Explore Membership Tiers
-          </a>
+            Explore Tiers &rarr;
+          </Link>
         </section>
 
-        {/* Team */}
+        {/* Team Section */}
         <section>
           <h2 className="text-2xl font-semibold mb-4">The Team Behind AUI</h2>
-          <div className="space-y-4">
-            <div>
-              <h3 className="text-lg font-semibold mb-2">Founder & Operator</h3>
-              <p className="text-base text-muted-foreground">
-                Chirag Solanki – Founder and individual operator of AUI (Among Us India), responsible for establishing and running the community.
+          <div className="grid sm:grid-cols-2 gap-4">
+            <div className="p-4 rounded-lg border border-border">
+              <h3 className="font-semibold">Founder & Operator</h3>
+              <p className="text-sm text-muted-foreground mt-1">
+                <strong className="text-foreground">Chirag Solanki</strong> – Responsible for establishing, directing, and operating the community.
               </p>
             </div>
-            <div>
-              <h3 className="text-lg font-semibold mb-2">Moderation & Support Team</h3>
-              <p className="text-base text-muted-foreground">
-                A dedicated team of moderators, administrators, and support staff work around the clock to keep the community safe, welcoming, and fun for everyone.
+            <div className="p-4 rounded-lg border border-border">
+              <h3 className="font-semibold">Moderation & Support Team</h3>
+              <p className="text-sm text-muted-foreground mt-1">
+                A dedicated staff working around the clock to ensure a safe, welcoming, and enjoyable space for all members.
               </p>
             </div>
           </div>
         </section>
 
-        {/* Helpful Resources */}
-        <section>
-          <h2 className="text-2xl font-semibold mb-4">Helpful Resources</h2>
-          <div className="flex flex-col gap-2">
-            <a href="/policies/terms" className="text-base underline">
-              → Terms & Conditions
-            </a>
-            <a href="/policies/privacy" className="text-base underline">
-              → Privacy Policy
-            </a>
-            <a href="/policies/refund" className="text-base underline">
-              → Return & Refund Policy
-            </a>
-            <a href="/policies/cancellation" className="text-base underline">
-              → Cancellation Policy
-            </a>
-            <a href="/policies/shipping" className="text-base underline">
-              → Shipping Policy
-            </a>
-            <a href="/contact" className="text-base underline">
-              → Contact Us
-            </a>
+        {/* Resources & Contact */}
+        <section className="grid md:grid-cols-2 gap-8 border-t border-border pt-8">
+          <div>
+            <h2 className="text-xl font-semibold mb-4">Helpful Resources</h2>
+            <div className="grid grid-cols-2 gap-2 text-sm">
+              {resources.map((res, i) => (
+                <Link
+                  key={i}
+                  href={res.href}
+                  className="text-muted-foreground hover:text-foreground transition-colors underline underline-offset-4"
+                >
+                  {res.name}
+                </Link>
+              ))}
+            </div>
           </div>
-        </section>
 
-        {/* Join Us */}
-        <section>
-          <h2 className="text-3xl font-bold mb-4">Join the AUI Family Today!</h2>
-          <p className="text-base text-muted-foreground mb-6">
-            Whether you&apos;re looking for gaming partners, want to make new friends, or simply want to be part of 
-            India&apos;s most vibrant Discord community - AUI welcomes you with open arms!
-          </p>
-          <div className="flex flex-col gap-2">
-            <a 
-              href="/membership" 
-              className="text-base underline"
-            >
-              → Become a Member
-            </a>
-            <a 
-              href="/contact" 
-              className="text-base underline"
-            >
-              → Contact Us
-            </a>
-          </div>
-        </section>
-
-        {/* Contact Information */}
-        <section>
-          <h2 className="text-xl font-semibold mb-3">Get in Touch</h2>
-          <div className="space-y-2">
-            <p className="text-base text-muted-foreground"><strong>Business Name:</strong> AUI (Among Us India)</p>
-            <p className="text-base text-muted-foreground"><strong>Operated By:</strong> Chirag Solanki</p>
-            <p className="text-base text-muted-foreground"><strong>Email:</strong> info@amongusindia.com</p>
-            <p className="text-base text-muted-foreground"><strong>Email:</strong> chiragsm258@gmail.com</p>
+          <div>
+            <h2 className="text-xl font-semibold mb-4">Get in Touch</h2>
+            <div className="space-y-1 text-sm text-muted-foreground">
+              <p><strong className="text-foreground">Business Name:</strong> AUI (Among Us India)</p>
+              <p><strong className="text-foreground">Operated By:</strong> Chirag Solanki</p>
+              <p><strong className="text-foreground">Email:</strong> info@amongusindia.com</p>
+              <p><strong className="text-foreground">Email:</strong> chiragsm258@gmail.com</p>
+            </div>
           </div>
         </section>
       </div>
     </main>
-  )
+  );
 }
