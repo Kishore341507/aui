@@ -1,23 +1,73 @@
 "use client"
 
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { CheckCircle2, Eye, Palette, Mic, MessageSquare, Wrench, Brain, Lock, Crown, Sliders, Coins, Gift, TrendingUp, LucideIcon, Mail, Headphones, User, MessageCircle, Layers, CreditCard, Copy, Check, X, Loader2 } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import React, { useEffect, useState } from "react"
+import React, { useEffect, useState, useMemo } from "react"
 import Link from "next/link"
-import { cn } from "@/lib/utils"
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
-import { QRCodeCanvas } from "qrcode.react"
 import { motion, AnimatePresence } from "framer-motion"
 import { useSession, signIn } from "next-auth/react"
+import { QRCodeCanvas } from "qrcode.react"
+import { cn } from "@/lib/utils"
 import { useIsMobile } from "@/hooks/use-mobile"
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+import { Button } from "@/components/ui/button"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+import { ScrollArea } from "@/components/ui/scroll-area"
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion"
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
 import { Command, CommandEmpty, CommandInput, CommandItem, CommandList } from "@/components/ui/command"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
+import { Badge } from "@/components/ui/badge"
+
+import {
+  CheckCircle2,
+  Eye,
+  Palette,
+  Mic,
+  MessageSquare,
+  Wrench,
+  Brain,
+  Lock,
+  Crown,
+  Sliders,
+  Coins,
+  Gift,
+  TrendingUp,
+  LucideIcon,
+  Mail,
+  Headphones,
+  User,
+  MessageCircle,
+  Layers,
+  CreditCard,
+  Copy,
+  Check,
+  X,
+  Loader2,
+  Sparkles,
+  ArrowRight,
+  ShieldCheck,
+} from "lucide-react"
 
 export type PlanData = {
   id: string
@@ -51,34 +101,90 @@ type SearchResult = {
 }
 
 const INTERVAL_LABELS: Record<string, string> = {
-  MONTHLY: "/month",
-  QUARTERLY: "/3 months",
-  YEARLY: "/year",
+  MONTHLY: "/mo",
+  QUARTERLY: "/quarter",
+  YEARLY: "/yr",
   LIFETIME: "one-time",
 }
 
 const INTERVAL_TAB_LABELS: Record<string, string> = {
   MONTHLY: "Monthly",
-  QUARTERLY: "3 months",
+  QUARTERLY: "3 Months",
   YEARLY: "Yearly",
   LIFETIME: "Lifetime",
 }
 
+const CATEGORY_ICON_MAP: Record<string, { Icon: LucideIcon; color: string }> = {
+  Visual: { Icon: Eye, color: "text-blue-400" },
+  "Visual Flex": { Icon: Palette, color: "text-purple-400" },
+  "Voice Power": { Icon: Mic, color: "text-pink-400" },
+  "Chat Power": { Icon: MessageSquare, color: "text-cyan-400" },
+  Chat: { Icon: MessageSquare, color: "text-cyan-400" },
+  Utility: { Icon: Wrench, color: "text-orange-400" },
+  Intelligence: { Icon: Brain, color: "text-indigo-400" },
+  Privacy: { Icon: Lock, color: "text-yellow-400" },
+  Exclusivity: { Icon: Crown, color: "text-amber-400" },
+  Control: { Icon: Sliders, color: "text-teal-400" },
+  Economy: { Icon: Coins, color: "text-emerald-400" },
+  Lottery: { Icon: Gift, color: "text-rose-400" },
+  Hierarchy: { Icon: TrendingUp, color: "text-violet-400" },
+  Status: { Icon: TrendingUp, color: "text-violet-400" },
+  Audio: { Icon: Headphones, color: "text-pink-400" },
+  Identity: { Icon: User, color: "text-violet-400" },
+  Social: { Icon: MessageCircle, color: "text-indigo-400" },
+  VC: { Icon: Mic, color: "text-purple-400" },
+  "Chat/Utility": { Icon: Wrench, color: "text-cyan-400" },
+  Reward: { Icon: Gift, color: "text-rose-400" },
+  Included: { Icon: Layers, color: "text-sky-400" },
+}
+
 const PricingHeader = ({ title, subtitle }: { title: string; subtitle: string }) => (
-  <section className="text-center">
-    <h2 className="text-3xl font-bold">{title}</h2>
-    <p className="text-xl pt-1">{subtitle}</p>
-    <p className="text-center text-sm italic text-muted-foreground pt-2">
-        100% of your contribution goes directly toward growing and improving AUI.
+  <section className="text-center space-y-3 max-w-2xl mx-auto px-4 mb-8">
+    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-rose-500/20 bg-rose-500/10 text-rose-500 text-xs font-semibold tracking-wide uppercase">
+      <Sparkles className="w-3.5 h-3.5" /> Support the Community
+    </div>
+    <h2 className="text-4xl font-extrabold tracking-tight sm:text-5xl bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+      {title}
+    </h2>
+    <p className="text-lg text-muted-foreground">{subtitle}</p>
+    <p className="text-xs italic text-muted-foreground/80 pt-1">
+      100% of your contribution directly fuels growing, maintaining, and improving AUI.
     </p>
-    <br />
   </section>
 )
+
+const CheckItem = ({ text }: { text: string }) => (
+  <div className="flex items-start gap-2.5">
+    <CheckCircle2 size={16} className="text-emerald-500 mt-0.5 shrink-0" />
+    <span className="text-zinc-700 dark:text-zinc-300 text-xs leading-snug">{text}</span>
+  </div>
+)
+
+const CheckItemWithCategory = ({ text }: { text: string }) => {
+  const parts = text.split(": ")
+  if (parts.length > 1) {
+    const category = parts[0]
+    const description = parts.slice(1).join(": ")
+    const { Icon, color } = CATEGORY_ICON_MAP[category] || { Icon: CheckCircle2, color: "text-emerald-500" }
+
+    return (
+      <div className="flex items-start gap-2.5">
+        <Icon size={16} className={cn("mt-0.5 shrink-0", color)} />
+        <span className="text-zinc-700 dark:text-zinc-300 text-xs leading-snug">
+          <strong className="font-semibold text-foreground">{category}: </strong>
+          {description}
+        </span>
+      </div>
+    )
+  }
+
+  return <CheckItem text={text} />
+}
 
 const PricingCard = ({ plan, popular, exclusive }: { plan: PlanData; popular: boolean; exclusive: boolean }) => {
   const { data: session } = useSession()
   const isMobile = useIsMobile()
-  const [view, setView] = useState<'features' | 'terms' | 'qr'>('features')
+  const [view, setView] = useState<"features" | "terms" | "qr">("features")
   const [copied, setCopied] = useState(false)
   const [supportTopUp, setSupportTopUp] = useState("0")
   const [customTopUp, setCustomTopUp] = useState("")
@@ -88,22 +194,16 @@ const PricingCard = ({ plan, popular, exclusive }: { plan: PlanData; popular: bo
   const [searchQuery, setSearchQuery] = useState("")
   const [searchResults, setSearchResults] = useState<SearchResult[]>([])
   const [isSearching, setIsSearching] = useState(false)
-  
   const [debouncedQuery, setDebouncedQuery] = useState(searchQuery)
 
   useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedQuery(searchQuery)
-    }, 500)
-
-    return () => {
-      clearTimeout(handler)
-    }
+    const handler = setTimeout(() => setDebouncedQuery(searchQuery), 400)
+    return () => clearTimeout(handler)
   }, [searchQuery])
 
   useEffect(() => {
     async function searchUsers() {
-      if (!debouncedQuery) {
+      if (!debouncedQuery.trim()) {
         setSearchResults([])
         return
       }
@@ -131,32 +231,20 @@ const PricingCard = ({ plan, popular, exclusive }: { plan: PlanData; popular: bo
   const amount = plan.isSupportable
     ? baseAmount + (Number.isFinite(topUpAmount) ? topUpAmount : 0)
     : baseAmount
+
   const upiId = "BHARATPE.8U0Z1L2A1X48538@fbpe"
   const url = `upi://pay?pa=${upiId}&pn=BharatPe Merchant`
 
   let tn = ""
   if (giftRecipient && session?.user) {
-      tn = `${session.user.userId}|${session.user.name}->${giftRecipient.user.id}|${giftRecipient.user.username}`
+    tn = `${session.user.userId}|${session.user.name}->${giftRecipient.user.id}|${giftRecipient.user.username}`
   } else if (session?.user) {
-      tn = `${session.user.userId}|${session.user.name}`
+    tn = `${session.user.userId}|${session.user.name}`
   }
 
-  const paymentUrl = url + (tn ? "&tn=" + tn : "") + `&am=${amount}`
-
+  const paymentUrl = url + (tn ? "&tn=" + encodeURIComponent(tn) : "") + `&am=${amount}`
   const intervalLabel = INTERVAL_LABELS[plan.interval] ?? ""
-  const actionLabel = `Get Started with ${plan.name}`
-
   const isSoldOut = plan.maxCount != null && plan.soldCount !== undefined && plan.soldCount >= plan.maxCount
-  console.log(plan);
-  const handleGetClick = () => {
-    if (view === 'features') {
-      if (session?.user?.userId) {
-        setView('terms')
-      }
-    } else {
-      setView('features')
-    }
-  }
 
   const handleCopyUpiId = async () => {
     try {
@@ -164,372 +252,390 @@ const PricingCard = ({ plan, popular, exclusive }: { plan: PlanData; popular: bo
       setCopied(true)
       setTimeout(() => setCopied(false), 2000)
     } catch (err) {
-      console.error('Failed to copy:', err)
+      console.error("Failed to copy:", err)
     }
   }
 
   return (
-  <Card
-    className={cn(`w-72 flex flex-col justify-between py-1 ${popular ? "border-rose-400" : "border-zinc-700"} mx-auto sm:mx-0`, {
-      "animate-background-shine bg-white dark:bg-[linear-gradient(110deg,#000103,45%,#1e2631,55%,#000103)] bg-[length:200%_100%] transition-colors":
-        exclusive,
-    })}>
-    <div>
-      <CardHeader className="pb-8 pt-4">
-        <div className="flex justify-between">
-          <CardTitle className="text-zinc-700 dark:text-zinc-300 text-lg">{plan.name}</CardTitle>
-          {plan.discount != null && plan.discount > 0 && (
-            <div className={cn("px-2.5 rounded-xl h-fit text-sm py-1 bg-zinc-200 text-black dark:bg-zinc-800 dark:text-white", {
-              "bg-gradient-to-r from-orange-400 to-rose-400 dark:text-black": popular,
-            })}>
-              Save {plan.discount}%
-            </div>
-          )}
+    <Card
+      className={cn(
+        "relative w-full max-w-sm flex flex-col justify-between transition-all duration-300 hover:-translate-y-1 rounded-2xl border bg-card text-card-foreground shadow-md hover:shadow-xl",
+        popular && "border-rose-500/80 ring-1 ring-rose-500/50 shadow-rose-500/10 dark:shadow-rose-500/5",
+        exclusive && "border-amber-500/80 ring-1 ring-amber-500/50 shadow-amber-500/10 dark:shadow-amber-500/5 bg-gradient-to-b from-card via-card to-amber-500/5"
+      )}
+    >
+      {popular && (
+        <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-rose-500 text-white text-[11px] font-bold uppercase tracking-wider shadow-sm flex items-center gap-1">
+          <Sparkles className="w-3 h-3" /> Most Popular
         </div>
-        <div className="flex gap-0.5 justify-between items-end">
-          <div className="flex gap-0.5">
-            <h3 className="text-3xl font-bold">₹{plan.price}</h3>
-            <span className="flex flex-col justify-end text-sm mb-1">{intervalLabel}</span>
+      )}
+      {exclusive && (
+        <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-amber-500 text-black text-[11px] font-bold uppercase tracking-wider shadow-sm flex items-center gap-1">
+          <Crown className="w-3 h-3" /> Exclusive
+        </div>
+      )}
+
+      <div>
+        <CardHeader className="pb-4 pt-6">
+          <div className="flex justify-between items-start">
+            <CardTitle className="text-xl font-bold text-foreground">{plan.name}</CardTitle>
+            {plan.discount != null && plan.discount > 0 && (
+              <Badge variant="secondary" className="bg-rose-500/10 text-rose-500 hover:bg-rose-500/20 border border-rose-500/20 text-xs font-semibold">
+                Save {plan.discount}%
+              </Badge>
+            )}
           </div>
-          {plan.maxCount != null && plan.soldCount !== undefined && (
-            <span className="font-bold text-red-500 mb-1 animate-pulse">
-              {plan.maxCount - plan.soldCount} Left
-            </span>
-          )}
-        </div>
-        <CardDescription className="pt-1.5 h-12">
-          {plan.description}
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="flex flex-col gap-2">
-        {plan.features.map((feature: string) => (
-          <CheckItem key={feature} text={feature} />
-        ))}
-      </CardContent>
-    </div>
-    <CardFooter className="mt-2">
-      <Dialog onOpenChange={(open) => !open && setView('features')}>
-        <DialogTrigger asChild>
-          <Button 
-            disabled={isSoldOut}
-            className="relative inline-flex w-full items-center justify-center rounded-md bg-black text-white dark:bg-white px-6 font-medium  dark:text-black transition-colors focus:outline-none focus:ring-2 focus:ring-slate-400 focus:ring-offset-2 focus:ring-offset-slate-50 disabled:opacity-50 disabled:cursor-not-allowed">
-            <div className="absolute -inset-0.5 -z-10 rounded-lg bg-gradient-to-b from-[#c7d2fe] to-[#8678f9] opacity-75 blur" />
-            {isSoldOut ? "Sold Out" : actionLabel}
-          </Button>
-        </DialogTrigger>
-        <DialogContent className="max-w-2xl min-h-[500px]">
-          <DialogHeader>
-            <DialogTitle className="text-2xl">{plan.name} - All Features</DialogTitle>
-            <DialogDescription className="text-base pt-2">
-              {plan.description}
-            </DialogDescription>
-          </DialogHeader>
-          <div className="flex justify-between items-center mt-4 mb-2">
-            <div className="flex gap-0.5 items-baseline">
-              <h3 className="text-3xl font-bold">₹{plan.price}</h3>
-              <span className="text-sm text-muted-foreground">{intervalLabel}</span>
+
+          <div className="flex justify-between items-baseline mt-3">
+            <div className="flex items-baseline gap-1">
+              <span className="text-4xl font-extrabold tracking-tight">₹{plan.price}</span>
+              <span className="text-sm font-medium text-muted-foreground">{intervalLabel}</span>
             </div>
-            <div className="flex items-center gap-2">
-              {plan.isGiftable && session && (
-              <Popover open={searchOpen} onOpenChange={setSearchOpen}>
-                <PopoverTrigger asChild>
-                    <Button variant="outline" className="shadow-[0_0_15px_rgba(236,72,153,0.6)] border-pink-500 text-pink-500 hover:text-pink-600 hover:border-pink-600 dark:text-pink-400 dark:hover:text-pink-300 dark:hover:border-pink-400">
-                      <Gift className="h-4 w-4" />
-                      Gift
-                    </Button>
-                </PopoverTrigger>
-                <PopoverContent className="p-0 w-[250px]" align="end">
-                  <Command shouldFilter={false}>
-                      <CommandInput placeholder="Search user..." value={searchQuery} onValueChange={setSearchQuery} />
-                      <CommandList>
-                        {isSearching && <div className="flex justify-center p-4"><Loader2 className="animate-spin h-4 w-4" /></div>}
-                        {!isSearching && searchResults.length === 0 && searchQuery && <CommandEmpty>No users found.</CommandEmpty>}
-                        {searchResults.map((result) => (
-                            <CommandItem 
-                              key={result.user.id} 
-                              value={result.user.username} 
+            {plan.maxCount != null && plan.soldCount !== undefined && (
+              <span className="text-xs font-bold text-red-500 animate-pulse bg-red-500/10 px-2 py-0.5 rounded-full border border-red-500/20">
+                {plan.maxCount - plan.soldCount} Left
+              </span>
+            )}
+          </div>
+
+          <CardDescription className="pt-2 text-xs line-clamp-2 min-h-[2.5rem]">
+            {plan.description}
+          </CardDescription>
+        </CardHeader>
+
+        <CardContent className="space-y-2.5 pt-0">
+          <div className="border-t pt-4 space-y-2.5">
+            {plan.features.map((feature: string) => (
+              <CheckItem key={feature} text={feature} />
+            ))}
+          </div>
+        </CardContent>
+      </div>
+
+      <CardFooter className="pt-4 pb-6">
+        <Dialog onOpenChange={(open) => !open && setView("features")}>
+          <DialogTrigger asChild>
+            <Button
+              disabled={isSoldOut}
+              className={cn(
+                "w-full rounded-xl font-semibold shadow-sm transition-all duration-200",
+                popular && "bg-rose-500 hover:bg-rose-600 text-white shadow-rose-500/25",
+                exclusive && "bg-amber-500 hover:bg-amber-600 text-black shadow-amber-500/25 font-bold"
+              )}
+            >
+              {isSoldOut ? "Sold Out" : `Get Started with ${plan.name}`}
+            </Button>
+          </DialogTrigger>
+
+          <DialogContent className="max-w-xl w-full p-6 sm:rounded-2xl overflow-hidden">
+            <DialogHeader className="pr-6">
+              <DialogTitle className="text-2xl font-bold flex items-center gap-2">
+                {plan.name}
+                <Badge variant="outline" className="text-xs font-normal">
+                  {INTERVAL_TAB_LABELS[plan.interval] ?? plan.interval}
+                </Badge>
+              </DialogTitle>
+              <DialogDescription className="text-sm pt-1">
+                {plan.description}
+              </DialogDescription>
+            </DialogHeader>
+
+            <div className="flex justify-between items-center my-4 py-3 px-4 bg-muted/40 rounded-xl border">
+              <div>
+                <span className="text-2xl font-bold">₹{amount}</span>
+                <span className="text-xs text-muted-foreground ml-1">{intervalLabel}</span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                {plan.isGiftable && session && (
+                  <Popover open={searchOpen} onOpenChange={setSearchOpen}>
+                    <PopoverTrigger asChild>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="border-pink-500/50 text-pink-500 hover:text-pink-600 hover:bg-pink-500/10 dark:text-pink-400 gap-1.5"
+                      >
+                        <Gift className="h-4 w-4" />
+                        Gift
+                      </Button>
+                    </PopoverTrigger>
+
+                    <PopoverContent className="p-0 w-[260px]" align="end">
+                      <Command shouldFilter={false}>
+                        <CommandInput placeholder="Search Discord User..." value={searchQuery} onValueChange={setSearchQuery} />
+                        <CommandList>
+                          {isSearching && (
+                            <div className="flex justify-center p-4">
+                              <Loader2 className="animate-spin h-4 w-4 text-muted-foreground" />
+                            </div>
+                          )}
+                          {!isSearching && searchResults.length === 0 && searchQuery && (
+                            <CommandEmpty>No users found.</CommandEmpty>
+                          )}
+                          {searchResults.map((result) => (
+                            <CommandItem
+                              key={result.user.id}
+                              value={result.user.username}
                               onSelect={() => {
-                                  setGiftRecipient(result);
-                                  setSearchOpen(false);
-                                  setSearchQuery("");
+                                setGiftRecipient(result)
+                                setSearchOpen(false)
+                                setSearchQuery("")
                               }}
-                              className="flex items-center gap-2 cursor-pointer"
+                              className="flex items-center gap-2 cursor-pointer p-2"
                             >
-                              <Avatar className="h-6 w-6">
-                                  {result.user.avatar && <AvatarImage src={`https://cdn.discordapp.com/avatars/${result.user.id}/${result.user.avatar}.png`} />}
-                                  <AvatarFallback>{result.user.username[0]}</AvatarFallback>
+                              <Avatar className="h-7 w-7 shrink-0">
+                                {result.user.avatar && (
+                                  <AvatarImage src={`https://cdn.discordapp.com/avatars/${result.user.id}/${result.user.avatar}.png`} />
+                                )}
+                                <AvatarFallback className="text-xs">{result.user.username[0]?.toUpperCase()}</AvatarFallback>
                               </Avatar>
                               <div className="flex flex-col overflow-hidden">
-                                  <span className="text-sm font-medium truncate">{result.user.global_name || result.user.username}</span>
-                                  <span className="text-xs text-muted-foreground truncate">@{result.user.username}</span>
+                                <span className="text-xs font-semibold truncate">{result.user.global_name || result.user.username}</span>
+                                <span className="text-[10px] text-muted-foreground truncate">@{result.user.username}</span>
                               </div>
                             </CommandItem>
-                        ))}
-                      </CommandList>
-                  </Command>
-                </PopoverContent>
-              </Popover>
-              )}
-              <Button onClick={() => !session ? signIn('discord') : handleGetClick()}>
-                  {!session ? "Login to Get" : view === 'features' ? (giftRecipient ? `Gift to @${giftRecipient.user.username}` : "Get") : "Show Features"}
-              </Button>
-            </div>
-          </div>
-          {giftRecipient && (
-              <div className="flex justify-end items-center mb-2 animate-in fade-in slide-in-from-top-1">
-                  <span className="text-xs text-muted-foreground mr-2">Gifting to:</span>
-                  <div className="flex items-center gap-1 bg-pink-100 dark:bg-pink-900/30 px-2 py-0.5 rounded-full border border-pink-200 dark:border-pink-800">
-                      <Avatar className="h-3 w-3">
-                        {giftRecipient.user.avatar && <AvatarImage src={`https://cdn.discordapp.com/avatars/${giftRecipient.user.id}/${giftRecipient.user.avatar}.png`} />}
-                        <AvatarFallback className="text-[8px]">{giftRecipient.user.username[0]}</AvatarFallback>
-                      </Avatar>
-                      <span className="text-xs font-semibold text-pink-700 dark:text-pink-300">@{giftRecipient.user.username}</span>
-                      <button onClick={() => setGiftRecipient(null)} className="ml-1 text-pink-500 hover:text-pink-700 dark:hover:text-pink-300 focus:outline-none">
-                          <X className="h-3 w-3" />
-                      </button>
-                  </div>
+                          ))}
+                        </CommandList>
+                      </Command>
+                    </PopoverContent>
+                  </Popover>
+                )}
+
+                <Button
+                  size="sm"
+                  onClick={() => (!session ? signIn("discord") : setView(view === "features" ? "terms" : "features"))}
+                >
+                  {!session ? "Login to Purchase" : view === "features" ? (giftRecipient ? `Gift to @${giftRecipient.user.username}` : "Continue") : "View Plan Details"}
+                </Button>
               </div>
-          )}
-          <div className="relative overflow-hidden" style={{ height: '50vh' }}>
-            <AnimatePresence mode="wait" initial={false}>
-              {view === 'features' ? (
-                 <motion.div
-                   key="features"
-                   initial={{ rotateY: 90, opacity: 0 }}
-                   animate={{ rotateY: 0, opacity: 1 }}
-                   exit={{ rotateY: -90, opacity: 0 }}
-                   transition={{ duration: 0.3 }}
-                   className="absolute inset-0"
-                 >
-                    <ScrollArea className="h-full pr-4">
-                      <div className="flex flex-col gap-3 pb-4">
+            </div>
+
+            {giftRecipient && (
+              <div className="flex items-center justify-between bg-pink-500/10 border border-pink-500/20 px-3 py-1.5 rounded-lg mb-2">
+                <span className="text-xs text-pink-600 dark:text-pink-300 font-medium flex items-center gap-1.5">
+                  <Gift className="h-3.5 w-3.5" /> Gifting to @{giftRecipient.user.username}
+                </span>
+                <button onClick={() => setGiftRecipient(null)} className="text-pink-500 hover:text-pink-700">
+                  <X className="h-3.5 w-3.5" />
+                </button>
+              </div>
+            )}
+
+            <div className="relative min-h-[320px] overflow-hidden">
+              <AnimatePresence mode="wait">
+                {view === "features" && (
+                  <motion.div
+                    key="features"
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: 10 }}
+                    transition={{ duration: 0.2 }}
+                    className="absolute inset-0"
+                  >
+                    <ScrollArea className="h-[320px] pr-3">
+                      <div className="space-y-3 pb-4">
                         {plan.allFeatures.map((feature: string, index: number) => {
                           if (plan.expandableFeatures?.[feature]) {
-                             return (
-                               <Accordion type="single" collapsible className="w-full" key={`${feature}-${index}`}>
-                                  <AccordionItem value="item-1" className="border-none">
-                                     <AccordionTrigger className="py-2 hover:no-underline -ml-1">
-                                        <CheckItemWithCategory text={feature} />
-                                     </AccordionTrigger>
-                                     <AccordionContent className="pl-6 flex flex-col gap-3 pt-2">
-                                        {plan.expandableFeatures[feature].map((subFeature, subIndex) => (
-                                           <CheckItemWithCategory key={`sub-${subIndex}`} text={subFeature} />
-                                        ))}
-                                     </AccordionContent>
-                                  </AccordionItem>
-                               </Accordion>
-                             )
+                            return (
+                              <Accordion type="single" collapsible key={`${feature}-${index}`}>
+                                <AccordionItem value="item-1" className="border-none">
+                                  <AccordionTrigger className="py-1.5 hover:no-underline">
+                                    <CheckItemWithCategory text={feature} />
+                                  </AccordionTrigger>
+                                  <AccordionContent className="pl-6 space-y-2 pt-1">
+                                    {plan.expandableFeatures[feature].map((subFeature, subIndex) => (
+                                      <CheckItemWithCategory key={`sub-${subIndex}`} text={subFeature} />
+                                    ))}
+                                  </AccordionContent>
+                                </AccordionItem>
+                              </Accordion>
+                            )
                           }
-                          return (
-                            <CheckItemWithCategory key={`${feature}-${index}`} text={feature} />
-                          )
+                          return <CheckItemWithCategory key={`${feature}-${index}`} text={feature} />
                         })}
                       </div>
                     </ScrollArea>
-                 </motion.div>
-              ) : view === 'terms' ? (
-                 <motion.div
-                   key="terms"
-                   initial={{ rotateY: 90, opacity: 0 }}
-                   animate={{ rotateY: 0, opacity: 1 }}
-                   exit={{ rotateY: -90, opacity: 0 }}
-                   transition={{ duration: 0.3 }}
-                   className="absolute inset-0 flex items-center justify-center flex-col gap-4 p-6"
-                 >
-                    <h3 className="text-xl font-bold">Terms & Conditions</h3>
-                    <div className="text-center text-muted-foreground space-y-3 px-2">
-                       <p className="text-sm">
-                         You are about to purchase a digital service membership for the Among Us Indians community.
-                       </p>
-                       <p className="text-sm">
-                         By proceeding with this transaction, you explicitly agree to our service agreement and acknowledge that benefits are subject to our community guidelines.
-                       </p>
-                       <p className="text-xs pt-2">
-                         Please review our full <Link href="/policies/terms" className="underline hover:text-foreground transition-colors" target="_blank">Terms & Conditions</Link> before continuing.
-                       </p>
+                  </motion.div>
+                )}
+
+                {view === "terms" && (
+                  <motion.div
+                    key="terms"
+                    initial={{ opacity: 0, x: 10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -10 }}
+                    transition={{ duration: 0.2 }}
+                    className="absolute inset-0 flex flex-col justify-between p-4 bg-muted/20 rounded-xl border"
+                  >
+                    <div className="space-y-3 text-center">
+                      <div className="p-2 w-fit mx-auto bg-primary/10 text-primary rounded-full">
+                        <ShieldCheck className="w-6 h-6" />
+                      </div>
+                      <h3 className="text-lg font-bold">Terms & Service Guidelines</h3>
+                      <div className="text-xs text-muted-foreground space-y-2 max-w-md mx-auto">
+                        <p>
+                          You are purchasing a digital membership tier for the Among Us Indians community.
+                        </p>
+                        <p>
+                          Benefits are activated automatically upon verification and are subject to community code of conduct.
+                        </p>
+                      </div>
                     </div>
-                    <Button onClick={() => setView('qr')} className="mt-4 w-full max-w-sm">
-                       I Accept & Proceed to Pay
-                    </Button>
-                 </motion.div>
-              ) : (
-                 <motion.div
-                   key="qr"
-                   initial={{ rotateY: 90, opacity: 0 }}
-                   animate={{ rotateY: 0, opacity: 1 }}
-                   exit={{ rotateY: -90, opacity: 0 }}
-                   transition={{ duration: 0.3 }}
-                   className="absolute inset-0"
-                 >
-                    <ScrollArea className="h-full w-full">
-                      <div className="flex items-center justify-center flex-col gap-4 min-h-full py-4">
+
+                    <div className="space-y-2 pt-4">
+                      <Button onClick={() => setView("qr")} className="w-full gap-2">
+                        I Agree & Proceed to Payment <ArrowRight className="w-4 h-4" />
+                      </Button>
+                      <p className="text-[10px] text-center text-muted-foreground">
+                        Review our full{" "}
+                        <Link href="/policies/terms" className="underline hover:text-foreground" target="_blank">
+                          Terms & Conditions
+                        </Link>
+                      </p>
+                    </div>
+                  </motion.div>
+                )}
+
+                {view === "qr" && (
+                  <motion.div
+                    key="qr"
+                    initial={{ opacity: 0, scale: 0.98 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.98 }}
+                    transition={{ duration: 0.2 }}
+                    className="absolute inset-0"
+                  >
+                    <ScrollArea className="h-[320px] pr-2">
+                      <div className="flex flex-col items-center justify-center space-y-4 py-2">
                         {plan.isSupportable && (
-                          <ToggleGroup
-                            type="single"
-                            className="mb-2"
-                            value={supportTopUp}
-                            onValueChange={(value) => value && setSupportTopUp(value)}
-                          >
-                            <ToggleGroupItem value="0" aria-label="Add 0">
-                              +0
-                            </ToggleGroupItem>
-                            <ToggleGroupItem value="100" aria-label="Add 100">
-                              +100
-                            </ToggleGroupItem>
-                            <ToggleGroupItem value="500" aria-label="Add 500">
-                              +500
-                            </ToggleGroupItem>
-                            {supportTopUp === "custom" ? (
-                              <div className="flex items-center rounded-md border border-input bg-background px-2">
-                                <input
-                                  type="number"
-                                  min={0}
-                                  step={1}
-                                  inputMode="numeric"
-                                  placeholder="Support AUI (₹)"
-                                  value={customTopUp}
-                                  onChange={(event) => setCustomTopUp(event.target.value)}
-                                  className="h-9 w-28 bg-transparent text-sm outline-none placeholder:text-muted-foreground"
-                                />
-                              </div>
-                            ) : (
-                              <ToggleGroupItem value="custom" aria-label="Custom amount">
-                                Custom
+                          <div className="w-full space-y-1.5">
+                            <span className="text-[11px] font-semibold text-muted-foreground block text-center">
+                              Add optional support contribution
+                            </span>
+                            <ToggleGroup
+                              type="single"
+                              value={supportTopUp}
+                              onValueChange={(value) => value && setSupportTopUp(value)}
+                              className="justify-center gap-1"
+                            >
+                              <ToggleGroupItem value="0" size="sm" className="text-xs">
+                                +₹0
                               </ToggleGroupItem>
-                            )}
-                          </ToggleGroup>
-                        )}
-                        <QRCodeCanvas className='border p-2 bg-foreground rounded ' value={paymentUrl} size={200} level='Q'
-                            imageSettings={{
-                                src: '/aui.png',
-                                height: 50,
-                                width: 50,
-                                excavate: true,
-                            }}
-                        />
-                        <div className="flex flex-col items-center gap-2">
-                          <div 
-                            onClick={handleCopyUpiId}
-                            className="flex items-center gap-2 bg-muted px-3 py-1.5 rounded border cursor-pointer hover:bg-muted/80 transition-colors group"
-                          >
-                            <code className="text-xs select-all">{upiId}</code>
-                            {copied ? (
-                              <Check size={14} className="text-green-500 flex-shrink-0" />
-                            ) : (
-                              <Copy size={14} className="text-muted-foreground group-hover:text-foreground transition-colors flex-shrink-0" />
-                            )}
+                              <ToggleGroupItem value="100" size="sm" className="text-xs">
+                                +₹100
+                              </ToggleGroupItem>
+                              <ToggleGroupItem value="500" size="sm" className="text-xs">
+                                +₹500
+                              </ToggleGroupItem>
+                              {supportTopUp === "custom" ? (
+                                <div className="flex items-center rounded-md border bg-background px-2 h-8">
+                                  <input
+                                    type="number"
+                                    min={0}
+                                    placeholder="Amount (₹)"
+                                    value={customTopUp}
+                                    onChange={(e) => setCustomTopUp(e.target.value)}
+                                    className="w-20 bg-transparent text-xs outline-none"
+                                  />
+                                </div>
+                              ) : (
+                                <ToggleGroupItem value="custom" size="sm" className="text-xs">
+                                  Custom
+                                </ToggleGroupItem>
+                              )}
+                            </ToggleGroup>
                           </div>
+                        )}
+
+                        <div className="p-3 bg-white rounded-xl shadow-md border">
+                          <QRCodeCanvas
+                            value={paymentUrl}
+                            size={160}
+                            level="Q"
+                            imageSettings={{
+                              src: "/aui.png",
+                              height: 36,
+                              width: 36,
+                              excavate: true,
+                            }}
+                          />
                         </div>
-                        <div className="flex flex-col gap-1 text-center text-muted-foreground text-sm">
-                            <p><span className="font-semibold text-foreground">Step 1:</span> Pay on QR</p>
-                            <p><span className="font-semibold text-foreground">Step 2:</span> Send screenshot on bottom right chat</p>
+
+                        <div
+                          onClick={handleCopyUpiId}
+                          className="flex items-center gap-2 bg-muted/80 hover:bg-muted px-3 py-1.5 rounded-lg border text-xs font-mono cursor-pointer transition-colors"
+                        >
+                          <span>{upiId}</span>
+                          {copied ? (
+                            <Check className="h-3.5 w-3.5 text-emerald-500" />
+                          ) : (
+                            <Copy className="h-3.5 w-3.5 text-muted-foreground" />
+                          )}
                         </div>
+
+                        <div className="text-center space-y-0.5 text-xs text-muted-foreground">
+                          <p><strong className="text-foreground">Step 1:</strong> Scan QR & Complete UPI Payment</p>
+                          <p><strong className="text-foreground">Step 2:</strong> Share receipt screenshot in support chat</p>
+                        </div>
+
                         {isMobile && (
-                            <Button asChild className="w-full max-w-xs mt-2" variant="outline">
-                                <a href={paymentUrl}>
-                                    <CreditCard className="mr-2 h-4 w-4" /> Pay via UPI App
-                                </a>
-                            </Button>
+                          <Button asChild className="w-full gap-2" variant="outline" size="sm">
+                            <a href={paymentUrl}>
+                              <CreditCard className="h-4 w-4" /> Open UPI Payment App
+                            </a>
+                          </Button>
                         )}
                       </div>
                     </ScrollArea>
-                 </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
-        </DialogContent>
-      </Dialog>
-    </CardFooter>
-  </Card>
-)}
-
-const CheckItem = ({ text }: { text: string }) => (
-  <div className="flex gap-2">
-    <CheckCircle2 size={18} className="my-auto text-green-400" />
-    <p className="pt-0.5 text-zinc-700 dark:text-zinc-300 text-sm">{text}</p>
-  </div>
-)
-
-const CheckItemWithCategory = ({ text }: { text: string }) => {
-  const getCategoryIcon = (category: string) => {
-    const iconMap: Record<string, { Icon: LucideIcon; color: string }> = {
-      "Visual": { Icon: Eye, color: "text-blue-400" },
-      "Visual Flex": { Icon: Palette, color: "text-purple-400" },
-      "Voice Power": { Icon: Mic, color: "text-pink-400" },
-      "Chat Power": { Icon: MessageSquare, color: "text-cyan-400" },
-      "Chat": { Icon: MessageSquare, color: "text-cyan-400" },
-      "Utility": { Icon: Wrench, color: "text-orange-400" },
-      "Intelligence": { Icon: Brain, color: "text-indigo-400" },
-      "Privacy": { Icon: Lock, color: "text-yellow-400" },
-      "Exclusivity": { Icon: Crown, color: "text-amber-400" },
-      "Control": { Icon: Sliders, color: "text-teal-400" },
-      "Economy": { Icon: Coins, color: "text-emerald-400" },
-      "Lottery": { Icon: Gift, color: "text-rose-400" },
-      "Hierarchy": { Icon: TrendingUp, color: "text-violet-400" },
-      "Status": { Icon: TrendingUp, color: "text-violet-400" },
-      "Audio": { Icon: Headphones, color: "text-pink-400" },
-      "Identity": { Icon: User, color: "text-violet-400" },
-      "Social": { Icon: MessageCircle, color: "text-indigo-400" },
-      "VC": { Icon: Mic, color: "text-purple-400" },
-      "Chat/Utility": { Icon: Wrench, color: "text-cyan-400" },
-      "Reward": { Icon: Gift, color: "text-rose-400" },
-      "Included": { Icon: Layers, color: "text-sky-400" },
-    }
-    return iconMap[category] || { Icon: CheckCircle2, color: "text-green-400" }
-  }
-
-  const parts = text.split(': ')
-  if (parts.length > 1) {
-    const category = parts[0]
-    const description = parts.slice(1).join(': ')
-    const { Icon, color } = getCategoryIcon(category)
-    return (
-      <div className="flex gap-2">
-        <Icon size={18} className={`my-auto ${color} flex-shrink-0`} />
-        <p className="pt-0.5 text-zinc-700 dark:text-zinc-300 text-sm">
-          {description}
-        </p>
-      </div>
-    )
-  }
-  return (
-    <div className="flex gap-2">
-      <CheckCircle2 size={18} className="my-auto text-green-400 flex-shrink-0" />
-      <p className="pt-0.5 text-zinc-700 dark:text-zinc-300 text-sm">{text}</p>
-    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </DialogContent>
+        </Dialog>
+      </CardFooter>
+    </Card>
   )
 }
 
 export default function MembershipCards({ plans }: { plans: PlanData[] }) {
-  const intervals = [...new Set(plans.map((p) => p.interval))]
+  const intervals = useMemo(() => [...new Set(plans.map((p) => p.interval))], [plans])
   const hasMultipleIntervals = intervals.length > 1
 
   const renderPlanGroup = (groupPlans: PlanData[]) => (
-    <section className="flex flex-col sm:flex-row sm:flex-wrap justify-center gap-8 mt-1">
-      {groupPlans.map((plan) => {
-        const popular = plan.category === "POPULAR"
-        const exclusive = plan.category === "EXCLUSIVE"
-        return <PricingCard key={plan.id} plan={plan} popular={popular} exclusive={exclusive} />
-      })}
-    </section>
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center max-w-6xl mx-auto px-4">
+      {groupPlans.map((plan) => (
+        <PricingCard
+          key={plan.id}
+          plan={plan}
+          popular={plan.category === "POPULAR"}
+          exclusive={plan.category === "EXCLUSIVE"}
+        />
+      ))}
+    </div>
   )
 
   return (
-    <div className="py-8">
-      <PricingHeader title="Membership Tiers" subtitle="Choose the tier that's right for you" />
+    <div className="py-12 bg-background">
+      <PricingHeader
+        title="Choose Your Tier"
+        subtitle="Unlock exclusive perks, elevated status, and empower the community."
+      />
+
       {hasMultipleIntervals ? (
-        <Tabs defaultValue={intervals[0]}>
-          <div className="flex justify-center mb-6">
-            <TabsList>
+        <Tabs defaultValue={intervals[0]} className="w-full">
+          <div className="flex justify-center mb-8">
+            <TabsList className="bg-muted/60 p-1 rounded-xl">
               {intervals.map((interval) => (
-                <TabsTrigger key={interval} value={interval}>
+                <TabsTrigger key={interval} value={interval} className="rounded-lg text-xs sm:text-sm px-4 py-1.5 font-medium">
                   {INTERVAL_TAB_LABELS[interval] ?? interval}
                 </TabsTrigger>
               ))}
             </TabsList>
           </div>
+
           {intervals.map((interval) => (
-            <TabsContent key={interval} value={interval}>
+            <TabsContent key={interval} value={interval} className="focus-visible:outline-none">
               {renderPlanGroup(plans.filter((p) => p.interval === interval))}
             </TabsContent>
           ))}
@@ -538,14 +644,13 @@ export default function MembershipCards({ plans }: { plans: PlanData[] }) {
         renderPlanGroup(plans)
       )}
 
-      {/* Contact Link */}
-      <div className="text-center mt-2">
-        <Link 
-          href="/about" 
-          className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+      <div className="text-center mt-12">
+        <Link
+          href="/about"
+          className="inline-flex items-center gap-2 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors group"
         >
-          <Mail size={16} />
-          <span>Have questions?</span>
+          <Mail className="w-4 h-4 group-hover:scale-110 transition-transform" />
+          <span>Have questions before getting started? Reach out to us</span>
         </Link>
       </div>
     </div>
