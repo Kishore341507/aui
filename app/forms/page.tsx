@@ -15,10 +15,10 @@ import {
   ShieldCheck,
   UserX,
   AlertTriangle,
-  Calendar,
+  // Calendar,
   Award,
   Palette,
-  // Users,
+  Users,
   ArrowRight,
 } from "lucide-react";
 
@@ -67,16 +67,16 @@ const FORMS_DATA = [
     badge: "Confidential",
     badgeVariant: "secondary" as const,
   },
-  {
-    href: "/forms/event-team",
-    title: "Event Team Application",
-    description:
-      "Join our event team to brainstorm, host, and manage engaging community activities and giveaways.",
-    time: "1-2 weeks",
-    icon: Calendar,
-    badge: "Community",
-    badgeVariant: "outline" as const,
-  },
+  // {
+  //   href: "/forms/event-team",
+  //   title: "Event Team Application",
+  //   description:
+  //     "Join our event team to brainstorm, host, and manage engaging community activities and giveaways.",
+  //   time: "1-2 weeks",
+  //   icon: Calendar,
+  //   badge: "Community",
+  //   badgeVariant: "outline" as const,
+  // },
   {
     href: "/forms/marshal",
     title: "Marshal Application",
@@ -97,16 +97,16 @@ const FORMS_DATA = [
     badge: "Creative",
     badgeVariant: "outline" as const,
   },
-  // {
-  //   href: "/forms/ambassador",
-  //   title: "Ambassador Application",
-  //   description:
-  //     "Apply to become an Ambassador and represent our server within your community. Be active, mature, and knowledgeable.",
-  //   time: "1-2 weeks",
-  //   icon: Users,
-  //   badge: "Representative",
-  //   badgeVariant: "outline" as const,
-  // },
+  {
+    href: "/forms/ambassador",
+    title: "Ambassador Application",
+    description:
+      "Apply to become an Ambassador and represent our server within your community. Be active, mature, and knowledgeable.",
+    time: "1-2 weeks",
+    icon: Users,
+    badge: "Representative",
+    badgeVariant: "outline" as const,
+  },
 ];
 
 export default function Forms() {
