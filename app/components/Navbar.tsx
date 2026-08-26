@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useSession, signIn, signOut } from "next-auth/react";
+import { usePathname } from "next/navigation";
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -11,6 +12,11 @@ export default function Navbar() {
   const [lastScrollY, setLastScrollY] = useState(0);
 
   const { data: session } = useSession();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [pathname]);
 
   const navItems = [
     { label: "About Us", href: "/about" },
