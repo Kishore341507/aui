@@ -18,6 +18,7 @@ import {
   Calendar,
   Award,
   Palette,
+  // Users,
   ArrowRight,
 } from "lucide-react";
 
@@ -96,6 +97,16 @@ const FORMS_DATA = [
     badge: "Creative",
     badgeVariant: "outline" as const,
   },
+  // {
+  //   href: "/forms/ambassador",
+  //   title: "Ambassador Application",
+  //   description:
+  //     "Apply to become an Ambassador and represent our server within your community. Be active, mature, and knowledgeable.",
+  //   time: "1-2 weeks",
+  //   icon: Users,
+  //   badge: "Representative",
+  //   badgeVariant: "outline" as const,
+  // },
 ];
 
 export default function Forms() {
