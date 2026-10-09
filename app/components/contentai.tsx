@@ -4,11 +4,6 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 
 export default function ContentAISection() {
-  const dotListLeft = [
-    "Epic Tournaments",
-    "Real Prizes & Recognition",
-    "Competitive Rankings",
-  ];
 
   const dotListRight = [
     "24/7 Music Streaming",
