@@ -2,13 +2,14 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono, Poppins } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
-
+import MainContent from "./components/MainContent";
 import { ThemeProvider } from "@/components/theme-provider"
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import { Analytics } from "@vercel/analytics/react"
 import { Toaster } from "@/components/ui/toaster"
 import AuthProvider from "./auth/Provider";
+
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -135,9 +136,7 @@ export default function RootLayout({
         
           <AuthProvider>
             <Navbar />
-            <main className="pt-32">
-            {children}
-            </main>
+            <MainContent>{children}</MainContent>
           </AuthProvider>
           <Footer />
           <Toaster />
