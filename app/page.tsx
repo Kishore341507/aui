@@ -5,7 +5,7 @@ import FeaturesSection from "./components/Features";
 import ContentAISection from "./components/contentai";
 // import TestimonialSection from "./components/testimonials";
 import FAQ from "./components/faq";
-
+import TournamentSection from "./components/tournament";
 async function getMemberCount(): Promise<string | null> {
   try {
     const res = await fetch(
@@ -55,6 +55,7 @@ export default async function Home() {
       <Hero memberCount={memberCount} />
       <TrustedBrandsMarquee memberCount={memberCount} />
       <FeaturesSection />
+      <TournamentSection />
       <ContentAISection />
       {/* <TestimonialSection /> */}
       <FAQ />
