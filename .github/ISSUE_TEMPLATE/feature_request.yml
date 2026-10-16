@@ -1,0 +1,53 @@
+name: 💡 Feature or Enhancement Request
+description: Propose a new feature, UI improvement, or enhancement for the AUI project
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thank you for suggesting an idea! Please outline your proposal and the expectation criteria below.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: 💡 Problem or Opportunity
+      description: What problem does this solve, or what value does it bring to the AUI website and community?
+      placeholder: Describe the problem, user need, or motivation...
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: 🛠️ Proposed Solution & Description
+      description: A clear and concise description of what you want to happen.
+      placeholder: Explain your proposed implementation or design...
+    validations:
+      required: true
+
+  - type: textarea
+    id: criteria
+    attributes:
+      label: 🎯 Expectation & Acceptance Criteria
+      description: What specific, measurable criteria determine when this feature or enhancement is complete?
+      placeholder: |
+        - [ ] Users can...
+        - [ ] Responsive layout on mobile and desktop
+        - [ ] Form validations work as expected
+    validations:
+      required: true
+
+  - type: textarea
+    id: references
+    attributes:
+      label: 🔗 Mockups, References, or Context (Optional)
+      description: Attach wireframes, design links, Discord discussions, or alternative solutions considered.
+      placeholder: Any additional context, Figma links, or screenshots...
+
+  - type: checkboxes
+    id: contribution
+    attributes:
+      label: 🤝 Contribution
+      options:
+        - label: I would like to implement this feature and submit a Pull Request!

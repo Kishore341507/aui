@@ -89,7 +89,7 @@ Platforms like **Vercel** and **Railway** support Prisma with PostgreSQL nativel
 
 ## Contributing
 
-Contributions are welcome! Feel free to open issues or submit pull requests.
+Contributions are welcome! Please check out our [Contributing Guide](CONTRIBUTING.md) to learn how to open structured issues, claim tasks, and submit pull requests.
 
 ## License
 
