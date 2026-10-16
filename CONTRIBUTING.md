@@ -65,6 +65,6 @@ flowchart LR
 ---
 
 ## 💡 Questions or Need Help?
-If you have any questions or just want to chat with the team, come say hello in our **[Discord Server](https://discord.gg/aui)**!
+If you have any questions or just want to chat with the team, come say hello in our **[Discord Server](https://discord.gg/amongusindians)**!
 
 Happy coding! 🚀
