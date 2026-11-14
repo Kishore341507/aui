@@ -104,7 +104,7 @@ export default function AmbassadorForm() {
             <FormField control={form.control} name="ambassadorFor" render={({ field }) => (
               <FormItem>
                 <FormLabel className="text-base font-semibold">What would you like to become an Ambassador for?</FormLabel>
-                <FormControl><Input {...field} disabled={!isAuthenticated} placeholder="e.g. Gaming, a specific game, community, interest, etc." /></FormControl>
+                <FormControl><Input {...field} disabled={!isAuthenticated} placeholder="e.g. Music (Melodist), Media & Content Creation, or any non-gaming interest that can boost server activity." /></FormControl>
                 <FormMessage />
               </FormItem>
             )} />
