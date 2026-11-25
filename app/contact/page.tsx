@@ -207,7 +207,7 @@ export default function ContactPage() {
         </section>
 
         {/* Quick Links & Business Hours Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-1 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {/* Helpful Resources */}
           <section className="rounded-2xl border border-border/60 bg-card/40 backdrop-blur-xl p-6 space-y-4">
             <h2 className="text-lg font-bold tracking-tight">Helpful Policy Resources</h2>
@@ -232,7 +232,28 @@ export default function ContactPage() {
             </div>
           </section>
 
-    
+          {/* Business Hours */}
+          <section className="rounded-2xl border border-border/60 bg-card/40 backdrop-blur-xl p-6 space-y-3 flex flex-col justify-between">
+            <div className="space-y-3">
+              <div className="flex items-center gap-2 text-emerald-500 font-semibold text-sm">
+                <ShieldCheck className="w-4 h-4" />
+                <span>Operating Hours (IST)</span>
+              </div>
+              <ul className="text-xs text-muted-foreground space-y-2">
+                <li className="flex justify-between pb-2 border-b border-border/30">
+                  <span>Monday – Saturday</span>
+                  <span className="font-semibold text-foreground">10:00 AM – 8:00 PM</span>
+                </li>
+                <li className="flex justify-between">
+                  <span>Sunday</span>
+                  <span className="font-semibold text-rose-400">Closed (Emergency Only)</span>
+                </li>
+              </ul>
+            </div>
+            <p className="text-[11px] text-muted-foreground/80 leading-relaxed pt-2">
+              Inquiries received outside business operating hours are logged and answered on the next business day.
+            </p>
+          </section>
         </div>
 
         {/* Discord Banner */}
