@@ -8,7 +8,6 @@ import {
   Building2,
   HelpCircle,
   ArrowRight,
-  ShieldCheck,
   ExternalLink,
   Sparkles,
 } from "lucide-react"
