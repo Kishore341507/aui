@@ -47,16 +47,16 @@ const FORMS_DATA = [
     badge: "Staff Role",
     badgeVariant: "default" as const,
   },
-  {
-    href: "/forms/unban",
-    title: "Unban Request",
-    description:
-      "Submit a request to appeal your ban from the server. Provide honest and detailed context regarding your case.",
-    time: "3-5 days",
-    icon: UserX,
-    badge: "Appeals",
-    badgeVariant: "destructive" as const,
-  },
+  //{
+  //  href: "/forms/unban",
+  // title: "Unban Request",
+  // description:
+  //   "Submit a request to appeal your ban from the server. Provide honest and detailed context regarding your case.",
+  // time: "3-5 days",
+  // icon: UserX,
+  // badge: "Appeals",
+  // badgeVariant: "destructive" as const,
+  //},
   {
     href: "/forms/staff-report",
     title: "Staff Report",
